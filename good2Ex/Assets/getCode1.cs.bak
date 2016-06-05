@@ -1,0 +1,23 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class getCode1 : MonoBehaviour {
+
+    // Use this for initialization
+    void Start() {
+
+    }
+
+    // Update is called once per frame
+    void Update() {
+
+    }
+
+    void OnMouseDown()
+    {
+        Debug.Log("L E-S : " + Mathf.Abs(CoordinateMapperExample.JointInfo["ElbowLeft"].Y - CoordinateMapperExample.JointInfo["ShoulderLeft"].Y));
+        Debug.Log("R E-S : " + Mathf.Abs(CoordinateMapperExample.JointInfo["ElbowRight"].Y - CoordinateMapperExample.JointInfo["ShoulderRight"].Y));
+        Debug.Log("L E-W : " + Mathf.Abs(CoordinateMapperExample.JointInfo["ElbowLeft"].X - CoordinateMapperExample.JointInfo["WristLeft"].X));
+        Debug.Log("R E-W : " + Mathf.Abs(CoordinateMapperExample.JointInfo["ElbowRight"].X - CoordinateMapperExample.JointInfo["WristRight"].X));
+    }
+}
