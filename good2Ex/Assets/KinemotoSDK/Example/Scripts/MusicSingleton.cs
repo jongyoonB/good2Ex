@@ -14,8 +14,8 @@ public class MusicSingleton : MonoBehaviour
         {
             
             temp = Random.Range(0, audioclips.Length);
-            Debug.Log(order);
-            Debug.Log(temp);
+            //Debug.Log(order);
+            //Debug.Log(temp);
             if (order != temp)
             {
                 order = temp;

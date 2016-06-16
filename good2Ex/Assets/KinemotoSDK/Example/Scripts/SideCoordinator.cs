@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 using System.Timers;
+using System.Diagnostics;
 
 public class SideCoordinator : MonoBehaviour
 {
@@ -48,7 +49,6 @@ public class SideCoordinator : MonoBehaviour
     public GameObject AnkleLAndFootL;
 
     //AudioSource & AudioClip 
-
     public GameObject BGM;
     public GameObject MessageController;
     private MessageController msgController;
@@ -71,6 +71,8 @@ public class SideCoordinator : MonoBehaviour
     public static GameObject firewall;
     public static Vector3 firewall_position;
 
+    public static GameObject firework;
+
 
     //GameObject for StartInfo
     public GameObject GameMask;
@@ -80,7 +82,9 @@ public class SideCoordinator : MonoBehaviour
     public GameObject ScoreGoal;
 
     //GameObject for Status
-    public GameObject Status_panel;
+    //public static GameObject Status;
+    private GameObject prefab;
+    public static GameObject Status;
 
     //GameObject For BreakTime
     public GameObject breakTimeMask;
@@ -95,8 +99,30 @@ public class SideCoordinator : MonoBehaviour
     [SerializeField]
     private static GameObject Timer;
     private static float BreakTime;
-    private int counter;
     public static Timer time;
+
+    //angle
+    public static GameObject armpRightDegree;
+    public static GameObject armpLeftDegree;
+    public static GameObject elbowLeftDegree;
+    public static GameObject elbowRightDegree;
+
+    //phase
+    public static GameObject phase;
+    public static GameObject Toggle1;
+    public static GameObject Toggle2;
+    public static GameObject Toggle3;
+    public static GameObject Toggle4;
+
+    //helper
+    public static GameObject helper;
+    public changeAnimation changeAnimation;
+    private GameObject balloon;
+    private static GameObject balloon_text;
+
+    //stop_watch(timer)
+    public static Stopwatch set_timer = new Stopwatch();
+    public static string set_time;
 
     void Start()
     {
@@ -104,20 +130,37 @@ public class SideCoordinator : MonoBehaviour
         Application.ExternalCall("orderPlus", "ok");
         if (!GameObject.Find("BGM"))
         {
+            
             BGM = new GameObject("BGM");
             BGM.AddComponent<AudioSource>();
             BGM.AddComponent<MusicSingleton>();
         }
-
+        else
+        {
+            this.BGM = GameObject.Find("BGM");
+        }
+        
         MessageController = new GameObject("MessageController");
         MessageController.AddComponent<AudioSource>();
         MessageController.AddComponent<MessageController>();
         msgController = gameObject.GetComponent("ScriptName") as MessageController;
 
+        phase = GameObject.Find("phase");
 
+        //helper
+        helper = GameObject.Find("helper");
+        changeAnimation = gameObject.GetComponent("ScriptName") as changeAnimation;
+        helper.SetActive(false);
+        balloon = GameObject.Find("balloon");
+        balloon.SetActive(false);
+        balloon_text = GameObject.Find("balloon_text");
+        balloon_text.SetActive(false);
+
+        //angle object
+        armpLeftDegree = GameObject.Find("armpRightDegree");
+        armpRightDegree = GameObject.Find("armpLeftDegree");
 
         //set count value
-        counter = 0;
         BreakTime = 10f;
 
         //clear EngagedUser
@@ -132,30 +175,60 @@ public class SideCoordinator : MonoBehaviour
         //particle effect set
         particle = Instantiate(Resources.Load("particle")) as GameObject;
         particle.SetActive(false);
+        particle.transform.parent = GameObject.Find("Canvas").transform;
         particle_position = new Vector3(0, 0);
 
         //firewall effect set
         firewall = Instantiate(Resources.Load("WallOfFire")) as GameObject;
         firewall.SetActive(false);
+        firewall.transform.parent = GameObject.Find("Canvas").transform;
         firewall_position = new Vector3(0, 0);
+        firework = GameObject.Find("firework");
+        if (firework.activeInHierarchy)
+        {
+            firework.SetActive(false);
+        }
 
         //Timer
         Timer = GameObject.Find("Timer");
+        set_timer.Reset();
 
         //movie texture set
-        PlayMovieTexture.StartAllMovies();
         movieTexture = GameObject.Find("GUITexture Video");
+        movieTexture.transform.parent = GameObject.Find("Panel").transform;
+        PlayMovieTexture.StartAllMovies();
 
         //panel set
         panel = GameObject.Find("Panel");
-        Status_panel = GameObject.Find("Status_panel");
         breakTimeMask = GameObject.Find("breakTimeMask");
-        Status_panel.SetActive(false);
         breakTimeMask.SetActive(false);
+
+        //Status.SetActive(false);
+        breakTimeMask.SetActive(false);
+        prefab = Resources.Load("prefabs/ToggleListMenu") as GameObject;
+        Status = GameObject.Instantiate(prefab) as GameObject;
+        Status.name = "status";
+        Status.transform.parent = GameObject.Find("Canvas").transform;
+        Status.transform.localPosition = new Vector3(236.2f, 110.9f, -10);
+        Status.transform.localScale = new Vector3(0.5130946f, 0.5937846f, 0.5082178f);
+
+        //phase = GameObject.Find("phase");
+        phase = GameObject.Find("Title");
+        Toggle1 = GameObject.Find("Toggle1");
+        Toggle2 = GameObject.Find("Toggle2");
+        Toggle3 = GameObject.Find("Toggle3");
+        Toggle4 = GameObject.Find("Toggle4");
+        Toggle1.GetComponentInChildren<Text>().resizeTextForBestFit = true;
+        Toggle2.GetComponentInChildren<Text>().resizeTextForBestFit = true;
+        Toggle3.GetComponentInChildren<Text>().resizeTextForBestFit = true;
+        Toggle4.GetComponentInChildren<Text>().resizeTextForBestFit = true;
+
+        Status.SetActive(false);
 
         //goal set
         SetGoal = GameObject.Find("SetGoals");
         ScoreGoal = GameObject.Find("ScoreGoals");
+
 
         //set material to BoneMaterial
         materialW = Resources.Load("BoneMaterialW", typeof(Material)) as Material;
@@ -182,6 +255,7 @@ public class SideCoordinator : MonoBehaviour
         side = new SideCheck();
 
         ConfigureCoordinateMapper(mapRenderer);
+        Application.ExternalCall("init_score", 0);
 
     }
 
@@ -192,7 +266,11 @@ public class SideCoordinator : MonoBehaviour
             Timer.GetComponent<Text>().text = ((int)BreakTime).ToString();
             BreakTime -= Time.deltaTime;
             GameObject.Find("TakeArest").GetComponent<Text>().color = new Color(GameObject.Find("TakeArest").GetComponent<Text>().color.r, GameObject.Find("TakeArest").GetComponent<Text>().color.g, GameObject.Find("TakeArest").GetComponent<Text>().color.b, Mathf.PingPong(Time.time, 1));
-            Debug.Log(BreakTime);
+            UnityEngine.Debug.Log(BreakTime);
+        }
+        if (!MessageController.GetComponent<AudioSource>().isPlaying && BGM.GetComponent<AudioSource>().volume != 0.5f)
+        {
+            BGM.GetComponent<AudioSource>().volume = 0.5f;
         }
 
     }
@@ -202,7 +280,7 @@ public class SideCoordinator : MonoBehaviour
         cm = new CoordinateMapper(render);
         cm.instantUpdate = true;
         // wether to check for new positions every frame
-        Debug.Log(render.gameObject.name);
+        UnityEngine.Debug.Log(render.gameObject.name);
     }
 
 
@@ -216,16 +294,25 @@ public class SideCoordinator : MonoBehaviour
             {
                 PlayMovieTexture.StopAllMovies();
                 GameMask.SetActive(false);
-                Status_panel.SetActive(true);
+                Status.SetActive(true);
                 Application.ExternalCall("screenSize", "ok");
                 screenSet = true;
-                MessageController.GetComponent<MessageController>().playClip(1);
+                //MessageController.GetComponent<MessageController>().playClip(1);
+                balloon.GetComponent<RectTransform>().localPosition = new Vector3(88.5f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
+                balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(89.7f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
+                helper.GetComponent<Transform>().localPosition = new Vector3(215f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
+                helper.SetActive(true);
+                balloon.SetActive(true);
+                balloon_text.SetActive(true);
+                changeAni("pose_00");
+                set_timer.Start();
+
             }
 
             for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++)
             {
                 // 조인트 조건.
-                if (jt != JointType.Head && jt != JointType.KneeLeft && jt != JointType.KneeRight && jt != JointType.AnkleLeft && jt != JointType.AnkleRight && jt != JointType.HandTipLeft && jt != JointType.HandTipRight && jt != JointType.Neck
+                if (jt != JointType.KneeLeft && jt != JointType.KneeRight && jt != JointType.AnkleLeft && jt != JointType.AnkleRight && jt != JointType.HandTipLeft && jt != JointType.HandTipRight && jt != JointType.Neck
                     && jt != JointType.HipLeft && jt != JointType.HipRight && jt != JointType.SpineBase)
                 {
                     if (!Joints.ContainsKey(jt.ToString()))
@@ -294,13 +381,15 @@ public class SideCoordinator : MonoBehaviour
 
             //side 의 main 함수를 계속 실행.
 
+            //텍스트 색 조절 및 값 조절
+            textController();
+
             side.main();
 
             //소리 실행
             Sound_Controller();
 
-            //텍스트 색 조절 및 값 조절
-            textController();
+            
 
         }
     }
@@ -328,189 +417,17 @@ public class SideCoordinator : MonoBehaviour
 
     public void Sound_Controller()
     {
-
-
-        if (side.AllDepth)
+        if (!MessageController.GetComponent<AudioSource>().isPlaying)
         {
-            MessageController.GetComponent<MessageController>().playClip(2);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
+            if (side.MSGorder > 0)
+            {
+                playMSGClip(side.MSGorder);
+                side.MSGorder = -1;
+            }
         }
-
-
-
-
-        else if (side.AllGup)
-        {
-            MessageController.GetComponent<MessageController>().playClip(3);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.AllSonmok)
-        {
-            MessageController.GetComponent<MessageController>().playClip(4);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.GanBaRe)
-        {
-            MessageController.GetComponent<MessageController>().playClip(5);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.Good)
-        {
-            MessageController.GetComponent<MessageController>().playClip(6);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.Jinji)
-        {
-            MessageController.GetComponent<MessageController>().playClip(7);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.JoGum)
-        {
-            MessageController.GetComponent<MessageController>().playClip(8);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.LastOne)
-        {
-            MessageController.GetComponent<MessageController>().playClip(9);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.LeftDepth)
-        {
-            MessageController.GetComponent<MessageController>().playClip(10);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.LeftGup)
-        {
-            MessageController.GetComponent<MessageController>().playClip(11);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.LeftSonMok)
-        {
-            MessageController.GetComponent<MessageController>().playClip(12);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
-
-
-
-
-        else if (side.RightDepth)
-        {
-            MessageController.GetComponent<MessageController>().playClip(13);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-        else if (side.RightGup)
-        {
-            MessageController.GetComponent<MessageController>().playClip(14);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-        else if (side.RightSonmok)
-        {
-            MessageController.GetComponent<MessageController>().playClip(15);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-        else if (side.Starts)
-        {
-            MessageController.GetComponent<MessageController>().playClip(16);
-            MessageController.GetComponent<AudioSource>().Play();
-
-            sideBoolClear();
-        }
-
 
     }
 
-    public void sideBoolClear()
-    {
-        side.AllDepth = false;
-        side.AllGup = false;
-        side.AllSonmok = false;
-        side.GanBaRe = false;
-        side.Good = false;
-        side.Jinji = false;
-        side.JoGum = false;
-        side.LastOne = false;
-        side.LeftDepth = false;
-        side.LeftGup = false;
-        side.LeftSonMok = false;
-        side.RightDepth = false;
-        side.RightGup = false;
-        side.RightSonmok = false;
-        side.Starts = false;
-    }
 
     public void ChangeMapper(Renderer newRenderer)
     {
@@ -584,28 +501,26 @@ public class SideCoordinator : MonoBehaviour
     }
 
     //화면에 보이는 텍스트 컨트롤
-    void textController()
+    public void textController()
     {
-        GameObject.Find("elbowLeftDegree").GetComponent<Text>().text = ((int)side.elbow_Right_Angle).ToString();
+        
 
+        if (phase.GetComponentInChildren<Text>().text == "Phase2" || phase.GetComponentInChildren<Text>().text == "Phase3")
+        {
+            armpLeftDegree.GetComponent<Text>().text = ((int)side.armpit_Left_Angle).ToString();
+            armpLeftDegree.transform.position = new Vector3((Joints["ShoulderLeft"].transform.position.x + 1f), (Joints["ShoulderLeft"].transform.position.y - 0.35f), 10);
+            armpLeftDegree.transform.localScale = new Vector3(1f, 1f, 1f);
 
-        GameObject.Find("elbowRightDegree").GetComponent<Text>().text = ((int)side.elbow_Left_Angle).ToString();
+            armpRightDegree.GetComponent<Text>().text = ((int)side.armpit_Right_Angle).ToString();
+            armpRightDegree.transform.position = new Vector3((Joints["ShoulderRight"].transform.position.x + 1.1f), (Joints["ShoulderRight"].transform.position.y - 0.35f), 10);
+            armpRightDegree.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else
+        {
+            armpLeftDegree.GetComponent<Text>().text = "";
 
-
-
-        GameObject.Find("armpLeftDegree").GetComponent<Text>().text = ((int)side.armpit_Left_Angle).ToString();
-
-
-
-        GameObject.Find("armpRightDegree").GetComponent<Text>().text = ((int)side.armpit_Right_Angle).ToString();
-        GameObject.Find("elbowLeftDegree").transform.position = new Vector3((Joints["ElbowLeft"].transform.position.x + 1.5f), (Joints["ElbowLeft"].transform.position.y + 0.35f), 10);
-        GameObject.Find("elbowLeftDegree").transform.localScale = new Vector3(1f, 1f, 1f);
-        GameObject.Find("elbowRightDegree").transform.position = new Vector3((Joints["ElbowRight"].transform.position.x + 1.1f), (Joints["ElbowRight"].transform.position.y + 0.35f), 10);
-        GameObject.Find("elbowRightDegree").transform.localScale = new Vector3(1f, 1f, 1f);
-        GameObject.Find("armpLeftDegree").transform.position = new Vector3((Joints["ShoulderLeft"].transform.position.x + 1f), (Joints["ShoulderLeft"].transform.position.y - 0.35f), 10);
-        GameObject.Find("armpLeftDegree").transform.localScale = new Vector3(1f, 1f, 1f);
-        GameObject.Find("armpRightDegree").transform.position = new Vector3((Joints["ShoulderRight"].transform.position.x + 1.1f), (Joints["ShoulderRight"].transform.position.y - 0.35f), 10);
-        GameObject.Find("armpRightDegree").transform.localScale = new Vector3(1f, 1f, 1f);
+            armpRightDegree.GetComponent<Text>().text = "";
+        }
 
     }
 
@@ -624,15 +539,26 @@ public class SideCoordinator : MonoBehaviour
     public void LoadScene(string scene)
     {
         Application.ExternalCall("screenResize", "ok");
+        Application.ExternalCall("sendTest", "LoadScene");
+        Application.ExternalCall("sendTime", set_time);
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
         KinemotoSDK.EngagementHandler.HandRaiseCounter.Clear();
-        Status_panel.SetActive(false);
+        Status.SetActive(false);
         breakTimeMask.SetActive(true);
-        GameObject.Find("elbowLeftDegree").SetActive(false);
-        GameObject.Find("elbowRightDegree").SetActive(false);
-        GameObject.Find("armpRightDegree").SetActive(false);
-        GameObject.Find("armpLeftDegree").SetActive(false);
+        elbowLeftDegree.SetActive(false);
+        elbowRightDegree.SetActive(false);
+        armpRightDegree.SetActive(false);
+        armpLeftDegree.SetActive(false);
+        helper.SetActive(false);
+        balloon.SetActive(false);
+        balloon_text.SetActive(false);
+        //balloon.GetComponent<RectTransform>().localPosition = new Vector3(277f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
+        //balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(281f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
+        //helper.GetComponent<Transform>().localPosition = new Vector3(377f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
+        //setBallonText("잘했어요! 잠시 휴식!");
+
+
 
         if (loadScene == false)
         {
@@ -648,22 +574,22 @@ public class SideCoordinator : MonoBehaviour
             if (loadScene == true)
             {
                 //change breaktime string next ex / end ex
-                if (scene == "end")
+                if (scene != "end")
                 {
-
+                    BreakTime = 10f;
+                    GameObject.Find("Finish").GetComponent<Text>().text = "목표 횟수 완료";
+                    GameObject.Find("TakeArest").GetComponent<Text>().text = "휴식 시간 입니다";
                 }
                 else
                 {
-
+                    firework.SetActive(true);
+                    BreakTime = 5f;
+                    GameObject.Find("Finish").GetComponent<Text>().text = "목표 운동 완료";
+                    GameObject.Find("TakeArest").GetComponent<Text>().text = "곧 결과 페이지로 이동합니다";
                 }
                 StartCoroutine(LoadNewScene(scene));
             }
         }
-    }
-
-    void set_text(string listName, string context)
-    {
-        GameObject.Find(listName).GetComponent<TextMesh>().text = context;
     }
 
     IEnumerator LoadNewScene(string scene)
@@ -671,23 +597,55 @@ public class SideCoordinator : MonoBehaviour
 
         // This line waits for 3 seconds before executing the next line in the coroutine.
         // This line is only necessary for this demo. The scenes are so simple that they load too fast to read the "Loading..." text.
+
         yield return new WaitForSeconds(9);
 
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
         //AsyncOperation async = Application.LoadLevelAsync(scene);
-        float fadeTime = GameObject.Find("fading").GetComponent<Fading>().BeginFade(1);
-        yield return new WaitForSeconds(fadeTime);
-        AsyncOperation async = SceneManager.LoadSceneAsync(scene);
+        if(scene != "end")
+        {
+            AsyncOperation async = SceneManager.LoadSceneAsync(scene);
+            while (!async.isDone)
+            {
+                yield return null;
+            }
+        }
+        else
+        {
+            Application.ExternalCall("move_Page", "true");
+        }
 
         // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
-        while (!async.isDone)
-        {
-            yield return null;
-        }
+        
+
+    }
+
+    public void playMSGClip(int order)
+    {
+        MessageController.GetComponent<MessageController>().playClip(order);
+        MessageController.GetComponent<AudioSource>().Play();
+    }
+
+    public static void changeAni(string aniName)
+    {
+        UnityEngine.Debug.Log("Call changeAni");
+        helper.GetComponent<changeAnimation>().changeAni(aniName);
+    }
+
+    public static void setBallonText(string text)
+    {
+        balloon_text.GetComponent<Text>().text = text;
+        balloon_text.GetComponent<Text>().CrossFadeColor(Color.black, 2f, false, false);
     }
 
     public void send2web(int count, int[] fail)
     {
         Application.ExternalCall("send_score", count, fail);
+    }
+
+    public void msg2Web(string msg)
+    {
+        Application.ExternalCall("sendTest", msg);
+
     }
 }

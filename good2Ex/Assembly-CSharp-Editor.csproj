@@ -45,12 +45,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\EZReplayManager\Editor\EZReplayManagerEditor.cs" />
-     <Compile Include="Assets\EZReplayManager\Editor\PropertyEditor.cs" />
+     <Compile Include="Assets\Editor\Everyplay\Scripts\EveryplayImport.cs" />
+     <Compile Include="Assets\Editor\Everyplay\Scripts\EveryplayLegacyCleanup.cs" />
+     <Compile Include="Assets\Editor\Everyplay\Scripts\EveryplayPostprocessor.cs" />
+     <Compile Include="Assets\Editor\Everyplay\Scripts\EveryplaySettingsEditor.cs" />
+     <Compile Include="Assets\Editor\Everyplay\Scripts\EveryplayWelcome.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXBuildFile.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXBuildPhase.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXDictionary.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXFileReference.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXGroup.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXList.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXObject.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXParser.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\PBXProject.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCBuildConfiguration.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCConfigurationList.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCFileOperationQueue.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCMod.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCProject.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCSourceFile.cs" />
+     <Compile Include="Assets\Editor\Everyplay\XCodeEditor\XCTarget.cs" />
      <None Include="Assets\PyroParticles\Prefab\Materials\AdditiveTintable.shader" />
-     <None Include="Assets\EZReplayManager\Standard Assets\Skyboxes\skybox info.txt" />
      <None Include="Assets\KinemotoSDK\KinemotoSDK_Changelog.txt" />
-     <None Include="Assets\EZReplayManager\example2\Gem Shader\diamond shader.shader" />
  <Reference Include="Assembly-UnityScript">
  <HintPath>D:/Study/Unity/TeamPJ/Good day for Exercise/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>
@@ -87,8 +104,8 @@
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
- <Reference Include="EZReplayManagerDemo">
- <HintPath>D:/Study/Unity/TeamPJ/Good day for Exercise/Assets/EZReplayManager/extension/scripts/EZReplayManagerDemo.dll</HintPath>
+ <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

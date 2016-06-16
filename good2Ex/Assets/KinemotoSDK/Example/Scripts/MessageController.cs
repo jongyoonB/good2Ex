@@ -8,7 +8,7 @@ public class MessageController : MonoBehaviour
 
     void Start()
     {
-        message[0] = Resources.Load("Sound/Message/もう少し頑張ってみろよ") as AudioClip;
+        message[0] = Resources.Load("Sound/Message/mousucosi") as AudioClip;
         message[1] = Resources.Load("Sound/Message/元気に行こ") as AudioClip;
         message[2] = Resources.Load("Sound/Message/AllDepth") as AudioClip;
         message[3] = Resources.Load("Sound/Message/AllGup") as AudioClip;
@@ -36,6 +36,7 @@ public class MessageController : MonoBehaviour
     {
         this.gameObject.GetComponent<AudioSource>().clip = message[clip];
         this.gameObject.GetComponent<AudioSource>().loop = false;
+        GameObject.Find("BGM").GetComponent<AudioSource>().volume = 0.1f;
         this.gameObject.GetComponent<AudioSource>().Play();
     }
 }

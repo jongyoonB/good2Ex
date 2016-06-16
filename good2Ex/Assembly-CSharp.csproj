@@ -46,11 +46,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\ClickMe.cs" />
+     <Compile Include="Assets\Fireworks\Scripts\Demo\SmoothCameraOrbit.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\ClickEvnt.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\DepthViewerExtended.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\DumbelCheck.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\DumbelCoordinator.cs" />
-     <Compile Include="Assets\KinemotoSDK\Example\Scripts\Fading.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\GetExInfo.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\KinectAudioStream.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\MessageController.cs" />
@@ -61,7 +61,9 @@
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\SideCoordinator.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\breaktime.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\change.cs" />
+     <Compile Include="Assets\KinemotoSDK\Example\Scripts\changeAnimation.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\speechControll.cs" />
+     <Compile Include="Assets\OneMinuteGui\Scripts\MenuManager.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\FireBaseScript.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\FireCollisionForwardScript.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\FireConstantBaseScript.cs" />
@@ -70,8 +72,17 @@
      <Compile Include="Assets\PyroParticles\Prefab\Script\MeteorSwarmScript.cs" />
      <Compile Include="Assets\PyroParticles\Prefab\Script\SingleLineAttribute.cs" />
      <Compile Include="Assets\TextOnSpotScript.cs" />
+     <Compile Include="Assets\changeText.cs" />
+     <None Include="Assets\TaichiCharacterPack\Shaders\toon_cutoff.shader" />
+     <None Include="Assets\OneMinuteGui\Font\CarterOne\OFL.txt" />
+     <None Include="Assets\Fireworks\Scripts\Simple Particle Scale\Simple Particle Scale - Readme.txt" />
      <None Include="Assets\PyroParticles\Prefab\Materials\AdditiveTintable.shader" />
+     <None Include="Assets\Fireworks\Scripts\C# Scripts\- IMPORTANT - Version Change Readme.txt" />
+     <None Include="Assets\Fireworks\Fireworks - Readme.txt" />
+     <None Include="Assets\TaichiCharacterPack\Readme.txt" />
      <None Include="Assets\KinemotoSDK\KinemotoSDK_Changelog.txt" />
+     <None Include="Assets\TaichiCharacterPack\Releasenote.txt" />
+     <None Include="Assets\TaichiCharacterPack\Shaders\toon_hair.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

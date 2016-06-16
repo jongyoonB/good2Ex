@@ -1,0 +1,116 @@
+var routine=null;
+var order = 0;
+var final_order = 0;
+var clear_score;
+var clear_set;
+var current_ex_name;
+var next_ex_name;
+
+$(document).ready(function() {
+});
+
+function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올림
+{
+    console.log("!");
+    console.log(temp);
+
+    jQuery(function(){
+
+        function order()//운동 하나 끝나면 aPlus 호출해서 숫자 올림
+        {
+            $.ajax({
+                type: "POST",
+                url: "/main/orderPlus",
+                dataType: "json",
+                success: function (data) {
+                    routine = data;
+                    exerciseGet();
+                    return data;
+                }
+            });
+        }
+
+        //Call any jquery function
+        order(); //jquery function
+    });(jQuery);
+
+}
+
+function exerciseGet()
+{
+    final_order = Number(routine.length);
+    if(order < final_order)
+    {
+        document.getElementById('information').innerHTML= '<h1>현재 운동 정보</h1>' +
+            '운동이름 : ' + routine[order].exercise_name +
+            ' 운동설명 : ' + routine[order].exercise_info +
+            ' 세트수 : ' + routine[order].number_of_set +
+            ' 운동 횟수 : ' + routine[order].number_of_count +
+            ' 운동 순서 : ' + routine[order].exercise_order;
+        clear_score = Number(routine[order].number_of_count);
+        clear_set = Number(routine[order].number_of_set);
+        switch (Number(routine[order].exercise_numb)){
+            case 1:{
+                current_ex_name = "Squart";
+                break;
+            }
+
+            case 2:{
+                current_ex_name = "Dumbel";
+                break;
+            }
+
+            case 3:{
+                current_ex_name ="Side";
+                break;
+            }
+
+            case 4:{
+                current_ex_name ="Lunge";
+                break;
+            }
+        }
+        console.log("setGet"+current_ex_name);
+
+        u.getUnity().SendMessage("CoordinateMapper", "setGet"+current_ex_name, clear_set);
+        u.getUnity().SendMessage("CoordinateMapper", "scoreGet"+current_ex_name, clear_score);
+
+    }
+
+    if(order+1 < final_order)
+    {
+        document.getElementById('nextInformation').innerHTML ='<h1>다음 운동 정보</h1>' +
+            '운동이름 : ' + routine[order+1].exercise_name +
+            ' 운동설명 : ' + routine[order+1].exercise_info +
+            ' 세트수 : ' + routine[order+1].number_of_set +
+            ' 운동 횟수 : ' + routine[order+1].number_of_count +
+            ' 운동 순서 : ' + routine[order+1].exercise_order;
+        switch (routine[order+1].exercise_numb){
+            case 1:{
+                next_ex_name = "squart";
+                break;
+            }
+
+            case 2:{
+                next_ex_name = "dumbel";
+                break;
+            }
+
+            case 3:{
+                next_ex_name ="side";
+                break;
+            }
+
+            case 4:{
+                next_ex_name ="lunge";
+                break;
+            }
+        }
+
+    }
+    else
+    {
+        document.getElementById('nextInformation').innerHTML= '끝';
+    }
+    order++;
+}
