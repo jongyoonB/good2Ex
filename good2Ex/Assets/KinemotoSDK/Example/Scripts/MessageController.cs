@@ -25,6 +25,7 @@ public class MessageController : MonoBehaviour
         message[14] = Resources.Load("Sound/Message/RightGup") as AudioClip;
         message[15] = Resources.Load("Sound/Message/RightSonmok") as AudioClip;
         message[16] = Resources.Load("Sound/Message/Start") as AudioClip;
+        message[17] = Resources.Load("Sound/Message/Jinji") as AudioClip;
     }
 
     void Awake()

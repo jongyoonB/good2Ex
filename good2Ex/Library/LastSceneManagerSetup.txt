@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Dumbel.unity
+- path: Assets/Side.unity
   isLoaded: 1
   isActive: 1

@@ -124,6 +124,16 @@ public class SideCoordinator : MonoBehaviour
     public static Stopwatch set_timer = new Stopwatch();
     public static string set_time;
 
+    public static Stopwatch count_timer = new Stopwatch();
+    public static long count_time_avg;
+
+    //camera
+    public static GameObject MainCamera;
+    public static GameObject SplitCamera;
+
+    //practice_mod
+    public static bool practice_On;
+
     void Start()
     {
         //call javascript function
@@ -151,17 +161,14 @@ public class SideCoordinator : MonoBehaviour
         helper = GameObject.Find("helper");
         changeAnimation = gameObject.GetComponent("ScriptName") as changeAnimation;
         helper.SetActive(false);
-        balloon = GameObject.Find("balloon");
-        balloon.SetActive(false);
+        //balloon = GameObject.Find("balloon");
+        //balloon.SetActive(false);
         balloon_text = GameObject.Find("balloon_text");
         balloon_text.SetActive(false);
 
         //angle object
         armpLeftDegree = GameObject.Find("armpRightDegree");
         armpRightDegree = GameObject.Find("armpLeftDegree");
-
-        //set count value
-        BreakTime = 10f;
 
         //clear EngagedUser
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
@@ -209,7 +216,7 @@ public class SideCoordinator : MonoBehaviour
         Status = GameObject.Instantiate(prefab) as GameObject;
         Status.name = "status";
         Status.transform.parent = GameObject.Find("Canvas").transform;
-        Status.transform.localPosition = new Vector3(236.2f, 110.9f, -10);
+        Status.transform.localPosition = new Vector3(405f, 145f, -10);
         Status.transform.localScale = new Vector3(0.5130946f, 0.5937846f, 0.5082178f);
 
         //phase = GameObject.Find("phase");
@@ -218,10 +225,16 @@ public class SideCoordinator : MonoBehaviour
         Toggle2 = GameObject.Find("Toggle2");
         Toggle3 = GameObject.Find("Toggle3");
         Toggle4 = GameObject.Find("Toggle4");
-        Toggle1.GetComponentInChildren<Text>().resizeTextForBestFit = true;
-        Toggle2.GetComponentInChildren<Text>().resizeTextForBestFit = true;
-        Toggle3.GetComponentInChildren<Text>().resizeTextForBestFit = true;
-        Toggle4.GetComponentInChildren<Text>().resizeTextForBestFit = true;
+
+        Toggle1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        Toggle2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        Toggle3.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        Toggle4.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+        Toggle1.GetComponentInChildren<Text>().color = Color.black;
+        Toggle2.GetComponentInChildren<Text>().color = Color.black;
+        Toggle3.GetComponentInChildren<Text>().color = Color.black;
+        Toggle4.GetComponentInChildren<Text>().color = Color.black;
 
         Status.SetActive(false);
 
@@ -255,6 +268,12 @@ public class SideCoordinator : MonoBehaviour
         side = new SideCheck();
 
         ConfigureCoordinateMapper(mapRenderer);
+        
+        //camera
+        MainCamera = GameObject.Find("Main Camera");
+        SplitCamera = GameObject.Find("Split Camera");
+        SplitCamera.SetActive(false);
+
         Application.ExternalCall("init_score", 0);
 
     }
@@ -298,11 +317,11 @@ public class SideCoordinator : MonoBehaviour
                 Application.ExternalCall("screenSize", "ok");
                 screenSet = true;
                 //MessageController.GetComponent<MessageController>().playClip(1);
-                balloon.GetComponent<RectTransform>().localPosition = new Vector3(88.5f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
-                balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(89.7f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
-                helper.GetComponent<Transform>().localPosition = new Vector3(215f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
+                //balloon.GetComponent<RectTransform>().localPosition = new Vector3(88.5f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
+                //balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(89.7f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
+                //helper.GetComponent<Transform>().localPosition = new Vector3(215f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
                 helper.SetActive(true);
-                balloon.SetActive(true);
+                //balloon.SetActive(true);
                 balloon_text.SetActive(true);
                 changeAni("pose_00");
                 set_timer.Start();
@@ -540,19 +559,23 @@ public class SideCoordinator : MonoBehaviour
     {
         Application.ExternalCall("screenResize", "ok");
         Application.ExternalCall("sendTest", "LoadScene");
-        Application.ExternalCall("sendTime", set_time);
+        Application.ExternalCall("send_time", set_time);
+        msg2Web(scene);
+        msg2Web((scene=="end").ToString());
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
         KinemotoSDK.EngagementHandler.HandRaiseCounter.Clear();
         Status.SetActive(false);
         breakTimeMask.SetActive(true);
-        elbowLeftDegree.SetActive(false);
-        elbowRightDegree.SetActive(false);
+        //elbowLeftDegree.SetActive(false);
+        //elbowRightDegree.SetActive(false);
         armpRightDegree.SetActive(false);
         armpLeftDegree.SetActive(false);
         helper.SetActive(false);
-        balloon.SetActive(false);
+        //balloon.SetActive(false);
         balloon_text.SetActive(false);
+        sendTime(set_time);
+        set_timer.Stop();
         //balloon.GetComponent<RectTransform>().localPosition = new Vector3(277f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
         //balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(281f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
         //helper.GetComponent<Transform>().localPosition = new Vector3(377f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
@@ -579,26 +602,29 @@ public class SideCoordinator : MonoBehaviour
                     BreakTime = 10f;
                     GameObject.Find("Finish").GetComponent<Text>().text = "목표 횟수 완료";
                     GameObject.Find("TakeArest").GetComponent<Text>().text = "휴식 시간 입니다";
+                    msg2Web("Change Scene : " + scene);
                 }
                 else
                 {
-                    firework.SetActive(true);
-                    BreakTime = 5f;
+                    BreakTime = 10f;
                     GameObject.Find("Finish").GetComponent<Text>().text = "목표 운동 완료";
+                    GameObject.Find("TakeArest").GetComponent<RectTransform>().localPosition = new Vector3(507f, -200f);
                     GameObject.Find("TakeArest").GetComponent<Text>().text = "곧 결과 페이지로 이동합니다";
+                    msg2Web("Change Scene : " + scene);
+                    firework.SetActive(true);
                 }
-                StartCoroutine(LoadNewScene(scene));
+                StartCoroutine(LoadNewScene(scene, BreakTime));
             }
         }
     }
 
-    IEnumerator LoadNewScene(string scene)
+    IEnumerator LoadNewScene(string scene, float BreakTime)
     {
 
         // This line waits for 3 seconds before executing the next line in the coroutine.
         // This line is only necessary for this demo. The scenes are so simple that they load too fast to read the "Loading..." text.
 
-        yield return new WaitForSeconds(9);
+        yield return new WaitForSeconds(BreakTime);
 
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
         //AsyncOperation async = Application.LoadLevelAsync(scene);
@@ -647,5 +673,66 @@ public class SideCoordinator : MonoBehaviour
     {
         Application.ExternalCall("sendTest", msg);
 
+    }
+
+    public void sendTime(string time)
+    {
+        Application.ExternalCall("send_time", time);
+        msg2Web("sendTime");
+    }
+
+    public void SplitScreen()
+    {
+        MainCamera.GetComponent<Camera>().rect = new Rect(0, 0, 0.7f, 1);
+        if (!SplitCamera.activeInHierarchy)
+        {
+            SplitCamera.SetActive(true);
+        }
+
+        practice_mod(true);
+    }
+    public void ResumeScreen()
+    {
+        MainCamera.GetComponent<Camera>().rect = new Rect(0, 0, 1, 1);
+        if (SplitCamera.activeInHierarchy)
+        {
+            SplitCamera.SetActive(false);
+        }
+        practice_mod(false);
+    }
+
+    public void practice_mod(bool on)
+    {
+        if (on)
+        {
+            set_timer.Stop();
+            count_timer.Stop();
+            practice_On = true;
+            //GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 굽음 X " + side.elbowLeft_Y_Count.ToString();
+            //GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 굽음 X " + side.elbowRight_Y_Count.ToString();
+            //GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 앞으로 나옴 X " + side.elbowLeft_Z_Count.ToString();
+            //GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 앞으로 나옴 X " + side.elbowLeft_Z_Count.ToString();
+            //GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "왼손목이 앞으로 나옴 X " + side.wristLeft_Z_Count.ToString();
+            //GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "오른손목이 앞으로 나옴 X " + side.wristLeft_Z_Count.ToString();
+
+            GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 굽음";
+            GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 굽음";
+            GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 앞으로 나옴";
+            GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 앞으로 나옴";
+            GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "왼손목이 앞으로 나옴";
+            GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "오른손목이 앞으로 나옴";
+            GameObject.Find("strike1").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+            GameObject.Find("strike2").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+            GameObject.Find("strike3").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+            GameObject.Find("strike4").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+            GameObject.Find("strike5").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+            GameObject.Find("strike6").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+        }
+        else
+        {
+            set_timer.Start();
+            count_timer.Start();
+            practice_On = false;
+        }
     }
 }

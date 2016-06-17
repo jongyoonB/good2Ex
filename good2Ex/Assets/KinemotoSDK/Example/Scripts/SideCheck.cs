@@ -28,6 +28,14 @@ public class SideCheck
     }
 
     // Y
+    public bool elbowLeft_Y
+    {
+        get; set;
+    }
+    public bool elbowRight_Y
+    {
+        get; set;
+    }
     public bool wristLeft_Y
     {
         get; set;
@@ -152,6 +160,10 @@ public class SideCheck
     int[] fail = new int[6];
     string failed_message = "";
 
+    static int good_count;
+    static int practice_count;
+    static int bad_count;
+
     #endregion
 
     #region Member [vector3 친구들]
@@ -168,6 +180,9 @@ public class SideCheck
     {
         set_Count = 0;
         score_Count = 0;
+        bad_count = 0;
+        good_count = 0;
+        practice_count = 0;
     }
 
     public void main()
@@ -180,7 +195,7 @@ public class SideCheck
             if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "Phase1")
             {
                 SideCoordinator.phase.GetComponentInChildren<Text>().text = "Phase1";
-                if (score_Count < 2)
+                if (set_Count == 0 && score_Count < 2)
                 {
                     set_text("Toggle1", "차렷자세");
                     //set_text("Toggle2", "");
@@ -200,12 +215,17 @@ public class SideCheck
         }
         else if (!start_Flag)
         {
-            SideCoordinator.changeAni("idle_10");
+            if (!SideCoordinator.count_timer.IsRunning)
+            {
+                SideCoordinator.count_timer.Start();
+            }
+            
             if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "Phase2")
             {
                 SideCoordinator.phase.GetComponentInChildren<Text>().text = "Phase2";
-                if (score_Count < 2)
+                if (set_Count == 0 && score_Count < 2)
                 {
+                    SideCoordinator.changeAni("idle_10");
                     SideCoordinator.Toggle2.SetActive(true);
                     SideCoordinator.Toggle3.SetActive(true);
                     SideCoordinator.Toggle4.SetActive(true);
@@ -222,7 +242,7 @@ public class SideCheck
             if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "Phase3")
             {
                 SideCoordinator.phase.GetComponentInChildren<Text>().text = "Phase3";
-                if (score_Count < 2)
+                if (set_Count == 0 && score_Count < 2)
                 {
                     set_text("Toggle1", "팔을 천천히 올리기");
                     set_text("Toggle2", "왼팔과 어깨가 평행하게");
@@ -237,7 +257,7 @@ public class SideCheck
             if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "Phase4")
             {
                 SideCoordinator.phase.GetComponentInChildren<Text>().text = "Phase4";
-                if (score_Count < 2)
+                if (set_Count == 0 && score_Count < 2)
                 {
                     SideCoordinator.Toggle3.SetActive(false);
                     SideCoordinator.Toggle4.SetActive(false);
@@ -299,16 +319,14 @@ public class SideCheck
 
     void startCheck()
     {
-        SideCoordinator.setBallonText("팔을 천천히 들어 주세요");
-
         y_False();
 
-        if (armpit_Left_Angle >= 43)
+        if (armpit_Left_Angle >= 55)
         {
             wristLeft_Y = true;
         }
 
-        if (armpit_Right_Angle >= 43)
+        if (armpit_Right_Angle >= 55)
         {
             wristRight_Y = true;
         }
@@ -324,57 +342,42 @@ public class SideCheck
     {
         y_False();
 
-        if (armpit_Left_Angle >= 80 && armpit_Left_Angle <= 90)
+        if (armpit_Left_Angle >= 80 && armpit_Left_Angle <= 100)
         {
             //set_textColor("Toggle2", Color.green);
             //SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
 
             wristLeft_Y = true;
         }
-        
 
-        if (armpit_Left_Angle < 43)
-        {
-            //아직 덜올라감.
-        }
-
-        if (armpit_Right_Angle < 43)
-        {
-            //아직 덜올라감.
-        }
-
-
-
-        if (armpit_Right_Angle >= 80 && armpit_Right_Angle <= 90)
+        if (armpit_Right_Angle >= 80 && armpit_Right_Angle <= 100)
         {
             //set_textColor("Toggle3", Color.green);
             //SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
 
             wristRight_Y = true;
         }
-        
+
 
         if (wristLeft_Y && wristRight_Y)
         {
             top_Flag = true;
             Sound_Controller();
-            y_Count_False();
-            z_Count_False();
+            
             Debug.Log("topClear");
         }
     }
 
     void endCheck()
     {
-        SideCoordinator.setBallonText("팔을 천천히 내려 주세요");
 
         y_False();
 
-        if (armpit_Left_Angle <= 40 && armpit_Left_Angle >= 25)
+        if (armpit_Left_Angle <= 40)
         {
             wristLeft_Y = true;
         }
-        if (armpit_Right_Angle <= 40 && armpit_Right_Angle >= 25)
+        if (armpit_Right_Angle <= 40)
         {
             wristRight_Y = true;
         }
@@ -424,7 +427,7 @@ public class SideCheck
                 fail[3] = 0;
             }
 
-            if (elbowLeft_Y_Count > 0)
+            if (elbowLeft_Y)
             {
                 fail[4] = 1;
             }
@@ -433,7 +436,7 @@ public class SideCheck
                 fail[4] = 0;
             }
 
-            if (elbowRight_Y_Count > 0)
+            if (elbowRight_Y)
             {
                 fail[5] = 1;
             }
@@ -441,62 +444,108 @@ public class SideCheck
             {
                 fail[5] = 0;
             }
+            GameObject PointsText;
+            if (fail[0] + fail[1] + fail[2] + fail[3] + fail[4] + fail[5] > 2)
+            {
+                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
+                bad_count++;
+                Debug.Log("BAD");
+            }
+            else
+            {
+                if (DumbelCoordinator.practice_On)
+                {
+                    practice_count++;
+                }
+                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/yosi")) as GameObject;
+                Debug.Log("yosi");
+            }
+            for (int i = 0; i < fail.Length; i++)
+            {
+                Debug.Log("failed[" + i.ToString() + "] = " + fail[i].ToString());
+                if (fail[i] >= 1)
+                {
+                    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
+                }
+                else
+                {
+                    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(1, 1.5f, false);
+                }
+            }
+            PointsText.GetComponent<ParticleSystem>().loop = false;
+            show_pointText(PointsText);
+
+            if (!SideCoordinator.practice_On && bad_count > 2)
+            {
+                sideCoordi.SplitScreen();
+            }
 
             end_Flag = true;
-            score_Count++;
-            if (score_Count == 2)
+            if (SideCoordinator.practice_On)
             {
-                //SideCoordinator.Status.SetActive(false);
-                SideCoordinator.Status.GetComponent<Image>().material = Resources.Load("blackMaterial") as Material;
-                SideCoordinator.Toggle1.SetActive(false);
-                SideCoordinator.Toggle2.SetActive(false);
-                SideCoordinator.Toggle3.SetActive(false);
-                SideCoordinator.Toggle4.SetActive(false);
+                if (practice_count > 2)
+                {
+                    practice_count = 0;
+                    bad_count = 0;
+                    y_Count_False();
+                    z_Count_False();
+                    sideCoordi.ResumeScreen();
+                }
+            }
 
+            else
+            {
+                if (score_Count > 2 || set_Count != 0)
+                {
+                    if (SideCoordinator.count_timer.ElapsedMilliseconds + 2000 > SideCoordinator.count_time_avg)
+                    {
+                        Debug.Log("SLOW!!");
+                        MSGorder = 17;
+                    }
+                    else
+                    {
+                        SideCoordinator.count_time_avg = (SideCoordinator.count_time_avg + SideCoordinator.count_timer.ElapsedMilliseconds) / score_Count;
+                    }
 
+                    Debug.Log(SideCoordinator.count_timer.ElapsedMilliseconds + " / " + SideCoordinator.count_time_avg);
+                }
+                score_Count++;
+                SideCoordinator.count_timer.Reset();
 
+                if (set_Count == 0 && score_Count == 2)
+                {
+                    //SideCoordinator.Status.SetActive(false);
+                    SideCoordinator.Status.GetComponent<Image>().material = Resources.Load("blackMaterial") as Material;
+                    SideCoordinator.Toggle1.SetActive(false);
+                    SideCoordinator.Toggle2.SetActive(false);
+                    SideCoordinator.Toggle3.SetActive(false);
+                    SideCoordinator.Toggle4.SetActive(false);
 
-
-                SideCoordinator.phase.transform.parent = GameObject.Find("Canvas").transform;
-                SideCoordinator.Status.GetComponent<RectTransform>().localScale = new Vector3(0.1203983f, 0.118181f, 1f);
-                SideCoordinator.Status.GetComponent<RectTransform>().offsetMin = new Vector2(-462f, -77f);
-                SideCoordinator.Status.GetComponent<RectTransform>().offsetMax = new Vector2(680f, 275f);
-                SideCoordinator.phase.transform.parent = SideCoordinator.Status.transform;
+                    SideCoordinator.phase.transform.parent = GameObject.Find("Canvas").transform;
+                    SideCoordinator.Status.GetComponent<RectTransform>().localScale = new Vector3(0.1203983f, 0.118181f, 1f);
+                    SideCoordinator.Status.GetComponent<RectTransform>().offsetMin = new Vector2(-462f, -77f);
+                    SideCoordinator.Status.GetComponent<RectTransform>().offsetMax = new Vector2(680f, 275f);
+                    SideCoordinator.phase.transform.parent = SideCoordinator.Status.transform;
+                }
             }
             Sound_Controller();
             ready_Flag = false;
             start_Flag = false;
             top_Flag = false;
             end_Flag = false;
-            y_Count_False();
-            z_Count_False();
-
+            
             //Application.ExternalCall("cut_view", score_Count, clear_Score);
 
             //Floating Text
-            GameObject PointsText;
-            if (fail[0] + fail[1] + fail[2] + fail[3] > 2)
-            {
-                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
-                Debug.Log("BAD");
-            }
-            else
-            {
-                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/yosi")) as GameObject;
-                Debug.Log("yosi");
-            }
-            PointsText.GetComponent<ParticleSystem>().loop = false;
-            show_pointTexta(PointsText);
+            
 
-
-
-            Debug.Log("EndClear");
+            //Debug.Log("EndClear");
         }
     }
 
     #endregion
 
-    void show_pointTexta(GameObject PointsText)
+    void show_pointText(GameObject PointsText)
     {
 
         PointsText.transform.position = new Vector3(SideCoordinator.JointInfo["Head"].X, SideCoordinator.JointInfo["Head"].Y + 2f, 0);
@@ -555,10 +604,10 @@ public class SideCheck
         {
             elbowLeft_Z = false;
             elbowLeft_Z_Count++;
+            failed_message = "왼쪽 팔꿈치가 너무 앞으로 나왔어요";
             if (ElbowLeftDepthFail == false)
             {
                 ElbowLeftDepthFail = true;
-                failed_message = "왼쪽 팔꿈치가 너무 앞으로 나왔어요";
             }
         }
 
@@ -570,10 +619,10 @@ public class SideCheck
         {
             elbowRight_Z = false;
             elbowRight_Z_Count++;
+            failed_message = "오른쪽 팔꿈치가 너무 앞으로 나왔어요";
             if (ElbowRightDepthFail == false)
             {
                 ElbowRightDepthFail = true;
-                failed_message = "오른쪽 팔꿈치가 너무 앞으로 나왔어요";
             }
         }
 
@@ -585,10 +634,10 @@ public class SideCheck
         {
             wristLeft_Z = false;
             wristLeft_Z_Count++;
+            failed_message = "왼쪽 손목이 너무 앞으로 나왔어요";
             if (WristLeftDepthFail == false)
             {
                 WristLeftDepthFail = true;
-                failed_message = "왼쪽 손목이 너무 앞으로 나왔어요";
             }
         }
 
@@ -600,34 +649,41 @@ public class SideCheck
         {
             wristRight_Z = false;
             wristRight_Z_Count++;
+            failed_message = "오른쪽 손목이 너무 앞으로 나왔어요";
             if (WristRightDepthFail == false)
             {
                 WristRightDepthFail = true;
-                failed_message = "오른쪽 손목이 너무 앞으로 나왔어요";
             }
         }
 
         if (elbowLeft_Z && elbowRight_Z && wristLeft_Z && wristRight_Z)
         {
-            SideCoordinator.changeAni("nod_01");
             if (!(elbow_Left_Angle >= 140) && !(elbow_Right_Angle >= 140))
             {
                 failed_message = "양팔이 굽혀졌내요";
             }
             else if (!(elbow_Left_Angle >= 140))
             {
-                failed_message = "왼이 굽혀졌내요";
+                failed_message = "왼팔이 굽혀졌내요";
             }
             else if (!(elbow_Right_Angle >= 140))
             {
                 failed_message = "오른팔이 굽혀졌내요";
             }
+            else if (start_Flag && !top_Flag && (armpit_Left_Angle < 54 || armpit_Right_Angle < 54))
+            {
+                failed_message = "잠깐!! 덜올라가고 내려오시면 안돼요.";
+            }
             else if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "Phase4")
             {
-                failed_message = "잘 하고 있어요!";
+                SideCoordinator.setBallonText("잘 하고 있어요!");
+                failed_message = "";
+                SideCoordinator.changeAni("nod_01");
+
             }
         }
-        else
+
+        if (failed_message.Length > 1)
         {
             SideCoordinator.changeAni("refuse_01");
             SideCoordinator.setBallonText(failed_message);
@@ -641,32 +697,6 @@ public class SideCheck
         {
             elbowRight_Y_Count++;
         }
-
-        
-        if (!top_Flag)
-        {
-            if (!elbowLeft_Z || !elbowRight_Z || !wristLeft_Z || !wristRight_Z)
-            {
-                //set_textColor("Toggle4", Color.red);
-            }
-            else
-            {
-                //set_textColor("Toggle4", Color.green);
-            }
-
-        }
-        else if (!end_Flag)
-        {
-            if (!elbowLeft_Z || !elbowRight_Z || !wristLeft_Z || !wristRight_Z)
-            {
-                //set_textColor("Toggle2", Color.red);
-            }
-            else
-            {
-                //set_textColor("Toggle2", Color.green);
-            }
-        }
-
     }
 
     #endregion
@@ -721,37 +751,37 @@ public class SideCheck
         bool RW = false;
 
         //왼팔꿈치가 굽었을 때
-        if (elbowLeft_Y_Count > 0)
+        if (elbowLeft_Y)
         {
             LG = true;
         }
 
         //오른팔꿈치가 굽었을 때
-        if (elbowRight_Y_Count > 0)
+        if (elbowRight_Y)
         {
             RG = true;
         }
 
         //왼팔꿈치가 앞으로 나왔을 때
-        if (elbowLeft_Z_Count > 0)
+        if (!elbowLeft_Z)
         {
             LE = true;
         }
 
         //오른팔꿈치가 앞으로 나왔을 때
-        if (elbowRight_Z_Count > 0)
+        if (!elbowRight_Z)
         {
             RE = true;
         }
 
         //왼손목이 앞으로 나왔을 때
-        if (wristLeft_Z_Count > 0)
+        if (!wristLeft_Z)
         {
             LW = true;
         }
 
         //오른손목이 앞으로 나왔을 때
-        if (wristRight_Z_Count > 0)
+        if (!wristRight_Z)
         {
             RW = true;
         }
@@ -801,43 +831,43 @@ public class SideCheck
 
         if (end_Flag)
         {
-            sideCoordi.send2web(score_Count, fail);
-
-            if ((clear_Score - 1) == score_Count)
+            if (!SideCoordinator.practice_On)
             {
-                SideCoordinator.firewall_position = new Vector3(((SideCoordinator.JointInfo["FootLeft"].X + SideCoordinator.JointInfo["FootRight"].X) / 2), ((SideCoordinator.JointInfo["FootLeft"].Y) * 6));
-                SideCoordinator.firewall.transform.position = SideCoordinator.firewall_position;
-                SideCoordinator.firewall.SetActive(true);
-                MSGorder = 9;
+                sideCoordi.send2web(score_Count, fail);
 
+                if ((clear_Score - 1) == score_Count)
+                {
+                    SideCoordinator.firewall_position = new Vector3(((SideCoordinator.JointInfo["FootLeft"].X + SideCoordinator.JointInfo["FootRight"].X) / 2), ((SideCoordinator.JointInfo["FootLeft"].Y) * 6));
+                    SideCoordinator.firewall.transform.position = SideCoordinator.firewall_position;
+                    SideCoordinator.firewall.SetActive(true);
+                    MSGorder = 9;
+
+                }
+                else if ((clear_Score - 2) == score_Count)
+                {
+                    MSGorder = 0;
+
+                }
+                else if ((clear_Score - 3) == score_Count)
+                {
+                    MSGorder = 5;
+                }
+                else if ((clear_Score == score_Count))
+                {
+                    SideCoordinator.firewall.SetActive(false);
+                    SideCoordinator.particle_position = new Vector3(((SideCoordinator.JointInfo["FootLeft"].X + SideCoordinator.JointInfo["FootRight"].X) / 2), ((SideCoordinator.JointInfo["FootLeft"].Y) * 7));
+                    SideCoordinator.particle.transform.position = SideCoordinator.particle_position;
+                    SideCoordinator.particle.SetActive(true);
+                    SideCoordinator.changeAni("greet_03");
+
+                    score_Count = 0;
+                    set_Count++;
+                    SideCoordinator.set_time = SideCoordinator.set_timer.Elapsed.ToString().Substring(3, 5);
+                    Debug.Log(SideCoordinator.set_time);
+                    MSGorder = 6;
+                }
             }
-            else if ((clear_Score - 2) == score_Count)
-            {
-                MSGorder = 0;
-
-            }
-            else if ((clear_Score - 3) == score_Count)
-            {
-                MSGorder = 5;
-            }
-            else if ((clear_Score == score_Count))
-            {
-                SideCoordinator.firewall.SetActive(false);
-                SideCoordinator.particle_position = new Vector3(((SideCoordinator.JointInfo["FootLeft"].X + SideCoordinator.JointInfo["FootRight"].X) / 2), ((SideCoordinator.JointInfo["FootLeft"].Y) * 7));
-                SideCoordinator.particle.transform.position = SideCoordinator.particle_position;
-                SideCoordinator.particle.SetActive(true);
-                SideCoordinator.changeAni("greet_03");
-
-                score_Count = 0;
-                set_Count++;
-                SideCoordinator.set_time = SideCoordinator.set_timer.Elapsed.ToString().Substring(3, 5);
-                Debug.Log(SideCoordinator.set_time);
-                SideCoordinator.set_timer.Reset();
-
-                MSGorder = 6;
-            }
-        }
-
+        }    
     }
 
     #endregion

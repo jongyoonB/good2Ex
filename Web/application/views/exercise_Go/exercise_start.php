@@ -202,7 +202,7 @@
         </div>
 
         <div class="row" style="margin: auto">
-            <div class="col-md-3">
+            <div class="col-md-3" style="float: right;">
 
                 <div class="row" style="margin: auto">
                     <div class="panel panel-success">
@@ -214,7 +214,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="float: right;">
                 <div class="row" style="margin: auto">
                     <div class="panel panel-success">
                         <div class="panel-heading" style="padding: 1px 1px; background-color: #3498db;color: white"><p class="set" id="set">1세트</p></div>
@@ -225,7 +225,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3" style="float: right;">
 
                 <div class="row" style="margin: auto">
                     <div class="panel panel-success">
@@ -246,7 +246,7 @@
 <script src="../../../public/js/highcharts.js"></script>
 <script src="../../../public/js/highcharts-more.js"></script>
 <script src="../../../public/js/solid-gauge.js"></script>
-<script src="../../../public/js/ex_info.js"></script>
+<!--<script src="../../../public/js/ex_info.js"></script>-->
 <script src="../../../public/js/chart.js"></script>
 
 

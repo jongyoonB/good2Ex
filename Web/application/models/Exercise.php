@@ -397,48 +397,48 @@ where er.exercise_numb = ei.exercise_numb
                  and ri.routine_date = ?
                  and o.exercise_order = ?;";
 
-        $query = $this->db->query($sql, array('2016-06-13', $order));
+        $query = $this->db->query($sql, array($today, $order));
+
         $exercise_numb = $query->row()->exercise_numb;
 
-        for ($i = 0; $i < count($fail_body_point); $i++) {
+        $sql = "SELECT check_point_index FROM check_point
+                  WHERE exercise_numb = ?";
 
-            $sql = "SELECT p.check_point_index FROM check_point p, user_position_record r
-                  WHERE p.check_point_index = r.check_point_index
-                  AND p.exercise_numb = ?
-                  AND p.point_numb = ?
-                  AND r.position_check_date = ?;";
+        $query = $this->db->query($sql, array($exercise_numb));
 
-            $query = $this->db->query($sql, array($exercise_numb, $i, '2016-06-13'));
+        if ($query->num_rows() > 0) {
+            $check_point_index = $query->result();
 
-            if ($query->num_rows() > 0) {
-                $a = $query->row();
+            for ($i = 0; $i < count($check_point_index); $i++) {
+                $sql = "SELECT position_record_index FROM user_position_record
+                  WHERE check_point_index = ?
+                  AND position_check_date = ?;";
 
-                $sql = "UPDATE user_position_record SET position_count = position_count + 1
-                      WHERE check_point_index = $a;";
+                $query = $this->db->query($sql, array($check_point_index[$i]->check_point_index, $today));
 
-            } else {
+                if ($query->num_rows() > 0) {
+                    $position_record_index = $query->row()->position_record_index;
 
-                $sql = "INSERT INTO user_position_record(user_numb, position_count, check_point_index, position_check_date)
-                    VALUES(
-                           {$_SESSION["user_info"]->user_numb}, {$fail_body_point[$i]},
-                           (
-                            select check_point_index
-                            from check_point
-                            where exercise_numb = {$exercise_numb}
-                            and point_numb = {$i}
-                           ), '2016-06-13');";
+                    $sql = "UPDATE user_position_record SET position_count = position_count + {$fail_body_point[$i]}
+                      WHERE position_record_index = $position_record_index;";
+
+                } else {
+
+                    $sql = "INSERT INTO user_position_record(user_numb, position_count, check_point_index, position_check_date)
+                    VALUES({$_SESSION["user_info"]->user_numb}, {$fail_body_point[$i]}, {$check_point_index[$i]->check_point_index}, '{$today});";
+
+                }
+
+                $this->db->query($sql);
 
             }
-
-            $this->db->query($sql);
-
 
             $sql = "UPDATE exercise_record SET clear_count = clear_count+1
                    WHERE user_numb = ?
                    and exercise_numb = ?
                    and exercise_date = ?;";
 
-            $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $exercise_numb, '2016-06-13'));
+            $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $exercise_numb, $today));
 
         }
 
@@ -449,7 +449,7 @@ where er.exercise_numb = ei.exercise_numb
     {
         //exit(var_dump($day));
         for ($i = 1; $i <= $exercise_count; $i++) {
-            for ($j = 0; $j < count($day); $j++){
+            for ($j = 0; $j < count($day); $j++) {
                 $sql = "INSERT INTO exercise_record (user_numb, exercise_numb, target_count, clear_count, exercise_date)
                     VALUE (2,
                            (
@@ -471,7 +471,7 @@ where er.exercise_numb = ei.exercise_numb
             }
         }
         if ($query) {
-            for ($j = 0; $j < count($day); $j++){
+            for ($j = 0; $j < count($day); $j++) {
                 $sql = "INSERT INTO user_routine_info(user_numb,routine_list_index,routine_date) VALUE($user_num, $select_routine,'$day[$j]')";
                 $query = $this->db->query($sql);
             }
@@ -514,16 +514,15 @@ and u.user_numb = ? order by o.exercise_order";
     function get_position_check_on_today($today)
     {
 
-
         $a = 0;
 //exit(var_dump($_SESSION["now_routine"]));
-        $sql = "SELECT p.point_numb, ei.exercise_name, p.position_check, sum(position_count) as position_count
+        $sql = "SELECT p.point_numb, ei.exercise_name, p.position_check, position_count
                 from user_position_record pr, check_point p, exercise_info ei
                 WHERE ei.exercise_numb = p.exercise_numb
                 and p.check_point_index = pr.check_point_index
                 and pr.user_numb = ?
                 AND pr.position_check_date = ?
-                group by p.exercise_numb, position_check, pr.check_point_index;";
+                and not position_count = 0;";
 
         $query = $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $today));
 
@@ -541,33 +540,43 @@ and u.user_numb = ? order by o.exercise_order";
 
     function get_position_check_on_another_day($today)
     {
-//exit();
-        $sql = "SELECT p.point_numb, ei.exercise_name, p.position_check, sum(position_count) as position_count
-                FROM user_position_record pr, check_point p, exercise_info ei
-                WHERE ei.exercise_numb = p.exercise_numb
-                and p.check_point_index = pr.check_point_index
-                AND pr.user_numb = ?
-                AND not pr.position_check_date = ?
-                group by ei.exercise_name, position_check, pr.check_point_index;
-";
-        $query = $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $today));
+        $a = array();
 
-//exit(var_dump($query));
-        if ($query->num_rows() > 0) {
-            $a = $query->result();
-            //exit(var_dump($a));
+        $x = 0;
+        for ($i = 0; $i < count($_SESSION['now_routine']); $i++) {
+            $sql = "SELECT p.point_numb, ei.exercise_name, p.position_check, position_count
+                    FROM user_position_record pr, check_point p, exercise_info ei
+                    WHERE ei.exercise_numb = p.exercise_numb
+                      and p.check_point_index = pr.check_point_index
+                      AND pr.position_check_date = (
+                                                    SELECT max(pr.position_check_date)
+                                                    from user_position_record pr, check_point p, exercise_info ei
+                                                    WHERE ei.exercise_numb = p.exercise_numb
+                                                      and p.check_point_index = pr.check_point_index
+                                                      and p.exercise_numb = ?
+                                                      and not pr.position_check_date = ?
+                                                    )
+                      and ei.exercise_numb = ?
+                      and not position_count = 0;";
+            $query = $this->db->query($sql, array($_SESSION['now_routine'][$i]->exercise_numb, $today, $_SESSION['now_routine'][$i]->exercise_numb));
 
-            return $a;
+            if ($query->num_rows() > 0) {
+                for ($z = 0; $z < count($query->result()); $z++) {
+                    $a[$x++] = $query->result()[$z];
+                }
 
-        } else {
-            return 0;//아이디 실패
+            } else
+                $a = 0;
         }
+
+        //exit(var_dump($a));
+        return $a;
     }
 
     function Exercise_routine_preview($user_num, $day)
     {
         //exit(var_dump($day));
-        for ($j = 0; $j < count($day); $j++){
+        for ($j = 0; $j < count($day); $j++) {
             $sql = "SELECT u.routine_date, r.routine_name,n.number_of_count,n.number_of_set,i.exercise_name, i.exercise_info
               FROM user_routine_info u, routine_list r, exercise_order o, exercise_repeat_numb n, exercise_info i
               WHERE u.user_numb='$user_num'
@@ -602,9 +611,10 @@ and u.user_numb = ? order by o.exercise_order";
         $this->db->query($sql);
     }
 
-    function get_calorie_info($exercise_time){
+    function get_calorie_info($exercise_time)
+    {
 
-        for ($j = 0; $j < count($_SESSION['now_routine']); $j++){
+        for ($j = 0; $j < count($_SESSION['now_routine']); $j++) {
             $sql = "select kinematic_coefficient* (
                                                SELECT weight
                                                FROM weight
@@ -616,7 +626,7 @@ and u.user_numb = ? order by o.exercise_order";
                  where exercise_numb = {$_SESSION['now_routine'][$j]->exercise_numb};";
 
             $query = $this->db->query($sql);
-        //exit(var_dump($sql));
+            //exit(var_dump($sql));
             if ($query->num_rows() > 0)
                 $a[$j] = $query->row();
         }

@@ -124,47 +124,51 @@ function exerciseGet()
 
 
 /*
-function screenSize(data)
-{
-  $(".content").css("width","500px");
-}
-*/
+ function screenSize(data)
+ {
+ $(".content").css("width","500px");
+ }
+ */
 
 function screenResize(data)
 {
-  $(".content").css("width","72%");
+    $(".col-md-8").css("width","74%");
 }
 
 
-  function cut_View(left,right) {
+function cut_View(left,right) {
     if(left < 0)
     {
-      left += 481;
+        left += 481;
     }
     if(right < 0)
     {
-      right += 481;
+        right += 481;
     }
     console.log("right : " + right);
     console.log("left : " + left);
-  }
-  function cut_view(left,right) {
+}
+function cut_view(left,right) {
     console.log("count : " + left);
     console.log("goal : " + right);
-  }
-  function cut_view2(left,right) {
+}
+function cut_view2(left,right) {
     //console.log("SETcount : " + left);
     //console.log("SETgoal : " + right);
-  }
+}
+
+function sendTest(msg){
+    console.log("from unity says: " + msg);
+}
 
 /*function send_score(score) {
-    if (sended_score != score) {
-        sended_score = score;
+ if (sended_score != score) {
+ sended_score = score;
 
-        make_chart();
+ make_chart();
 
-    }
-}*/
+ }
+ }*/
 
 function send_score(score, fail_body_point) {
     if (sended_score != score) {
@@ -181,17 +185,17 @@ function send_score(score, fail_body_point) {
             },
             dataType: "json",
             success: function(data){
-               console.log(data);
+                console.log(data);
             }
 
         });
-        
+
     }
 }
 
 
 function send_time(time){
-     console.log("sended Time : "+time);
+    console.log("sended Time : "+time);
     $.ajax({
         type: "post",
         url: '/main/save_time',
@@ -212,7 +216,7 @@ function send_time(time){
 
 
 function get_score() {
-    return sended_score;0
+    return sended_score;
 }
 
 function init_score(score) {
@@ -311,7 +315,7 @@ function make_chart() {
             point,
             newVal,
             inc;
-            //set_num=1;
+        //set_num=1;
 
         if (chart) {
             inc = get_score();
@@ -362,7 +366,7 @@ function make_chart() {
 
 
 /*
-function sleep(ms){
-    ts1 = new Date().getTime() + ms;
-    do ts2 = new Date().getTime(); while (ts2<ts1);
-}*/
+ function sleep(ms){
+ ts1 = new Date().getTime() + ms;
+ do ts2 = new Date().getTime(); while (ts2<ts1);
+ }*/

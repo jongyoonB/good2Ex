@@ -92,14 +92,15 @@ exercise_date 정보로 달력에 표시
             날짜선택</a></span>
     <span class="fa fa-check-square-o list-group-item" style="width: 100%" aria-hidden="true"><a href="#">
             계획완료</a></span>
+    <button type="button" id="nextButton" class="btn btn-success" style="text-align: center; margin-top: 10px">날짜 선택 완료</button>
 </div>
+
 
 
 <div style="margin:auto; width:80%; margin-bottom: 10px; float: left">
     <?php
     echo $calendar;
     ?>
-    <button type="button" id="nextButton" class="btn btn-primary" style="float: right; margin-top: 10px">다음</button>
 </div>
 
 
@@ -210,7 +211,7 @@ exercise_date 정보로 달력에 표시
                 var dd = Rplan.length;
                 $('.modal-content').html("<div class='modal-header'>" +
                     "<button type='button' class='close'><span aria-hidden='true'>×</span><span class='sr-only'>Close</span></button>" +
-                    "<h4 class='modal-title' id='myModalLabel'>Modal title</h4>" +
+                    "<h4 class='modal-title' id='myModalLabel'>운동 계획</h4>" +
                     "</div>" +
                     "<div class='modal-body' id='exercise_modal'>" +
                     "</div>" +

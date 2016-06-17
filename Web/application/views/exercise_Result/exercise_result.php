@@ -57,7 +57,7 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                 },
                 plotOptions: {
                     column: {
-                        pointPadding: 0.3,
+                        pointPadding: 0.2,
                         borderWidth: 0
                     }
                 },
@@ -91,9 +91,9 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
             background-color: #ececec;
         }
 
-        /*.point {*/
-        /*cursor: pointer;*/
-        /*}*/
+        .point {
+            cursor: pointer;
+        }
 
         #check_point_info {
             display: none;
@@ -103,11 +103,100 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
         #check_point_info div {
             position: absolute;
         }
+
+        .radio {
+            padding-left: 20px;
+        }
+
+        .radio label {
+            display: inline-block;
+            position: relative;
+            padding-left: 5px;
+        }
+
+        .radio label::before {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            width: 17px;
+            height: 17px;
+            left: 0;
+            margin-left: -20px;
+            border: 1px solid #cccccc;
+            border-radius: 50%;
+            background-color: #fff;
+            -webkit-transition: border 0.15s ease-in-out;
+            -o-transition: border 0.15s ease-in-out;
+            transition: border 0.15s ease-in-out;
+        }
+
+        .radio label::after {
+            display: inline-block;
+            position: absolute;
+            content: " ";
+            width: 11px;
+            height: 11px;
+            left: 3px;
+            top: 3px;
+            margin-left: -20px;
+            border-radius: 50%;
+            background-color: #555555;
+            -webkit-transform: scale(0, 0);
+            -ms-transform: scale(0, 0);
+            -o-transform: scale(0, 0);
+            transform: scale(0, 0);
+            -webkit-transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+            -moz-transition: -moz-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+            -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+            transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+        }
+
+        .radio input[type="radio"] {
+            opacity: 0;
+        }
+
+        .radio input[type="radio"]:focus + label::before {
+            outline: thin dotted;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+
+        .radio input[type="radio"]:checked + label::after {
+            -webkit-transform: scale(1, 1);
+            -ms-transform: scale(1, 1);
+            -o-transform: scale(1, 1);
+            transform: scale(1, 1);
+        }
+
+        .radio input[type="radio"]:disabled + label {
+            opacity: 0.65;
+        }
+
+        .radio input[type="radio"]:disabled + label::before {
+            cursor: not-allowed;
+        }
+
+        .radio.radio-inline {
+            margin-top: 0;
+        }
+
+        .radio-primary input[type="radio"] + label::after {
+            background-color: #428bca;
+        }
+
+        .radio-primary input[type="radio"]:checked + label::before {
+            border-color: #428bca;
+        }
+
+        .radio-primary input[type="radio"]:checked + label::after {
+            background-color: #428bca;
+        }
     </style>
 </head>
 <body>
 <?php
-//exit(var_dump($achievement_count));
+$now_routine_info = $_SESSION['now_routine'];
+
 ?>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -139,8 +228,10 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                 <li><a href="/sign/logout">LOGOUT</a></li>
                 <?php /*}*/ ?>
             </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
 </nav>
 
 <div class="container-fluid">
@@ -148,20 +239,26 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
         <div class="col-lg-3">
             <div class="row" style="background-color: #a4caca; margin: auto; margin-bottom: 15px">
                 <div style="padding: 20px 0px 20px 30px; box-shadow: 0px 2px 3px #cccccc;">
-                    <p style="font-size: 25px; color: white">오늘 수행한 운동</p>
-                    <?php
-                    for ($i = 0; $i < count($_SESSION['now_routine']); $i++) {
-                        $plus = $i + 1;
-                        echo "<p style='font-size: 22px'><span class='label label-default' style='margin: 0px 10px 0px 10px'>$plus</span>{$_SESSION['now_routine'][$i]->exercise_name}</p>";
-                    }
-                    ?>
+                    <p style="font-size: 25px;">운동시간</p>
+
+                    <p class="text-center" style="font-size: 90px;">
+                        <?php
+                        for ($i = 0; $i < count($exercise_time); $i++) {
+                            if ($i == count($exercise_time) - 1)
+                                echo "<strong class='time_count'>$exercise_time[$i]</strong>";
+                            else
+                                echo "<strong class='time_count'>$exercise_time[$i]</strong>:";
+                        }
+                        ?>
+                    </p>
                 </div>
             </div>
             <div class="row"
                  style="background-image:url('/public/img/exercise/Kcal.jpg'); background-size: cover;  margin: auto; background-repeat: no-repeat;margin-bottom: 15px; color: white;">
                 <div style="padding: 20px 0px 20px 30px; box-shadow: 0px 2px 3px #cccccc;">
                     <p style="font-size: 25px">칼로리 정보</p>
-                    <p style="font-size: 70px">
+
+                    <p style="font-size: 75px">
                         <strong id="calorie_count" style="color: #d2ff00"><?php echo $calorie_info ?></strong>Kcal
                     </p>
                 </div>
@@ -169,42 +266,42 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
         </div>
         <div class="col-lg-5">
             <div class="row"
-                 style="background-color: #b4bdc4; margin: auto; margin-bottom: 15px; padding: 10px; box-shadow: 0px 2px 3px #cccccc;">
-                <div class="col-md-7" style="padding-right: 0">
+                 style="background-color: #b4bdc4; margin: auto; padding: 10px;  padding-top: 20px; box-shadow: 0px 2px 3px #cccccc;">
+                <div class="col-md-6" style="padding-right: 0;">
                     <div class="row">
-                        <div style="width:82%; margin-right:10px; float:right; position: relative" id="human">
+                        <div style="width:90%; position: relative;  margin-left: 10px;" id="human">
                             <img src="/public/img/exercise/musle_icon_2.png"
                                  style="width: 100%;">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5" style="padding-left: 0;">
-                    <div class="row" style="margin-bottom: 195%">
+                <div class="col-md-6" style="padding-left: 0;">
+                    <div class="row" style="margin-bottom: 150%">
                         <div class="btn-group" data-toggle="buttons" style="float: right">
                             <label class="btn btn-default round btn-md" id="point_check">
-                                <input type="radio" name="options" autocomplete="off">지적사항
+                                <input type="radio" name="menu" autocomplete="off">지적사항
                             </label>
                             <label class="btn btn-default round btn-md" id="muscle">
                                 <input type="radio" name="options" autocomplete="off">근육
                             </label>
                         </div>
                     </div>
-                    <div class="row" style="padding-right: 20px;">
-                        <div class="exercise_list panel panel-default">
+                    <div class="row" style="padding-right: 15px;">
+                        <div class="panel panel-default" style="font-size: 20px">
                             <!-- Default panel contents -->
-                            <div class="panel-heading" style="font-size: 20px">운동 목록</div>
-                            <table class="table table-hover">
+                            <div class="panel-heading">운동 목록</div>
+                            <!-- List group -->
+                            <ul class="list-group">
                                 <?php
                                 for ($i = 0; $i < count($_SESSION['now_routine']); $i++) {
-                                    if ($i == 0)
-                                        $color = '#57b79c';
-                                    elseif ($i == 1)
-                                        $color = 'f982e4';
-
-                                    echo "<tr class='exercise_info {$i}' id='{$_SESSION['now_routine'][$i]->exercise_name}'><td><span class='glyphicon glyphicon-ok-circle' style='color: {$color}' aria-hidden='true'></span> {$_SESSION['now_routine'][$i]->exercise_name}</td></tr>";
+                                    $value = $i + 1;
+                                    echo "<li class='list-group-item'>";
+                                    echo "<div class='radio' style='margin: 0; padding:0; padding-left: 20px'>";
+                                    echo "<input type='radio' class='exercise_info' name='radio' id='radio{$value}' value='{$_SESSION['now_routine'][$i]->exercise_name}' disabled=''>";
+                                    echo "<label for='radio{$value}'>{$_SESSION['now_routine'][$i]->exercise_name}</label></div></li>";
                                 }
                                 ?>
-                            </table>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -212,16 +309,20 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
         </div>
         <div class="col-lg-4">
             <div class="row" style="background-color: rgba(84, 130, 130, 0.3); margin: auto; margin-bottom: 15px">
-                <div style="padding: 30px 0px 30px 40px; box-shadow: 0px 2px 3px #cccccc;">
-                    <p style="font-size: 25px; ">운동시간</p>
-                    <p class="text-center" style="font-size: 70px">
-                        <strong class="time_count">00</strong>:<strong class="time_count">06</strong>:<strong
-                            class="time_count">50</strong></p>
+                <div style="padding: 20px 0px 20px 30px; box-shadow: 0px 2px 3px #cccccc;">
+                    <p style="font-size: 25px; color: white">오늘 수행한 운동</p>
+                    <?php
+                    for ($i = 0; $i < count($_SESSION['now_routine']); $i++) {
+                        $plus = $i + 1;
+                        echo "<p style='font-size: 20px'><span class='label label-default' style='margin: 0px 10px 0px 10px'>$plus</span>{$_SESSION['now_routine'][$i]->exercise_name}</p>";
+                    }
+                    ?>
                 </div>
             </div>
             <div class="row" style="background-color: white; margin: auto; margin-bottom: 15px">
-                <div style="padding: 30px 30px 10px 40px; box-shadow: 0px 2px 3px #cccccc;">
+                <div style="padding: 20px 30px 10px 30px; box-shadow: 0px 2px 3px #cccccc;">
                     <p style="font-size: 25px; margin-bottom: 20px">목표 달성</p>
+
                     <div id="achievement_count"></div>
                 </div>
             </div>
@@ -233,27 +334,33 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
     </div>
 </div>
 
-<div>
-    <div id="check_point_info">
-        <div id="container" style="width: 20%"></div>
-    </div>
+<div class="row">
+    <div style="width: 40%;" id="check_point_info"></div>
 </div>
 
 <script>
     $(document).ready(function () {
 
-        var exercise_name;
-        var exercise_info = Array();
         var result = '<?= json_encode($position_check_on_today)?>';
+        //console.log(result);
         var position_check_on_today = JSON.parse(result);
 
-        //console.log(position_check_on_today);
-
-        var result = '<?= json_encode($position_check_on_another_day)?>';
+        result = '<?= json_encode($position_check_on_another_day)?>';
+        //console.log(result);
         var position_check_on_another_day = JSON.parse(result);
 
+        <?php
+        echo "var now_routine_info = " . json_encode($_SESSION['now_routine']) . ";"
+        ?>
+
+
+        //console.log("posi" + position_check_on_today);
+        //console.log("ana" + position_check_on_another_day);
+        var today_check, recent_check;
+        var point_numb, exercise_name;
+
         $('#calorie_count').each(function () {
-            $(this).prop('Counter', 10).animate({
+            $(this).prop('Counter', 0).animate({
                 Counter: $(this).text()
             }, {
                 duration: 1000,
@@ -280,217 +387,263 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                 }
             });
         });
-        //$(id).css('background-color', '#DEF');
 
-
-        //var exercise_info = true;
         $('.btn').click(
             function () {
-                var id = $(this).attr("id");
+
+                $('.exercise_info').removeAttr("disabled");
+                $('#radio1').attr("checked", "");
+
+                var menu = $(this).attr("id");
                 //alert(id);
 
-                if (id == "point_check") {
+                if (menu == "point_check") {
                     $('.point').remove();
 
-                    var value = Array();
-                    for (var i = 0; i < position_check_on_today.length; i++) {
-                        value[i] = position_check_on_today[i]['point_numb'];
-                    }
+                    exercise_name = $('#radio1').attr("value");
 
-//                    for (var i = 0; i < position_check_on_another_day.length; i++) {
-//                        value[i] = position_check_on_another_day[i]['point_numb'];
-//                    }
-
-                    var point_numb = [];
-                    $.each(value, function (i, el) {
-                        if ($.inArray(el, point_numb) === -1) point_numb.push(el);
-                    });
+                    point_numb = find_point(exercise_name);
 
                     //console.log(point_numb);
 
-                    for (var i = 0; i < point_numb.length; i++) {
+                    drow_point(point_numb);
 
-                        // 왼쪽 팔꿈치
-                        if (i == 0) {
-                            $("#human").append("<div style='position: absolute; top: 35%; left: 18%;'><span class='point glyphicon glyphicon-record' style='font-size: 30px; color: #0064a2; opacity: 0.8'></span></div>");
+                    point_hover();
 
-                            // 오른쪽 팔꿈치
-                        } else if (i == 1) {
-                            $("#human").append("<div style='position: absolute; top: 35%; left: 70%;'><span class='point glyphicon glyphicon-record' style='font-size: 30px; color: #0064a2; opacity: 0.8'></span></div>");
-
-                            // 왼쪽 손목
-                        } else if (i == 2) {
-                            $("#human").append("<div style='position: absolute; top: 48%; left: 10%;'><span class='point glyphicon glyphicon-record' style='font-size: 30px; color: #0064a2; opacity: 0.8'></span></div>");
-                            $(".point:last").addClass(i);
-
-                            // 오른쪽 손목
-                        } else if (i == 3) {
-                            $("#human").append("<div style='position: absolute; top: 48%; left: 79%'><span class='point glyphicon glyphicon-record' style='font-size: 30px; color: #0064a2; opacity: 0.8'></span></div>");
-
-                            // 무릎
-                        } else if (i == 4) {
-                            $("#human").append("<div style='position: absolute; top: 67%; left: 34%;'><span class='point glyphicon glyphicon-record' style='font-size: 30px; color: #0064a2; opacity: 0.8'></span></div>");
-
-                            // 상체
-                        } else if (i == 5) {
-                            $("#human").append("<div style='position: absolute; top: 14%; left: 24%; width: 52%; height: 26%;' class='point'></div>");
-
-                            // 다리
-                        } else if (i == 6) {
-                            $("#human").append("<div style='position: absolute; top: 40%; left: 36%; width: 30%; height: 52%;' class='point'></div>");
-
-                        }
-
-                    }
-
-                } else if (id == 'muscle') {
+                } else if (menu == 'muscle') {
                     $('.point').remove();
 
                 }
 
                 $('.exercise_info').click(
                     function () {
-
                         //console.log(this);
-                        exercise_name = $(this).attr("id");
-                        //console.log(position_check_on_today);
+
+                        exercise_name = $(this).attr("value");
 
                         $('.point').remove();
 
-                        var value1 = Array();
-                        var value_count = 0;
-                        for (var i = 0; i < position_check_on_today.length; i++) {
-                            if(exercise_name == position_check_on_today[i].exercise_name){
-                                value1[value_count] = position_check_on_today[i].point_numb;
+                        point_numb = find_point(exercise_name);
+                        drow_point(point_numb);
 
-                                value_count++;
-                            }
-                        }
-
-                        //console.log(value1);
-
-//                        value_count = 0;
-//                        var value2 = new Array();
-//                        for (var i = 0; i < position_check_on_another_day.length; i++) {
-//                            if(exercise_name == position_check_on_another_day[i]['exercise_name'])
-//                            value2[value_count] = position_check_on_another_day[i].point_numb;
-
-//                        value_count++;
-//                        }
-//
-//                        var value = value1.concat(value2);
-                        //console.log(value1[0]);
-
-                        var point_numb = [];
-                        $.each(value1, function (i, el) {
-                            if ($.inArray(el, point_numb) === -1) point_numb.push(el);
-                        });
-
-                        //console.log(point_numb);
-                        for (var i = 0; i < point_numb.length; i++) {
-
-                            // 왼쪽 팔꿈치
-                            if (i == 0) {
-                                //console.log(i);
-                                $("#human").append("<div style='position: absolute; top: 35%; left: 18%;'><span class='point glyphicon glyphicon-record' id='"+i+"' style='font-size: 30px; color: #0064a2; opacity: 1'></span></div>");
-
-                                // 오른쪽 팔꿈치
-                            } else if (i == 1) {
-                                $("#human").append("<div style='position: absolute; top: 35%; left: 70%;'><span class='point glyphicon glyphicon-record' id='"+i+"' style='font-size: 30px; color: #0064a2; opacity: 1'></span></div>");
-
-                                // 왼쪽 손목
-                            } else if (i == 2) {
-                                $("#human").append("<div style='position: absolute; top: 48%; left: 10%;'><span class='point glyphicon glyphicon-record' id='"+i+"' style='font-size: 30px; color: #0064a2; opacity: 1'></span></div>");
-
-                                // 오른쪽 손목
-                            } else if (i == 3) {
-                                $("#human").append("<div style='position: absolute; top: 48%; left: 79%'><span class='point glyphicon glyphicon-record' id='"+i+"' style='font-size: 30px; color: #0064a2; opacity: 1'></span></div>");
-
-                                // 무릎
-                            } else if (i == 4) {
-                                $("#human").append("<div style='position: absolute; top: 67%; left: 34%;'><span class='point glyphicon glyphicon-record' id='"+i+"' style='font-size: 30px; color: #0064a2; opacity: 1'></span></div>");
-
-                                // 상체
-                            } else if (i == 5) {
-                                $("#human").append("<div style='position: absolute; top: 14%; left: 24%; width: 52%; height: 26%;' class='point' id='"+i+"'></div>");
-
-                                // 다리
-                            } else if (i == 6) {
-                                $("#human").append("<div style='position: absolute; top: 40%; left: 36%; width: 30%; height: 52%;' class='point' id='"+i+"'></div>");
-
-                            }
-
-                        }
-
-                        var result = $(this).attr("class");
-                        var split = result.split(' ');
-                        var order = split[split.length - 1];
-
-                        if (order == 0)
-                            $('.point').css('color', '#57b79c');
-                        else if(order == 1)
-                            $('.point').css('color', '#f982e4');
-
-                        $('.point').css('opacity', '0.3');
-
-                        $('.point').hover(
-                            function (event) {
-                                $(this).css('opacity', '1');
-
-                                var point_numb = $(this).attr("id");
-
-                                //console.log(position_check_on_today);
-
-                                var value_count = 0;
-                                //exercise_info['exercise_name']=[];
-                                for (var i = 0; i < position_check_on_today.length; i++) {
-                                    exercise_name[value_count]=position_check_on_today[i]['exercise_name'];
-                                    console.log(exercise_info['exercise_name']);
-//                                    if (exercise_name == position_check_on_today[i]['exercise_name']) {
-//                                        //console.log(position_check_on_today[i]);
-//                                        check[value_count] = position_check_on_today[i];
-//
-//                                    }
-                                    value_count++;
-                                }
-                                console.log(exercise_name);
-
-//                                for (var i = 0; i < position_check_on_another_day.length; i++) {
-//                                    if (point_numb == position_check_on_another_day[i]['point_numb']) {
-//                                        var check2 = position_check_on_another_day[i];
-//                                    }
-//                                }
-                        var left = event.pageX - $(this).offset().left + 300;
-
-                        var top = event.pageY - $(this).offset().top + 300;
-                        $('#check_point_info').css({top: top, left: left}).show();
-
-                                //console.log(check2);
-
-
-                            },
-                            function () {
-                                $(this).css('opacity', '0.3');
-
-                                $('#check_point_info').hide();
-                            }
-                        );
+                        point_hover();
 
                     }
                 );
 
             });
 
-// Data gathered from http://populationpyramid.net/germany/2015/
-        $(function () {
-            //console.log(exercise_info);
-            // Age categories
-            var categories = ['덤벨 숄더 플레스', '사이드 레터럴 레이즈'];
-            $(document).ready(function () {
-                $('#container').highcharts({
+        function find_point(exercise_name) {
+            var value1 = Array();
+            var value_count = 0;
+            for (var i = 0; i < position_check_on_today.length; i++) {
+                if (exercise_name == position_check_on_today[i].exercise_name) {
+                    value1[value_count] = position_check_on_today[i].point_numb;
+
+                    value_count++;
+                }
+            }
+
+            var value2 = Array();
+            value_count = 0;
+            for (var i = 0; i < position_check_on_another_day.length; i++) {
+                if (exercise_name == position_check_on_another_day[i].exercise_name) {
+                    value2[value_count] = position_check_on_another_day[i].point_numb;
+
+                    value_count++;
+                }
+            }
+
+            var value = value1.concat(value2);
+
+            var point_numb = [];
+            $.each(value, function (i, el) {
+                if ($.inArray(el, point_numb) === -1) point_numb.push(el);
+            });
+
+            return point_numb;
+        }
+
+        function drow_point(point_numb) {
+            for (var i = 0; i < point_numb.length; i++) {
+
+                // 왼쪽 팔꿈치
+                if (i == 0) {
+                    //console.log(i);
+                    $("#human").append("<div style='position: absolute; top: 35%; left: 18%;'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+
+                    // 오른쪽 팔꿈치
+                } else if (i == 1) {
+                    $("#human").append("<div style='position: absolute; top: 35%; left: 70%;'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+
+                    // 왼쪽 손목
+                } else if (i == 2) {
+                    $("#human").append("<div style='position: absolute; top: 48%; left: 10%;'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+
+                    // 오른쪽 손목
+                } else if (i == 3) {
+                    $("#human").append("<div style='position: absolute; top: 48%; left: 79%'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+
+                    // 무릎
+                } else if (i == 4) {
+                    $("#human").append("<div style='position: absolute; top: 67%; left: 34%;'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+
+                    // 상체
+                } else if (i == 5) {
+                    $("#human").append("<div style='position: absolute; top: 14%; left: 24%; width: 52%; height: 26%;' class='point' id='" + i + "'></div>");
+
+                    // 다리
+                } else if (i == 6) {
+                    $("#human").append("<div style='position: absolute; top: 40%; left: 36%; width: 30%; height: 52%;' class='point' id='" + i + "'></div>");
+
+                }
+
+            }
+        }
+
+        function point_hover() {
+
+            $('.point').hover(
+                function (event) {
+                    $(this).css('opacity', '1');
+
+                    var point_numb = $(this).attr("id");
+
+                    today_check = [];
+                    recent_check = [];
+
+                    for (var i = 0; i < position_check_on_today.length; i++) {
+                        if (exercise_name == position_check_on_today[i]['exercise_name'] && point_numb == position_check_on_today[i]['point_numb'])
+                        {
+                            today_check[position_check_on_today[i]['position_check']] = position_check_on_today[i]['position_count'];
+                        }
+                    }
+
+                    for (var i = 0; i < position_check_on_another_day.length; i++) {
+                        if (exercise_name == position_check_on_another_day[i]['exercise_name'] && point_numb == position_check_on_another_day[i]['point_numb'])
+                            recent_check[position_check_on_another_day[i]['position_check']] = position_check_on_another_day[i]['position_count'];
+                    }
+
+                    i = 0;
+                    var categories = [];
+                    for (var value1 in today_check) {
+                        for (var value2 in recent_check) {
+                            if (value1 == value2) {
+                                //console.log(value1);
+                                categories.push(value1);
+                                //console.log(categories);
+                            }
+                        }
+                    }
+
+                    var new_point = [];
+                    var no_point = [];
+                    if (categories.length > 0) {
+                        var today_data = [];
+                        for (var value in today_check) {
+                            var flag = false;
+                            for (var i = 0; i < categories.length; i++) {
+                                if (categories[i] == value) {
+                                    //console.log("같을 때 : " + value);
+                                    flag = true;
+                                    var data = today_check[value] - 0;
+                                    today_data.push(data);
+                                }
+                            }
+
+                            if(!flag)
+                            {
+                                //console.log("다를때");
+                                //console.log(value);
+                                var data = value;
+
+                                new_point.push(data);
+                                //console.log("dddd"+new_point);
+                            }
+
+                        }
+
+
+                        //console.log(new_point);
+                        var recent_data = [];
+                        for (var value in recent_check) {
+                            var flag = false;
+                            for (var i = 0; i < categories.length; i++) {
+                                if (categories[i] == value) {
+                                    //console.log("같을 때2 : " + value);
+                                    flag = true;
+                                    var data = recent_check[value] - 0;
+                                    recent_data.push(data);
+                                }
+                            }
+
+                            if(!flag)
+                            {
+                                //console.log("다를때2");
+                                //console.log(value);
+                                var data = value;
+                                no_point.push(data);
+                                //console.log(no_point);
+                                 //console.log(new_point);
+                            }
+
+                        }
+                        $("#check_point_info").empty();
+                        $("#check_point_info").append("<div id='check_point'></div>");
+
+                        check(categories, today_data, recent_data);
+
+                    } else {
+                        $("#check_point_info").empty();
+                    }
+
+
+                    if (no_point.length > 0) {
+                        $("#check_point_info").append("<div class='row'><div id='no_point'>전에 받은 지적사항</div></div>");
+
+                        for(var i=0; i<no_point.length; i++){
+                            $("#no_point").append("<p></p>");
+                        }
+
+                        //console.log("ddd");
+                    }
+
+                    if (new_point.length > 0) {
+                        $("#check_point_info").append("<div class='row'><div id='new_point'>새로 받은 지적사항</div></div>");
+
+                        for(var i=0; i<new_point.length; i++){
+                            $("#new_point").append("<p></p>");
+                        }
+                        //console.log("d");
+                    }
+
+                    var left = event.pageX - $(this).offset().left + 0;
+                    var top = event.pageY - $(this).offset().top + 200;
+                    $('#check_point_info').css({top: top, left: left}).show();
+
+                },
+                function () {
+                    $(this).css('opacity', '0.5');
+
+                    $('#check_point_info').hide();
+                }
+            );
+        }
+
+        function check(categories, today_data, recent_data) {
+
+            var height;
+            if (categories.length == 1) {
+                height = 170;
+            } else if (categories.length == 2) {
+                height = 250;
+            }
+
+            $(function () {
+                $('#check_point').highcharts({
                     chart: {
                         type: 'bar',
-                        height: 230
+                        height: height
                     },
                     title: {
                         text: null
@@ -506,63 +659,58 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                     credits: {
                         enabled: false
                     },
-                    xAxis: [{
+                    xAxis: {
                         categories: categories,
-                        reversed: false,
-                        labels: {
-                            step: 1
-                        }
-                    }, { // mirror axis on right side
-                        opposite: true,
-                        reversed: false,
-                        categories: categories,
-                        linkedTo: 0,
-                        labels: {
-                            step: 1
-                        }
-                    }],
-                    yAxis: {
                         title: {
-                            text: '체크 횟수'
+                            text: null
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: null,
                         },
                         labels: {
-                            formatter: function () {
-                                return Math.abs(this.value);
-                            }
+                            overflow: 'justify'
                         }
                     },
-
-                    plotOptions: {
-                        series: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true,
-                                formatter: function () {
-                                    return Highcharts.numberFormat(Math.abs(this.point.y), 0);
-                                }
-                            }
-                        }
-                    },
-
                     tooltip: false,
-
+                    plotOptions: {
+                        bar: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'left',
+                        verticalAlign: 'bottom',
+                        floating: true,
+                        borderWidth: 1,
+                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                        shadow: true
+                    },
+                    credits: {
+                        enabled: false
+                    },
                     series: [{
                         name: '이전',
-                        data: [-2, -6]
+                        data: recent_data
                     }, {
                         name: '현재',
-                        data: [2, 6]
+                        data: today_data
                     }]
                 });
             });
+        }
 
-        });
 
     });
 </script>
 
 <script src="/public/graph/highcharts.js" language="JavaScript"></script>
-<script src="/public/graph/highcharts-more.js" language="JavaScript"></script>
+<script src="/public/js/highcharts-more.js" language="JavaScript"></script>
 <script src="/public/graph/exporting.js" language="JavaScript"></script>
 </body>
 </html>

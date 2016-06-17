@@ -31,6 +31,9 @@ if (isset($_SESSION["user_info"])) {
 <html>
 <head>
     <meta charset="UTF-8">
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/public/js/vendor/jquery.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <title></title>
     <link rel="stylesheet" href="/public/icon/foundation-icons.css">
@@ -260,7 +263,7 @@ if (isset($_SESSION["user_info"])) {
 
 <div class="top-bar" style="background-color: white">
     <div class="top-bar-left">
-        <img src="/public/img/logo.png" style="margin-left:10px; width: 11%">
+        <img src="/public/img/logo.png" style="margin-left:10px; width: 15%">
     </div>
     <div class="top-bar-right">
         <a href="/main/exercise_Free">자유게시판</a>
@@ -275,11 +278,71 @@ if (isset($_SESSION["user_info"])) {
              style="max-width: 60%; display: block; margin-left: auto; margin-right: auto">
         <a href="/main/exercise_Go"><p class="text-center" style="color: white; font-size: 20px">운동시작</p></a>
     </div>
-    <div class="small-2 large-3 columns"style="margin-left: 12.5%">
+
+    <div class="small-2 large-3 columns" style="margin-left: 12.5%">
         <img src="/public/img/main/exercisePlan.png"
              style="max-width: 60%; display: block; margin-left: auto; margin-right: auto">
-        <a href="/main/exercise_Plan"><p class="text-center" style="color : WHITE; font-size: 20px" ;">운동 계획</p></a>
+        <!--    <a href="/main/exercise_Plan"><p class="text-center" style="color : WHITE; font-size: 20px" ;">운동 계획</p></a>
+     -->      <a data-target="#layerpop" data-toggle="modal">
+            <p class="text-center" style="color : WHITE; font-size: 20px" ;">운동 계획</p>
+        </a>
+        <div class="modal fade" id="layerpop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">운동 계획</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <a class="selectPlan" href="/main/exercise_Beginner_date"><div class="col-sm-6 col-md-4">
+                                    <div class="thumbnail">
+                                        <img src="/public/img/exercise/beginner.png" style="height: 20%">
+                                        <div class="caption">
+                                            <h3 style="text-align: center">초보자 모드</h3>
+                                            <p class="lead">운동에 자신이 없는 당신에게 완벽한 운동 계획을 만들어 줍니다.</p>
+
+
+                                        </div>
+                                    </div>
+                                </div></a>
+
+                            <a class="selectPlan" href="/main/exercise_Plan">
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="thumbnail">
+                                        <img src="/public/img/exercise/myself.jpg" style="height: 20%">
+                                        <div class="caption">
+                                            <h3 style="text-align: center">혼자 계획하기</h3>
+                                            <p class="lead">운동에 대한 기본적인 지식을 갖추셨나요? 그럼 스스로 운동계획을 세워보세요!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a class="selectPlan" href="/main/exercise_date"><div class="col-sm-6 col-md-4">
+                                    <div class="thumbnail">
+                                        <img src="/public/img/exercise/calendar.jpg" style="height: 20%">
+                                        <div class="caption">
+                                            <h3 style="text-align: center">운동 날짜 보기</h3>
+                                            <p class="lead">계획한 운동을 확인하고 싶거나 수정,삭제하고 싶으신가요? 여기서 확인하세요!</p>
+                                        </div>
+                                    </div>
+                                </div></a>
+
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
     <div class="small-2 large-3 columns">
         <img src="/public/img/main/graph.png"
              style="max-width: 60%; display: block; margin-left: auto; margin-right: auto">
@@ -403,4 +466,5 @@ if (isset($_SESSION["user_info"])) {
 
 </body>
 
+<script src="/public/js/bootstrap.min.js"></script>
 </html>

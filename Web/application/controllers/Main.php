@@ -109,15 +109,19 @@ class Main extends CI_Controller
 //
 //        }
 
-
+//
+//        $body_point = $_REQUEST['body_point'];
+//        $order = $_REQUEST['order'];
         $body_point = $_REQUEST['body_point'];
         $order = $_REQUEST['order'];
 
 
+
         $today = date("Y-m-d");
 
-        $this->Exercise->insert_Exercise_Result($today, $body_point, $order);
+        $k=$this->Exercise->insert_Exercise_Result($today, $body_point, $order);
 
+        echo json_encode($k);
     }
 
     public function numPlus()
@@ -283,16 +287,23 @@ class Main extends CI_Controller
     public function save_time(){
         $_SESSION['time'] = $_POST['time'];
 
-        echo json_encode($_SESSION['time']);
     }
 
     public function exercise_Result()
     {
+        //exit(var_dump($_SESSION['time']));
+        $time = explode (":", $_SESSION['time']);
+        $data['exercise_time'] = $time;
+
+        $time[1]=$time[1]/60;
+
+        $time = $time[0] + $time[1];
+
+
         $this->load->model('Exercise');
         $today = date("Y-m-d");
-        $exercise_time = 15 / 30;
+        $exercise_time = $time / 30;
 
-        //exit(var_dump($data['day']));
         $data['achievement_count'] = $this->Exercise->exercise_Result($today);
         $data['position_check_on_today'] = $this->Exercise->get_position_check_on_today($today);
         $data['position_check_on_another_day'] = $this->Exercise->get_position_check_on_another_day($today);
