@@ -204,7 +204,7 @@ function send_time(time){
         },
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            console.log("now time" + data);
         },
         error: function (data, error, result) {
             console.log(data);

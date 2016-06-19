@@ -48,7 +48,7 @@ if (isset($_SESSION["user_info"])) {
             $('#container2').highcharts({
                 chart: {
                     type: 'column',
-                    height: 300
+                    height: 422
                 },
                 title: {
                     text: '달성률'
@@ -149,7 +149,7 @@ if (isset($_SESSION["user_info"])) {
             $('#container').highcharts({
                 chart: {
                     type: 'area',
-                    height: 280
+                    height: 422
                 },
                 title: {
                     text: 'BMI'
@@ -273,13 +273,13 @@ if (isset($_SESSION["user_info"])) {
 
 <div class="row expanded callout primary"
      style="border-color:#0097dc; background-color: #0097dc;">
-    <div class="small-2 large-3 columns">
+    <div class="small-2 large-2 columns" style="margin-left: 5%">
         <img src="/public/img/main/exerciseStart.png"
              style="max-width: 60%; display: block; margin-left: auto; margin-right: auto">
         <a href="/main/exercise_Go"><p class="text-center" style="color: white; font-size: 20px">운동시작</p></a>
     </div>
 
-    <div class="small-2 large-3 columns" style="margin-left: 12.5%">
+    <div class="small-2 large-2 columns" style="margin-left: 20%">
         <img src="/public/img/main/exercisePlan.png"
              style="max-width: 60%; display: block; margin-left: auto; margin-right: auto">
         <!--    <a href="/main/exercise_Plan"><p class="text-center" style="color : WHITE; font-size: 20px" ;">운동 계획</p></a>
@@ -343,15 +343,15 @@ if (isset($_SESSION["user_info"])) {
 
 
 
-    <div class="small-2 large-3 columns">
+    <div class="small-2 large-2 columns" style="margin-right: 5%">
         <img src="/public/img/main/graph.png"
              style="max-width: 60%; display: block; margin-left: auto; margin-right: auto">
-        <a href="/main/exercise_Bodycheck"><p class="text-center" style="color : WHITE; font-size: 20px" ;">그래프</p></a>
+        <a href="/main/exercise_Bodycheck"><p class="text-center" style="color : WHITE; font-size: 20px" ;">마이 헬스 다이어리</p></a>
     </div>
 </div>
 
-<div class="row">
-    <div class="large-4 columns"style="margin-top: 5%">
+<div class="row expanded">
+    <div class="large-4 columns"style="">
 
         <div class="column row"
              style="padding-left:10px; padding-right:10px; margin-bottom: 15px; border: 3px solid #E3E5E8;">
@@ -430,7 +430,7 @@ if (isset($_SESSION["user_info"])) {
         </div>
 
     </div>
-    <div class="large-4 columns"style="margin-top: 5%">
+    <div class="large-4 columns"style="">
         <div class="column row" style="margin-bottom: 15px; border: 3px solid #E3E5E8;">
             <div id="container2"></div>
         </div>

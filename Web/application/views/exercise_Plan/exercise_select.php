@@ -285,7 +285,6 @@ if ('exercise_Plan/exercise_select') {
                                     <h3 class="modal_select_text">선택부위</h3>
 
                                     <h3 class="selectPartText" style="text-align: center; color:#1e87c3 "></h3>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>

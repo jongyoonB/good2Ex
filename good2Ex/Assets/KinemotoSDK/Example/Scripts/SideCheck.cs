@@ -146,6 +146,13 @@ public class SideCheck
     {
         get; set;
     }
+    //2016- 06-18 새로 추가
+    public bool elbowRight_Z_Flag;
+    public bool elbowLeft_Z_Flag;
+    public bool wristRight_Z_Flag;
+    public bool wristLeft_Z_Flag;
+    public bool elbow_right_angle_Flag;
+    public bool elbow_left_angle_Flag;
 
     //Score Count 변수
     public short set_Count;
@@ -363,7 +370,7 @@ public class SideCheck
         {
             top_Flag = true;
             Sound_Controller();
-            
+            sound_flag_false();
             Debug.Log("topClear");
         }
     }
@@ -445,7 +452,7 @@ public class SideCheck
                 fail[5] = 0;
             }
             GameObject PointsText;
-            if (fail[0] + fail[1] + fail[2] + fail[3] + fail[4] + fail[5] > 2)
+            if (fail[0] + fail[1] + fail[2] + fail[3] + fail[4] + fail[5] >= 2)
             {
                 PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
                 bad_count++;
@@ -529,6 +536,7 @@ public class SideCheck
                 }
             }
             Sound_Controller();
+            sound_flag_false();
             ready_Flag = false;
             start_Flag = false;
             top_Flag = false;
@@ -596,13 +604,14 @@ public class SideCheck
 
     public void depth_Check()
     {
-        if ((SideCoordinator.JointInfo["ShoulderLeft"].Z - SideCoordinator.JointInfo["ElbowLeft"].Z) <= 0.08f)
+        if ((SideCoordinator.JointInfo["ShoulderLeft"].Z - SideCoordinator.JointInfo["ElbowLeft"].Z) <= 0.2f)
         {
             elbowLeft_Z = true;
         }
         else
         {
             elbowLeft_Z = false;
+            elbowLeft_Z_Flag = true;
             elbowLeft_Z_Count++;
             failed_message = "왼쪽 팔꿈치가 너무 앞으로 나왔어요";
             if (ElbowLeftDepthFail == false)
@@ -611,13 +620,14 @@ public class SideCheck
             }
         }
 
-        if ((SideCoordinator.JointInfo["ShoulderRight"].Z - SideCoordinator.JointInfo["ElbowRight"].Z) <= 0.08f)
+        if ((SideCoordinator.JointInfo["ShoulderRight"].Z - SideCoordinator.JointInfo["ElbowRight"].Z) <= 0.2f)
         {
             elbowRight_Z = true;
         }
         else
         {
             elbowRight_Z = false;
+            elbowRight_Z_Flag = true;
             elbowRight_Z_Count++;
             failed_message = "오른쪽 팔꿈치가 너무 앞으로 나왔어요";
             if (ElbowRightDepthFail == false)
@@ -626,13 +636,14 @@ public class SideCheck
             }
         }
 
-        if ((SideCoordinator.JointInfo["ShoulderLeft"].Z - SideCoordinator.JointInfo["WristLeft"].Z) <= 0.15f)
+        if ((SideCoordinator.JointInfo["ElbowLeft"].Z - SideCoordinator.JointInfo["WristLeft"].Z) <= 0.2f)
         {
             wristLeft_Z = true;
         }
         else
         {
             wristLeft_Z = false;
+            wristLeft_Z_Flag = true;
             wristLeft_Z_Count++;
             failed_message = "왼쪽 손목이 너무 앞으로 나왔어요";
             if (WristLeftDepthFail == false)
@@ -641,13 +652,14 @@ public class SideCheck
             }
         }
 
-        if ((SideCoordinator.JointInfo["ShoulderRight"].Z - SideCoordinator.JointInfo["WristRight"].Z) <= 0.15f)
+        if ((SideCoordinator.JointInfo["ElbowRight"].Z - SideCoordinator.JointInfo["WristRight"].Z) <= 0.2f)
         {
             wristRight_Z = true;
         }
         else
         {
             wristRight_Z = false;
+            wristRight_Z_Flag = true;
             wristRight_Z_Count++;
             failed_message = "오른쪽 손목이 너무 앞으로 나왔어요";
             if (WristRightDepthFail == false)
@@ -661,14 +673,18 @@ public class SideCheck
             if (!(elbow_Left_Angle >= 140) && !(elbow_Right_Angle >= 140))
             {
                 failed_message = "양팔이 굽혀졌내요";
+                elbow_right_angle_Flag = true;
+                elbow_left_angle_Flag = true;
             }
             else if (!(elbow_Left_Angle >= 140))
             {
                 failed_message = "왼팔이 굽혀졌내요";
+                elbow_left_angle_Flag = true;
             }
             else if (!(elbow_Right_Angle >= 140))
             {
                 failed_message = "오른팔이 굽혀졌내요";
+                elbow_right_angle_Flag = true;
             }
             else if (start_Flag && !top_Flag && (armpit_Left_Angle < 54 || armpit_Right_Angle < 54))
             {
@@ -751,37 +767,37 @@ public class SideCheck
         bool RW = false;
 
         //왼팔꿈치가 굽었을 때
-        if (elbowLeft_Y)
+        if (elbow_left_angle_Flag)
         {
             LG = true;
         }
 
         //오른팔꿈치가 굽었을 때
-        if (elbowRight_Y)
+        if (elbow_right_angle_Flag)
         {
             RG = true;
         }
 
         //왼팔꿈치가 앞으로 나왔을 때
-        if (!elbowLeft_Z)
+        if (elbowLeft_Z_Flag)
         {
             LE = true;
         }
 
         //오른팔꿈치가 앞으로 나왔을 때
-        if (!elbowRight_Z)
+        if (elbowRight_Z_Flag)
         {
             RE = true;
         }
 
         //왼손목이 앞으로 나왔을 때
-        if (!wristLeft_Z)
+        if (wristLeft_Z_Flag)
         {
             LW = true;
         }
 
         //오른손목이 앞으로 나왔을 때
-        if (!wristRight_Z)
+        if (wristRight_Z_Flag)
         {
             RW = true;
         }
@@ -827,7 +843,10 @@ public class SideCheck
         {
             MSGorder = 15;
         }
-
+        else
+        {
+            MSGorder = 6;
+        }
 
         if (end_Flag)
         {
@@ -868,6 +887,16 @@ public class SideCheck
                 }
             }
         }    
+    }
+
+    public void sound_flag_false()
+    {
+        elbow_left_angle_Flag = false;
+        elbow_right_angle_Flag = false;
+        wristLeft_Z_Flag = false;
+        wristRight_Z_Flag = false;
+        elbowRight_Z_Flag = false;
+        elbowLeft_Z_Flag = false;
     }
 
     #endregion

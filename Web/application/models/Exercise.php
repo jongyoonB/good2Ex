@@ -425,7 +425,7 @@ where er.exercise_numb = ei.exercise_numb
                 } else {
 
                     $sql = "INSERT INTO user_position_record(user_numb, position_count, check_point_index, position_check_date)
-                    VALUES({$_SESSION["user_info"]->user_numb}, {$fail_body_point[$i]}, {$check_point_index[$i]->check_point_index}, '{$today});";
+                    VALUES({$_SESSION["user_info"]->user_numb}, {$fail_body_point[$i]}, {$check_point_index[$i]->check_point_index}, '{$today}');";
 
                 }
 
