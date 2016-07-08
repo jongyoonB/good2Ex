@@ -194,10 +194,6 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
     </style>
 </head>
 <body>
-<?php
-$now_routine_info = $_SESSION['now_routine'];
-
-?>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -478,11 +474,11 @@ $now_routine_info = $_SESSION['now_routine'];
 
                     // 왼쪽 손목
                 } else if (i == 2) {
-                    $("#human").append("<div style='position: absolute; top: 48%; left: 10%;'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+                    //$("#human").append("<div style='position: absolute; top: 48%; left: 10%;'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
 
                     // 오른쪽 손목
                 } else if (i == 3) {
-                    $("#human").append("<div style='position: absolute; top: 48%; left: 79%'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
+                   // $("#human").append("<div style='position: absolute; top: 48%; left: 79%'><span class='point glyphicon glyphicon-record' id='" + i + "' style='font-size: 30px; color: #0064a2; opacity: 0.5'></span></div>");
 
                     // 무릎
                 } else if (i == 4) {

@@ -211,6 +211,10 @@
     </script>
 
     <style>
+        @font-face {
+            font-family: HANYG0230;
+            src: url('../../../public/fonts/HANYGO230.ttf'); format('truetype');
+        }
         /*
          * Base structure
          */
@@ -343,16 +347,16 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/main/exercise_Go">운동시작</a></li>
-                <li><a href="/main/exercise_Free">자유게시판</a></li>
-                <li><a href="/main/exercise_QnA">QNA</a></li>
+                <li><a href="/main/exercise_Go"  style="font-family: HANYG0230">운동시작</a></li>
+                <li><a href="/main/exercise_Free"  style="font-family: HANYG0230">자유게시판</a></li>
+                <li><a href="/main/exercise_QnA"  style="font-family: HANYG0230">QNA</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <?php
                 /*                if(isset($_SESSION["user_info"]))
                                 {*/ ?>
-                <li><a href="#">LOGOUT</a></li>
+                <li><a href="#"  style="font-family: HANYG0230">LOGOUT</a></li>
                 <?php /*}*/ ?>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -370,36 +374,36 @@
                 </div>
                 <div class="col-md-6">
                     <?php
-                    echo "<h3><strong>{$_SESSION['user_info']->nick}</strong></h3><br>";
+                    echo "<h3 style='font-family: HANYG0230'><strong>{$_SESSION['user_info']->nick}</strong></h3><br>";
                     ?>
                 </div>
             </div>
             <ul class="nav nav-sidebar" style="text-align: center; font-size: 20px">
-                <li><a href="#">프로필</a>
+                <li><a href="#" style="font-family: HANYG0230">프로필</a>
                 </li>
-                <li><a href="#">회원정보설정</a></li>
-                <li class="active"><a href="#">BodyCheck</a></li>
-                <li><a href="#">도전과제</a></li>
-                <li><a href="#">랭킹</a></li>
+                <li><a href="#"  style="font-family: HANYG0230">회원정보설정</a></li>
+                <li class="active" style="font-family: HANYG0230"><a href="#">BodyCheck</a></li>
+                <li><a href="#" style="font-family: HANYG0230">도전과제</a></li>
+                <li><a href="#" style="font-family: HANYG0230">랭킹</a></li>
             </ul>
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-9 main">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#graph" data-toggle="tab">그래프</a></li>
-                <li><a href="#picture" data-toggle="tab">사진 모음</a>
+                <li class="active"><a href="#graph" data-toggle="tab" style="font-family: HANYG0230">그래프</a></li>
+                <li><a href="#picture" data-toggle="tab" style="font-family: HANYG0230">사진 모음</a>
                 </li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content" style="border-color: #e5e5e5; border-style: solid; border-width: 0px 1px 1px 1px;">
                 <div class="tab-pane active" id="graph">
-                    <p style="padding: 10px; padding-left: 20px; padding-top: 20px; border-bottom: 1px solid #eee; font-size: 25px">
+                    <p style="font-family: HANYG0230;padding: 10px; padding-left: 20px; padding-top: 20px; border-bottom: 1px solid #eee; font-size: 25px">
                         BMI</p>
                     <div id="container" style="width: 90%; margin: auto"></div>
 
-                    <p style="padding: 10px; padding-left: 20px; padding-top: 30px; border-bottom: 1px solid #eee; font-size: 25px">
+                    <p style="font-family: HANYG0230;padding: 10px; padding-left: 20px; padding-top: 30px; border-bottom: 1px solid #eee; font-size: 25px">
                         달성률</p>
                     <div id="container2" style="width: 90%; margin: auto"></div>
 

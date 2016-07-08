@@ -1,4 +1,4 @@
-var routine=null;
+var routine = null;
 var order = 0;
 var final_order = 0;
 var clear_score;
@@ -6,14 +6,13 @@ var clear_set;
 var current_ex_name;
 var next_ex_name;
 var sended_score = 0;
-var set_num=1;
-var min=0;
+var set_num = 1;
+var min = 0;
 
-$(document).ready(function(){
+$(document).ready(function () {
     u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
 
 });
-
 
 
 function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올림
@@ -21,7 +20,7 @@ function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올�
     console.log("!");
     console.log(temp);
 
-    jQuery(function(){
+    jQuery(function () {
 
         function order()//운동 하나 끝나면 aPlus 호출해서 숫자 올림
         {
@@ -39,86 +38,93 @@ function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올�
 
         //Call any jquery function
         order(); //jquery function
-    });(jQuery);
+    });
+    (jQuery);
 
 }
 
-function exerciseGet()
-{
+function exerciseGet() {
     console.log("order" + order + " / " + final_order);
     final_order = Number(routine.length);
-    if(order < final_order)
-    {
-        document.getElementById('information').innerHTML=
-            '<h3 style="color: #00bf6f">' + routine[order].exercise_name +'</h3>'+
-            '<h4> 세트수 : ' + routine[order].number_of_set +
-            '  운동 횟수 : ' + routine[order].number_of_count +'</h4>';
+    if (order < final_order) {
+        document.getElementById('information').innerHTML =
+            '<h1 style="color: #00bf6f">' + routine[order].exercise_name + '</h1>';
+        document.getElementById('information_set').innerHTML =
+            '<h3 style=""> 세트수 :' + set_num + '/' + routine[order].number_of_set + '</h3>';
+        document.getElementById('information_count').innerHTML =
+            '<h3 style="">운동 횟수 :' + sended_score + '/' + routine[order].number_of_count + '</h3>';
 
         clear_score = Number(routine[order].number_of_count);
         clear_set = Number(routine[order].number_of_set);
-        switch (Number(routine[order].exercise_numb)){
-            case 1:{
+        switch (Number(routine[order].exercise_numb)) {
+            case 1:
+            {
                 current_ex_name = "Squart";
                 break;
             }
 
-            case 2:{
+            case 2:
+            {
                 current_ex_name = "Dumbel";
                 break;
             }
 
-            case 3:{
-                current_ex_name ="Side";
+            case 3:
+            {
+                current_ex_name = "Side";
                 break;
             }
 
-            case 4:{
-                current_ex_name ="Lunge";
+            case 4:
+            {
+                current_ex_name = "Lunge";
                 break;
             }
         }
-        console.log("setGet"+current_ex_name);
+        console.log("setGet" + current_ex_name);
 
-        u.getUnity().SendMessage("CoordinateMapper", "setGet"+current_ex_name, clear_set);
-        u.getUnity().SendMessage("CoordinateMapper", "scoreGet"+current_ex_name, clear_score);
-
+        u.getUnity().SendMessage("CoordinateMapper", "setGet" + current_ex_name, clear_set);
+        u.getUnity().SendMessage("CoordinateMapper", "scoreGet" + current_ex_name, clear_score);
+        //progress_bars();
     }
 
-    if(order+1 < final_order)
-    {
-        document.getElementById('nextInformation').innerHTML =
-            '<h3 style="color: #00bf6f">'+ routine[order+1].exercise_name +'</h3>'+
-            ' <h4>세트수 : ' + routine[order+1].number_of_set +
-            ' 운동 횟수 : ' + routine[order+1].number_of_count +'</h4>';
-        switch (Number(routine[order+1].exercise_numb)){
-            case 1:{
+
+    if (order + 1 < final_order) {
+
+        switch (Number(routine[order + 1].exercise_numb)) {
+            case 1:
+            {
                 next_ex_name = "Squart";
                 break;
             }
 
-            case 2:{
+            case 2:
+            {
                 next_ex_name = "Dumbel";
                 break;
             }
 
-            case 3:{
-                next_ex_name ="Side";
+            case 3:
+            {
+                next_ex_name = "Side";
                 break;
             }
 
-            case 4:{
-                next_ex_name ="Lunge";
+            case 4:
+            {
+                next_ex_name = "Lunge";
+                break;
+            }
+            default:
+            {
                 break;
             }
         }
 
     }
-    else
-    {
-        document.getElementById('nextInformation').innerHTML= '끝';
-    }
+
     order++;
-    make_chart()
+    //make_chart()
 
 }
 
@@ -130,34 +136,33 @@ function exerciseGet()
  }
  */
 
-function screenResize(data)
-{
-    $(".col-md-8").css("width","74%");
+function screenResize(data) {
+    $(".col-md-8").css("width", "74%");
 }
 
 
-function cut_View(left,right) {
-    if(left < 0)
-    {
-        left += 481;
-    }
-    if(right < 0)
-    {
-        right += 481;
-    }
-    console.log("right : " + right);
-    console.log("left : " + left);
-}
-function cut_view(left,right) {
+/*function cut_View(left,right) {
+ if(left < 0)
+ {
+ left += 481;
+ }
+ if(right < 0)
+ {
+ right += 481;
+ }
+ console.log("right : " + right);
+ console.log("left : " + left);
+ }*/
+function cut_view(left, right) {
     console.log("count : " + left);
     console.log("goal : " + right);
 }
-function cut_view2(left,right) {
+function cut_view2(left, right) {
     //console.log("SETcount : " + left);
     //console.log("SETgoal : " + right);
 }
 
-function sendTest(msg){
+function sendTest(msg) {
     console.log("from unity says: " + msg);
 }
 
@@ -173,18 +178,48 @@ function sendTest(msg){
 function send_score(score, fail_body_point) {
     if (sended_score != score) {
         sended_score = score;
+        progress_bars();
+        if (sended_score == Number(clear_score)) {
+            sended_score = 0;
+            ++set_num;
+            console.log("SET INFO");
+            console.log(set_num + " / " + clear_set);
+            if (set_num > clear_set) {
+                console.log("Send Data to Unity!");
+                console.log("Change Scene!");
+                if (order == final_order) {
+                    console.log("finish Exercise");
+                    //location.href="jycom.asuscomm.com:5080/main/exercise_Result";
+                    u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
 
-        make_chart();
+
+                }
+                else {
+                    newVal = 0;
+                    set_num = 1;
+                    console.log(next_ex_name);
+                    u.getUnity().SendMessage("CoordinateMapper", "LoadScene", next_ex_name);
+                }
+            }
+            //ready -> current_ex_name -> setGet / scoreGet
+
+            insert_set(set_num);
+
+        }
+        document.getElementById('information_count').innerHTML =
+            '<h3 style="">운동 횟수 :' + sended_score + '/' + clear_score + '</h3>';
+        //make_chart();
         console.log(fail_body_point);
+
         $.ajax({
             type: "post",
             url: "/main/insert_check_point",
             data: {
-                order:order,
+                order: order,
                 body_point: fail_body_point
             },
             dataType: "json",
-            success: function(data){
+            success: function (data) {
                 console.log(data);
             }
 
@@ -194,8 +229,8 @@ function send_score(score, fail_body_point) {
 }
 
 
-function send_time(time){
-    console.log("sended Time : "+time);
+function send_time(time) {
+    console.log("sended Time : " + time);
     $.ajax({
         type: "post",
         url: '/main/save_time',
@@ -220,149 +255,216 @@ function get_score() {
 }
 
 function init_score(score) {
-    sended_score = score;
+    sended_score = 0;
 }
 
 function insert_set(set_num) {
-    document.getElementById("set").innerHTML = set_num+"세트";
+    document.getElementById('information_set').innerHTML =
+        '<h3 style=""> 세트수 :' + set_num + '/' + routine[order].number_of_set + '</h3>';
 }
 
-function move_Page(temp){
-    location.href="http://localhost/main/exercise_Result";
+function move_Page(temp) {
+    location.href = "http://localhost/main/exercise_Result";
 }
 
 
-function make_chart() {
-    $(function () {
-        var gaugeOptions = {
+function progress_bars() {
 
-            chart: {
-                type: 'solidgauge',
-                height:190
-            },
+    //console.log((((clear_score * (set_num-1)+sended_score) / (clear_set * clear_score) * 100) / 100));
+    //console.log((((clear_score * (set_num-1)+sended_score)*1.0 / (clear_set * clear_score))).toFixed(1));
+    var progress_percent = (((clear_score * (set_num - 1) + sended_score) * 1.0 / (clear_set * clear_score)).toFixed(1)) * 100;
+    console.log(progress_percent);
+    var width = document.getElementById('label').innerHTML;
 
-            title: null,
+    if (width)
+        width = width.replace("%", "");
+    else
+        width = 0;
 
-            pane: {
-                center: ['50%', '85%'],
-                size: '150%',
-                startAngle: -90,
-                endAngle: 90,
-                background: {
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
-                    innerRadius: '60%',
-                    outerRadius: '100%',
-                    shape: 'arc'
+    var id = setInterval(frame, 50);
+
+    function frame() {
+        if (width >= progress_percent) {
+            clearInterval(id);
+
+        } else {
+            var change_width;
+            width++;
+
+            if (width <= 20)
+                $("#first_bar").css("width", width + "%");
+            else {
+                if (width <= 40) {
+                    change_width = width - 20;
+                    $("#second_bar").css("width", change_width + "%");
                 }
-            },
-
-            // the value axis
-            yAxis: {
-                stops: [
-                    [0.1, '#DF5353'], // green
-                    [0.5, '#DDDF0D'], // yellow
-                    [0.9, '#55BF3B'] // red
-                ],
-                lineWidth: 0,
-                minorTickInterval: null,
-                tickPixelInterval: 400,
-                tickWidth: 0,
-                title: {
-                    y: -70
-                },
-                labels: {
-                    y: 16
+                else if (width <= 60) {
+                    change_width = width - 40;
+                    $("#third_bar").css("width", change_width + "%");
                 }
-            },
-
-            plotOptions: {
-                solidgauge: {
-                    dataLabels: {
-                        y: 5,
-                        borderWidth: 0,
-                        useHTML: false
-                    }
+                else if (width <= 80) {
+                    change_width = width - 60;
+                    $("#forth_bar").css("width", change_width + "%");
                 }
-            }
-        };
-
-        // The speed gauge
-        $('#container-speed').highcharts(Highcharts.merge(gaugeOptions, {
-            yAxis: {
-                min: min,
-                max: clear_score,
-            },
-
-            credits: {
-                enabled: false
-            },
-
-            series: [{
-                data: [0],
-                dataLabels: {
-                    format: '<div style="text-align:center"><span style="font-size:25px;color:' +
-                    ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span></div>'
-                },
-                enableMouseTracking: false
-            }]
-
-        }));
-
-        // Bring life to the dials
-
-        // Speed
-        var chart = $('#container-speed').highcharts(),
-            point,
-            newVal,
-            inc;
-        //set_num=1;
-
-        if (chart) {
-            inc = get_score();
-            //console.log(inc);
-
-            point = chart.series[0].points[0];
-            newVal = point.y + inc;
-            point.update(newVal);
-            console.log("SCORE INFO");
-            console.log(newVal + " / " + clear_score);
-            if (newVal == Number(clear_score)) {
-                newVal = 0;
-                ++set_num;
-                console.log("SET INFO");
-                console.log(set_num + " / " + clear_set);
-                if(set_num>clear_set)
-                {
-                    console.log( "Send Data to Unity!" );
-                    console.log( "Change Scene!" );
-                    if(order == final_order)
-                    {
-                        console.log("finish Exercise");
-                        //location.href="jycom.asuscomm.com:5080/main/exercise_Result";
-                        u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
-
-
-                    }
-                    else
-                    {
-                        newVal = 0;
-                        set_num = 1;
-                        console.log(next_ex_name);
-                        u.getUnity().SendMessage("CoordinateMapper", "LoadScene", next_ex_name);
-                    }
+                else if (width <= 100) {
+                    change_width = width - 80;
+                    $("#fifth_bar").css("width", change_width + "%");
                 }
-                //ready -> current_ex_name -> setGet / scoreGet
-
-                insert_set(set_num);
-                setTimeout(function(){ point.update(newVal);}, 1000);
 
             }
 
+            if(progress_percent == 100){
+                setTimeout(function(){
+                    width = 0;
+                    $("#first_bar").css("width", width + "%");
+                    $("#second_bar").css("width", width + "%");
+                    $("#third_bar").css("width", width + "%");
+                    $("#forth_bar").css("width", width + "%");
+                    $("#fifth_bar").css("width", width + "%");
+                    //clearInterval(id);
+                    document.getElementById("label").innerHTML = 0 + '%';
+                },1000);
+            }
+
+
+            document.getElementById("label").innerHTML = width * 1 + '%';
         }
+    }
+};
 
 
-    });
-}
+/*function make_chart() {
+ $(function () {
+ var gaugeOptions = {
+
+ chart: {
+ type: 'solidgauge',
+ height:190
+ },
+
+ title: null,
+
+ pane: {
+ center: ['50%', '85%'],
+ size: '150%',
+ startAngle: -90,
+ endAngle: 90,
+ background: {
+ backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+ innerRadius: '60%',
+ outerRadius: '100%',
+ shape: 'arc'
+ }
+ },
+
+ // the value axis
+ yAxis: {
+ stops: [
+ [0.1, '#DF5353'], // green
+ [0.5, '#DDDF0D'], // yellow
+ [0.9, '#55BF3B'] // red
+ ],
+ lineWidth: 0,
+ minorTickInterval: null,
+ tickPixelInterval: 400,
+ tickWidth: 0,
+ title: {
+ y: -70
+ },
+ labels: {
+ y: 16
+ }
+ },
+
+ plotOptions: {
+ solidgauge: {
+ dataLabels: {
+ y: 5,
+ borderWidth: 0,
+ useHTML: false
+ }
+ }
+ }
+ };
+
+ // The speed gauge
+ $('#container-speed').highcharts(Highcharts.merge(gaugeOptions, {
+ yAxis: {
+ min: min,
+ max: clear_score,
+ },
+
+ credits: {
+ enabled: false
+ },
+
+ series: [{
+ data: [0],
+ dataLabels: {
+ format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+ ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span></div>'
+ },
+ enableMouseTracking: false
+ }]
+
+ }));
+
+ // Bring life to the dials
+
+ // Speed
+ var chart = $('#container-speed').highcharts(),
+ point,
+ newVal,
+ inc;
+ //set_num=1;
+
+ if (chart) {
+ inc = get_score();
+ //console.log(inc);
+
+ point = chart.series[0].points[0];
+ newVal = point.y + inc;
+ point.update(newVal);
+ console.log("SCORE INFO");
+ console.log(newVal + " / " + clear_score);
+ if (newVal == Number(clear_score)) {
+ newVal = 0;
+ sended_score =0;
+ ++set_num;
+ console.log("SET INFO");
+ console.log(set_num + " / " + clear_set);
+ if(set_num>clear_set)
+ {
+ console.log( "Send Data to Unity!" );
+ console.log( "Change Scene!" );
+ if(order == final_order)
+ {
+ console.log("finish Exercise");
+ //location.href="jycom.asuscomm.com:5080/main/exercise_Result";
+ u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
+
+
+ }
+ else
+ {
+ newVal = 0;
+ set_num = 1;
+ console.log(next_ex_name);
+ u.getUnity().SendMessage("CoordinateMapper", "LoadScene", next_ex_name);
+ }
+ }
+ //ready -> current_ex_name -> setGet / scoreGet
+
+ insert_set(set_num);
+ setTimeout(function(){ point.update(newVal);}, 1000);
+
+ }
+
+ }
+
+
+ });
+ }*/
 
 
 /*

@@ -30,6 +30,10 @@ if (isset($_SESSION["user_info"])) {
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
     <style>
+        @font-face {
+            font-family: HANYG0230;
+            src: url('../../../public/fonts/HANYGO230.ttf'); format('truetype');
+        }
 
         a:hover {
             color: blue;
@@ -205,9 +209,9 @@ if (isset($_SESSION["user_info"])) {
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="/main/exercise_Go">운동시작</a></li>
-                    <li><a href="/main/exercise_Free">자유게시판</a></li>
-                    <li><a href="/main/exercise_QnA">QNA</a></li>
+                    <li><a href="/main/exercise_Go" style="font-family: HANYG0230">운동시작</a></li>
+                    <li><a href="/main/exercise_Free" style="font-family: HANYG0230">자유게시판</a></li>
+                    <li><a href="/main/exercise_QnA" style="font-family: HANYG0230">QNA</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -285,6 +289,7 @@ if ('exercise_Plan/exercise_select') {
                                     <h3 class="modal_select_text">선택부위</h3>
 
                                     <h3 class="selectPartText" style="text-align: center; color:#1e87c3 "></h3>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>

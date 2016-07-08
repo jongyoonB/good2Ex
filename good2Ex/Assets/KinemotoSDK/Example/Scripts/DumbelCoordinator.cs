@@ -68,7 +68,7 @@ public class DumbelCoordinator : MonoBehaviour
     public static GameObject particle;
     public static Vector3 particle_position;
 
-    public static GameObject firewall;
+    public static GameObject firewall_obj;
     public static Vector3 firewall_position;
 
     public static GameObject firework;
@@ -108,18 +108,24 @@ public class DumbelCoordinator : MonoBehaviour
     public static GameObject armpRightDegree;
     public static GameObject armpLeftDegree;
 
-    //phase
-    public static GameObject phase;
-    public static GameObject Toggle1;
-    public static GameObject Toggle2;
-    public static GameObject Toggle3;
-    public static GameObject Toggle4;
+    //title
+    public static GameObject title;
+    public static GameObject Message;
+    public static GameObject checkPoint1;
+    public static GameObject checkPoint1_1;
+    public static GameObject checkPoint1_2;
+    public static GameObject checkPoint2;
+    public static GameObject checkPoint2_1;
+    public static GameObject checkPoint2_2;
+
+    public static int current_phase;
 
     //helper
     public static GameObject helper;
     public changeAnimation changeAnimation;
     private GameObject balloon;
     private static GameObject balloon_text;
+    private static GameObject text_background;
 
     //stop_watch(timer)
     public static Stopwatch set_timer = new Stopwatch();
@@ -135,10 +141,8 @@ public class DumbelCoordinator : MonoBehaviour
     //practice_mod
     public static bool practice_On;
 
-
     void Start()
     {
-        
         //Time.captureFramerate = 30;
         //call javascript function
         Application.ExternalCall("orderPlus", "ok");
@@ -167,7 +171,9 @@ public class DumbelCoordinator : MonoBehaviour
         //balloon = GameObject.Find("balloon");
         //balloon.SetActive(false);
         balloon_text = GameObject.Find("balloon_text");
+        text_background = GameObject.Find("text_background");
         balloon_text.SetActive(false);
+        text_background.SetActive(false);
 
         //angle object
         elbowLeftDegree = GameObject.Find("elbowLeftDegree");
@@ -188,10 +194,6 @@ public class DumbelCoordinator : MonoBehaviour
         particle_position = new Vector3(0, 0);
 
         //firewall effect set
-        firewall = Instantiate(Resources.Load("WallOfFire")) as GameObject;
-        firewall.SetActive(false);
-        firewall.transform.parent = GameObject.Find("Canvas").transform;
-        firewall_position = new Vector3(0, 0);
         firework = GameObject.Find("firework");
         if (firework.activeInHierarchy)
         {
@@ -219,29 +221,50 @@ public class DumbelCoordinator : MonoBehaviour
 
         //Status_panel.SetActive(false);
         breakTimeMask.SetActive(false);
-        prefab = Resources.Load("prefabs/ToggleListMenu") as GameObject;
+        prefab = Resources.Load("prefabs/ToggleListMenu4Canvas1") as GameObject;
         Status = GameObject.Instantiate(prefab) as GameObject;
         Status.name = "status";
         Status.transform.parent = GameObject.Find("Canvas").transform;
-        Status.transform.localPosition = new Vector3(405f, 145f, -10);
-        Status.transform.localScale = new Vector3(0.5130946f, 0.5937846f, 0.5082178f);
+        Status.transform.localPosition = new Vector3(470f, -37f, -10);
+        Status.transform.localScale = new Vector3(0.711432f, 1.080361f, 0.734385f);
 
-        //phase = GameObject.Find("phase");
-        phase = GameObject.Find("Title");
-        Toggle1 = GameObject.Find("Toggle1");
-        Toggle2 = GameObject.Find("Toggle2");
-        Toggle3 = GameObject.Find("Toggle3");
-        Toggle4 = GameObject.Find("Toggle4");
+        //title = GameObject.Find("title");
+        title = GameObject.Find("Title");
+        Message = GameObject.Find("Message");
+        Message.SetActive(false);
 
-        Toggle1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
-        Toggle2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
-        Toggle3.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
-        Toggle4.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        //public static GameObject checkPoint1;
+        //public static GameObject checkPoint1_1;
+        //public static GameObject checkPoint1_2;
+        //public static GameObject checkPoint2;
+        //public static GameObject checkPoint2_1;
+        //public static GameObject checkPoint2_2;
 
-        Toggle1.GetComponentInChildren<Text>().color = Color.black;
-        Toggle2.GetComponentInChildren<Text>().color = Color.black;
-        Toggle3.GetComponentInChildren<Text>().color = Color.black;
-        Toggle4.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint1 = GameObject.Find("CheckPoint1");
+        checkPoint1_1 = GameObject.Find("CheckPoint1_1");
+        checkPoint1_2 = GameObject.Find("CheckPoint1_2");
+
+        checkPoint2 = GameObject.Find("CheckPoint2");
+        checkPoint2_1 = GameObject.Find("CheckPoint2_1");
+        checkPoint2_2 = GameObject.Find("CheckPoint2_2");
+
+        checkPoint1.GetComponentInChildren<Text>().text = "팔을 올릴 때";
+        checkPoint1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint1_1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint1_2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+        checkPoint1.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint1_1.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint1_2.GetComponentInChildren<Text>().color = Color.black;
+
+        checkPoint2.GetComponentInChildren<Text>().text = "팔을 내릴 때";
+        checkPoint2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint2_1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint2_2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+        checkPoint2.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint2_1.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint2_2.GetComponentInChildren<Text>().color = Color.black;
 
         Status.SetActive(false);
 
@@ -267,7 +290,7 @@ public class DumbelCoordinator : MonoBehaviour
         //set position of meshcube to back of the display
         meshCube.transform.position = new Vector3(0, 0, 20);
         meshCube2.transform.position = new Vector3(0, -5, 20);
-        meshCube3.transform.position = new Vector3(0, -10, 20);
+        meshCube3.transform.position = new Vector3(0, -5, 20);
 
         //생성자
         dumbel = new DumbelCheck();
@@ -297,6 +320,7 @@ public class DumbelCoordinator : MonoBehaviour
         {
             BGM.GetComponent<AudioSource>().volume = 0.5f;
         }
+
     }
 
     private void ConfigureCoordinateMapper(Renderer render)
@@ -316,10 +340,11 @@ public class DumbelCoordinator : MonoBehaviour
             //Resize Unity Player Size & stop movie & hide startinfo & show status panel
             if (!screenSet)
             {
+                //Message.SetActive(true);
                 //Time.captureFramerate = 60;
                 PlayMovieTexture.StopAllMovies();
                 GameMask.SetActive(false);
-                Status.SetActive(true);
+                //Status.SetActive(true);
                 //Status_panel.GetComponent<RawImage>().CrossFadeAlpha(1000, 2.0f, false);
                 Application.ExternalCall("screenSize", "ok");
                 screenSet = true;
@@ -330,6 +355,7 @@ public class DumbelCoordinator : MonoBehaviour
                 helper.SetActive(true);
                 //balloon.SetActive(true);
                 balloon_text.SetActive(true);
+                text_background.SetActive(true);
                 changeAni("pose_00");
                 set_timer.Start();
             }
@@ -399,14 +425,14 @@ public class DumbelCoordinator : MonoBehaviour
             // 뼈대 생성 메서드
             makeBones();
 
+            //main 함수를 호출.
+            dumbel.main();
+
             //뼈 색 조절
-            depthJointColor();
+            //depthJointColor();
 
             //텍스트 색 조절 및 값 조절
             textController();
-
-            //main 함수를 호출.
-            dumbel.main();
 
             //소리 실행
             Sound_Controller();
@@ -479,49 +505,49 @@ public class DumbelCoordinator : MonoBehaviour
         lr.SetWidth(.1f, .1f);
     }
 
-    void depthJointColor()
-    {
-        if (!dumbel.elbowLeft_Z)
-        {
-            Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["ElbowLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["ElbowLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-        if (!dumbel.elbowRight_Z)
-        {
-            Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["ElbowRight"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["ElbowRight"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-        if (!dumbel.wristLeft_Z)
-        {
-            Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["WristLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["WristLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-        if (!dumbel.wristRight_Z)
-        {
-            Joints["WristRight"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["WristRight"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["WristRight"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["WristRight"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-    }
+    //void depthJointColor()
+    //{
+    //    if (!dumbel.elbowLeft_Z)
+    //    {
+    //        Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["ElbowLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
+    //    }
+    //    else
+    //    {
+    //        Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["ElbowLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
+    //    }
+    //    if (!dumbel.elbowRight_Z)
+    //    {
+    //        Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["ElbowRight"].transform.localScale = new Vector3(0.7f, 0.7f);
+    //    }
+    //    else
+    //    {
+    //        Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["ElbowRight"].transform.localScale = new Vector3(0.15f, 0.15f);
+    //    }
+    //    if (!dumbel.wristLeft_Z)
+    //    {
+    //        Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["WristLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
+    //    }
+    //    else
+    //    {
+    //        Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["WristLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
+    //    }
+    //    if (!dumbel.wristRight_Z)
+    //    {
+    //        Joints["WristRight"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["WristRight"].transform.localScale = new Vector3(0.7f, 0.7f);
+    //    }
+    //    else
+    //    {
+    //        Joints["WristRight"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["WristRight"].transform.localScale = new Vector3(0.15f, 0.15f);
+    //    }
+    //}
 
     //화면에 보이는 텍스트 컨트롤
     void textController()
@@ -534,8 +560,9 @@ public class DumbelCoordinator : MonoBehaviour
         armpRightDegree.transform.position = new Vector3((Joints["ShoulderRight"].transform.position.x + 1.1f), (Joints["ShoulderRight"].transform.position.y - 0.35f), 10);
         armpRightDegree.transform.localScale = new Vector3(1f, 1f, 1f);
 
-        if (phase.GetComponentInChildren<Text>().text == "Phase1")
+        if (current_phase == 1)
         {
+            Message.GetComponent<RawImage>().texture = Resources.Load("IMG/raiseArm") as Texture;
             elbowLeftDegree.GetComponent<Text>().text = ((int)dumbel.elbow_Right_Angle).ToString();
             elbowLeftDegree.transform.position = new Vector3((Joints["ElbowLeft"].transform.position.x + 1.5f), (Joints["ElbowLeft"].transform.position.y + 0.35f), 10);
             elbowLeftDegree.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -546,8 +573,17 @@ public class DumbelCoordinator : MonoBehaviour
         }
         else
         {
+            if (!Message.activeInHierarchy)
+            {
+                Message.SetActive(true);
+            }
             elbowLeftDegree.GetComponent<Text>().text = "";
             elbowRightDegree.GetComponent<Text>().text = "";
+         
+            if (current_phase == 4)
+            {
+                Message.GetComponent<RawImage>().texture = Resources.Load("IMG/downArm") as Texture;
+            }
         }
 
     }
@@ -562,7 +598,7 @@ public class DumbelCoordinator : MonoBehaviour
     public void scoreGetDumbel(int score)
     {
         ScoreGoal.GetComponent<Text>().text = score.ToString() + "회";
-        Application.ExternalCall("cut_View", score, score);
+        Application.ExternalCall("cut_view", score, score);
         DumbelCheck.clear_Score = (short)score;
     }
     public void LoadScene(string scene)
@@ -575,6 +611,7 @@ public class DumbelCoordinator : MonoBehaviour
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
         KinemotoSDK.EngagementHandler.HandRaiseCounter.Clear();
         Status.SetActive(false);
+        Message.SetActive(false);
         breakTimeMask.SetActive(true);
         elbowLeftDegree.SetActive(false);
         elbowRightDegree.SetActive(false);
@@ -583,6 +620,7 @@ public class DumbelCoordinator : MonoBehaviour
         helper.SetActive(false);
         //balloon.SetActive(false);
         balloon_text.SetActive(false);
+        text_background.SetActive(false);
         sendTime(set_time);
         set_timer.Stop();
         //balloon.GetComponent<RectTransform>().localPosition = new Vector3(277f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
@@ -629,7 +667,7 @@ public class DumbelCoordinator : MonoBehaviour
 
     IEnumerator LoadNewScene(string scene, float BreakTime)
     {
-        UnityEngine.Debug.Log("MOVING SCENE NAME : " + scene);
+        //UnityEngine.Debug.Log("MOVING SCENE NAME : " + scene);
         // This line waits for 3 seconds before executing the next line in the coroutine.
         // This line is only necessary for this demo. The scenes are so simple that they load too fast to read the "Loading..." text.
 
@@ -657,12 +695,13 @@ public class DumbelCoordinator : MonoBehaviour
 
     public void playMSGClip(int order)
     {
+        UnityEngine.Debug.Log("MSG ORDER : " + order);
         MessageController.GetComponent<MessageController>().playClip(order);
     }
 
     public static void changeAni(string aniName)
     {
-        //Debug.Log("Call changeAni");
+        //UnityEngine.Debug.Log("changeAni : " + aniName);
         helper.GetComponent<changeAnimation>().changeAni(aniName);
     }
 
@@ -698,7 +737,12 @@ public class DumbelCoordinator : MonoBehaviour
         {
             SplitCamera.SetActive(true);
         }
-        
+        //title.GetComponent<RectTransform>().localPosition = new Vector3(1816f, 547f, title.GetComponent<RectTransform>().localPosition.z);
+        Status.SetActive(false);
+        balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(2f, 271f, balloon_text.GetComponent<RectTransform>().localPosition.z);
+        text_background.GetComponent<Transform>().localPosition = new Vector3(1f, 291f, text_background.GetComponent<Transform>().localPosition.z);
+        helper.GetComponent<Transform>().localPosition = new Vector3(-352f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
+
         practice_mod(true);
     }
     public void ResumeScreen()
@@ -709,6 +753,11 @@ public class DumbelCoordinator : MonoBehaviour
             SplitCamera.SetActive(false);
         }
         practice_mod(false);
+        Status.SetActive(true);
+        //title.GetComponent<RectTransform>().localPosition = new Vector3(3124f, 413f, title.GetComponent<RectTransform>().localPosition.z);
+        balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(-192f, 248f, balloon_text.GetComponent<RectTransform>().localPosition.z);
+        text_background.GetComponent<Transform>().localPosition = new Vector3(-193f, 268f, text_background.GetComponent<Transform>().localPosition.z);
+        helper.GetComponent<Transform>().localPosition = new Vector3(-422f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
     }
 
     public void practice_mod(bool on)
@@ -718,18 +767,12 @@ public class DumbelCoordinator : MonoBehaviour
             set_timer.Stop();
             count_timer.Stop();
             practice_On = true;
-            //GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 굽음 X " + dumbel.elbowLeft_Y_Count.ToString();
-            //GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 굽음 X " + dumbel.elbowRight_Y_Count.ToString();
-            //GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 앞으로 나옴 X " + dumbel.elbowLeft_Z_Count.ToString();
-            //GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 앞으로 나옴 X " + dumbel.elbowLeft_Z_Count.ToString();
-            //GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "왼손목이 앞으로 나옴 X " + dumbel.wristLeft_Z_Count.ToString();
-            //GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "오른손목이 앞으로 나옴 X " + dumbel.wristLeft_Z_Count.ToString();
-            GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 굽음";
-            GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 굽음";
-            GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 앞으로 나옴";
-            GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 앞으로 나옴";
-            GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "왼손목이 앞으로 나옴";
-            GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "오른손목이 앞으로 나옴";
+            GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔을 어깨와 나란히";
+            GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔을 어깨와 나란히";
+            GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼쪽 승모근 자극하지 않기";
+            GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른쪽 승모근 자극하지 않기";
+            GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "";
+            GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "";
             GameObject.Find("strike1").GetComponent<RawImage>().CrossFadeAlpha(0, 0,false);
             GameObject.Find("strike2").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
             GameObject.Find("strike3").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
@@ -747,12 +790,20 @@ public class DumbelCoordinator : MonoBehaviour
 
     public string StrikeThrough(string s)
     {
-        UnityEngine.Debug.Log("StrikeThrough");
+        //UnityEngine.Debug.Log("StrikeThrough");
         string strikethrough = "";
         foreach (char c in s)
         {
             strikethrough = strikethrough + c + '\u0336';
         }
         return strikethrough;
+    }
+
+    public void firewall()
+    {
+        firewall_obj = Instantiate(Resources.Load("WallOfFire")) as GameObject;
+        firewall_obj.SetActive(false);
+        firewall_obj.transform.parent = GameObject.Find("Canvas").transform;
+        firewall_position = new Vector3(0, 0);
     }
 }

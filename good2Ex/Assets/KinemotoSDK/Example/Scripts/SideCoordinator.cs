@@ -68,7 +68,7 @@ public class SideCoordinator : MonoBehaviour
     public static GameObject particle;
     public static Vector3 particle_position;
 
-    public static GameObject firewall;
+    public static GameObject firewall_obj;
     public static Vector3 firewall_position;
 
     public static GameObject firework;
@@ -119,6 +119,7 @@ public class SideCoordinator : MonoBehaviour
     public changeAnimation changeAnimation;
     private GameObject balloon;
     private static GameObject balloon_text;
+    private static GameObject text_background;
 
     //stop_watch(timer)
     public static Stopwatch set_timer = new Stopwatch();
@@ -164,7 +165,9 @@ public class SideCoordinator : MonoBehaviour
         //balloon = GameObject.Find("balloon");
         //balloon.SetActive(false);
         balloon_text = GameObject.Find("balloon_text");
+        text_background = GameObject.Find("text_background");
         balloon_text.SetActive(false);
+        text_background.SetActive(false);
 
         //angle object
         armpLeftDegree = GameObject.Find("armpRightDegree");
@@ -186,10 +189,7 @@ public class SideCoordinator : MonoBehaviour
         particle_position = new Vector3(0, 0);
 
         //firewall effect set
-        firewall = Instantiate(Resources.Load("WallOfFire")) as GameObject;
-        firewall.SetActive(false);
-        firewall.transform.parent = GameObject.Find("Canvas").transform;
-        firewall_position = new Vector3(0, 0);
+        
         firework = GameObject.Find("firework");
         if (firework.activeInHierarchy)
         {
@@ -216,8 +216,8 @@ public class SideCoordinator : MonoBehaviour
         Status = GameObject.Instantiate(prefab) as GameObject;
         Status.name = "status";
         Status.transform.parent = GameObject.Find("Canvas").transform;
-        Status.transform.localPosition = new Vector3(405f, 145f, -10);
-        Status.transform.localScale = new Vector3(0.5130946f, 0.5937846f, 0.5082178f);
+        Status.transform.localPosition = new Vector3(470f, -37f, -10);
+        Status.transform.localScale = new Vector3(0.711432f, 1.08361f, 0.7343858f);
 
         //phase = GameObject.Find("phase");
         phase = GameObject.Find("Title");
@@ -261,7 +261,7 @@ public class SideCoordinator : MonoBehaviour
         //set position of meshcube to back of the display
         meshCube.transform.position = new Vector3(0, 0, 20);
         meshCube2.transform.position = new Vector3(0, -5, 20);
-        meshCube3.transform.position = new Vector3(0, -10, 20);
+        meshCube3.transform.position = new Vector3(0, -5, 20);
 
         //생성자
 
@@ -323,6 +323,7 @@ public class SideCoordinator : MonoBehaviour
                 helper.SetActive(true);
                 //balloon.SetActive(true);
                 balloon_text.SetActive(true);
+                text_background.SetActive(true);
                 changeAni("pose_00");
                 set_timer.Start();
 
@@ -574,6 +575,7 @@ public class SideCoordinator : MonoBehaviour
         helper.SetActive(false);
         //balloon.SetActive(false);
         balloon_text.SetActive(false);
+        text_background.SetActive(false);
         sendTime(set_time);
         set_timer.Stop();
         //balloon.GetComponent<RectTransform>().localPosition = new Vector3(277f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
@@ -648,6 +650,7 @@ public class SideCoordinator : MonoBehaviour
 
     public void playMSGClip(int order)
     {
+        UnityEngine.Debug.Log("PlayMessage : " + order);
         MessageController.GetComponent<MessageController>().playClip(order);
         MessageController.GetComponent<AudioSource>().Play();
     }
@@ -661,7 +664,7 @@ public class SideCoordinator : MonoBehaviour
     public static void setBallonText(string text)
     {
         balloon_text.GetComponent<Text>().text = text;
-        balloon_text.GetComponent<Text>().CrossFadeColor(Color.black, 2f, false, false);
+        //balloon_text.GetComponent<Text>().CrossFadeColor(Color.black, 2f, false, false);
     }
 
     public void send2web(int count, int[] fail)
@@ -688,6 +691,10 @@ public class SideCoordinator : MonoBehaviour
         {
             SplitCamera.SetActive(true);
         }
+        phase.GetComponent<RectTransform>().localPosition = new Vector3(1816f, 547f, phase.GetComponent<RectTransform>().localPosition.z);
+        balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(2f, 271f, balloon_text.GetComponent<RectTransform>().localPosition.z);
+        text_background.GetComponent<Transform>().localPosition = new Vector3(1f, 291f, text_background.GetComponent<Transform>().localPosition.z);
+        helper.GetComponent<Transform>().localPosition = new Vector3(-352f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
 
         practice_mod(true);
     }
@@ -699,6 +706,10 @@ public class SideCoordinator : MonoBehaviour
             SplitCamera.SetActive(false);
         }
         practice_mod(false);
+        phase.GetComponent<RectTransform>().localPosition = new Vector3(3124f, 413f, phase.GetComponent<RectTransform>().localPosition.z);
+        balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(-192f, 248f, balloon_text.GetComponent<RectTransform>().localPosition.z);
+        text_background.GetComponent<Transform>().localPosition = new Vector3(-193f, 268f, text_background.GetComponent<Transform>().localPosition.z);
+        helper.GetComponent<Transform>().localPosition = new Vector3(-422f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
     }
 
     public void practice_mod(bool on)
@@ -734,5 +745,13 @@ public class SideCoordinator : MonoBehaviour
             count_timer.Start();
             practice_On = false;
         }
+    }
+
+    public void firewall()
+    {
+        firewall_obj = Instantiate(Resources.Load("WallOfFire")) as GameObject;
+        firewall_obj.SetActive(false);
+        firewall_obj.transform.parent = GameObject.Find("Canvas").transform;
+        firewall_position = new Vector3(0, 0);
     }
 }

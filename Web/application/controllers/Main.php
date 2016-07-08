@@ -285,24 +285,26 @@ class Main extends CI_Controller
     }
 
     public function save_time(){
-        $_SESSION['time'] = $_POST['time'];
 
+
+        $time = explode (":", $_POST['time']);
+        echo "BEFORE<BR>"; var_dump($time); echo "<BR>";
+        $time[0]=$time[0]*60;
+        $_SESSION['time'] += array_sum($time);
+        var_dump($_POST['time']); echo "<BR><BR>".$time[0].":".$time[1]."<BR><BR>"; var_dump($_SESSION['time']);
+        exit();
     }
 
     public function exercise_Result()
     {
         //exit(var_dump($_SESSION['time']));
-        $time = explode (":", $_SESSION['time']);
+        $time[0] = $_SESSION['time'] / 60;
+        $time[1] = $_SESSION['time'] % 60;
         $data['exercise_time'] = $time;
-
-        $time[1]=$time[1]/60;
-
-        $time = $time[0] + $time[1];
-
 
         $this->load->model('Exercise');
         $today = date("Y-m-d");
-        $exercise_time = $time / 30;
+        $exercise_time = (($time[0] + ($time[1] / 60)) / 30);
 
         $data['achievement_count'] = $this->Exercise->exercise_Result($today);
         $data['position_check_on_today'] = $this->Exercise->get_position_check_on_today($today);

@@ -75,9 +75,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'jycom.asuscomm.com:5066',
-	'username' => 'exercise',
-	'password' => 'Exercise12!@',
+	//'hostname' => 'jycom.asuscomm.com:5066',
+	'hostname' => 'localhost',
+	//'username' => 'exercise',
+	'username' => 'root',
+	//'password' => 'Exercise12!@',
+	'password' => '',
 	'database' => 'exercise',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

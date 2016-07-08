@@ -7,6 +7,7 @@
 
     <script src="/public/jquery-2.2.0/jquery-2.2.0.min.js"></script>
     <script src="/public/jquery-2.2.0/jquery-2.2.0.js"></script>
+    <script src="/public/js/jquery-ui.js"></script>
 
     <link href="/public/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript">
@@ -71,10 +72,17 @@
         });
         -->
     </script>
+
     <style type="text/css">
+        @font-face {
+            font-family: HANYG0230;
+            src: url('../../../public/fonts/HANYGO230.ttf'); format('truetype');
+        }
+
         <!--
         body {
             font-family: Helvetica, Verdana, Arial, sans-serif;
+            height: 940px;
 
             text-align: center;
         }
@@ -118,18 +126,19 @@
         div#unityPlayer {
 
             cursor: default;
-   /*         height: 100%;
-            width: 100%;*/
+            /*         height: 100%;
+                     width: 100%;*/
         }
-/*
-        div.startBody {
-            !* border-top: 1px solid black;
-             border-right: 1px solid black;
-             border-left: 1px solid black;
-             border-bottom: 1px solid black;*!
-            width: 100%;
-            height: 100%;
-        }*/
+
+        /*
+                div.startBody {
+                    !* border-top: 1px solid black;
+                     border-right: 1px solid black;
+                     border-left: 1px solid black;
+                     border-bottom: 1px solid black;*!
+                    width: 100%;
+                    height: 100%;
+                }*/
 
         /*div.migi {
             margin-left: auto;
@@ -138,8 +147,13 @@
         }*/
 
         .set {
-            font-size: 35px;
+            font-size: 30px;
         }
+
+        .part {
+            border-radius: 50%;
+        }
+
     </style>
 </head>
 <body>
@@ -161,25 +175,98 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/main/exercise_Free">자유게시판</a></li>
-                <li><a href="/main/exercise_QnA">QNA</a></li>
+                <li><a href="/main/exercise_Free" STYLE="font-family: HANYG0230">자유게시판</a></li>
+                <li><a href="/main/exercise_QnA" style="font-family: HANYG0230">QNA</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <?php
                 /*                if(isset($_SESSION["user_info"]))
                                 {*/ ?>
-                <li><a href="#">LOGOUT</a></li>
+                <li><a href="#" style="font-family: HANYG0230">LOGOUT</a></li>
                 <?php /*}*/ ?>
             </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
 </nav>
 
 
 <div class="container-fluid">
     <div class="row" style="margin: auto">
+        <div class="col-md-3">
+            <div class="row" style="margin: auto">
+                <div style="font-family: HANYG0230;height: 80px;padding: 1px;/*margin-bottom: 20px;*/" id="information">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="row" style="margin: auto">
+                <div style="font-family: HANYG0230;height: 80px;padding: 5px;/*margin-bottom: 20px;*/"
+                     id="information_set">
 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="row" style="margin: auto">
+                <div style="font-family: HANYG0230;height: 80px;padding: 5px;/*margin-bottom: 20px;*/"
+                     id="information_count">
+
+                </div>
+            </div>
+        </div>
+        <!--     <div class="col-md-4">
+                 <div class="row" style="margin: auto">
+                 <div class="panel panel-success">
+                               <div class="panel-heading" style="padding: 1px 1px; background-color: #3498db;color: white"><p
+                                       class="set" id="set" style="font-family: HANYG0230">1세트</p></div>
+                     <div class="graph">
+                         <div style="font-family: HANYG0230;height: 195px;padding: 1px"
+                              id="container-speed"></div>
+                     </div>
+                 </div>
+             </div>-->
+    </div>
+
+
+    <!--<div class="col-md-4">
+        <div class="row" style="margin: auto">
+            <div class="panel panel-success">
+                <div class="panel-heading" style="padding:1px 1px; background-color: #3498db;color: white">
+                    <p style="font-family: HANYG0230;font-size: 30px">현재 운동 정보</p>
+                </div>
+                <div class="panel-body" style="font-family: HANYG0230;height: 116px;padding: 1px" id="information">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row" style="margin: auto">
+            <div class="panel panel-success">
+                <div class="panel-heading" style="padding: 1px 1px; background-color: #3498db;color: white"><p
+                        class="set" id="set" style="font-family: HANYG0230">1세트</p></div>
+                <div class="graph">
+                    <div class="panel-body" style="font-family: HANYG0230;height: 195px;padding: 1px"
+                         id="container-speed"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row" style="margin: auto">
+            <div class="panel panel-success">
+                <div class="panel-heading" style="padding: 1px 1px;background-color: #3498db;color: white">
+                    <p style="font-family: HANYG0230; font-size: 30px">다음 운동 정보</p>
+                </div>
+                <div class="panel-body" style="height: 116px;padding: 1px;font-family: HANYG0230"
+                     id="nextInformation">
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="row" style="margin: auto">
         <div class="col-md-8">
             <div class="row" style="margin: auto">
                 <div id="unityPlayer">
@@ -200,56 +287,134 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="row" style="margin: auto">
+                <div class="panel panel-success">
+                    <div class="panel-body" style="font-family: HANYG0230; padding: 1px position: relative;">
+                        <img src="/public/img/muscle/human.png"
+                             style="width : 52%; filter: drop-shadow(0px 0px 2px #666666);">
 
-        <div class="row" style="margin: auto">
-            <div class="col-md-3" style="float: right;">
-
-                <div class="row" style="margin: auto">
-                    <div class="panel panel-success">
-                        <div class="panel-heading"style="padding:1px 1px; background-color: #3498db;color: white">
-                            <h3>현재 운동 정보</h3>
-                        </div>
-                        <div class="panel-body" style="height: 116px;padding: 1px" id="information">
-                        </div>
+                        <div id="deltoid_left" class="part" style='position: absolute; top: 20%; left:12%;'></div>
+                        <div id="deltoid_right" class="part" style='position: absolute; top: 20%; left:45%;'></div>
+                    </div>
+                    <div class="panel-footer" style="padding:1px 1px; background-color: #3498db;color: white">
+                        <p style="font-family: HANYG0230; font-size: 25px">근육 센서</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" style="float: right;">
-                <div class="row" style="margin: auto">
-                    <div class="panel panel-success">
-                        <div class="panel-heading" style="padding: 1px 1px; background-color: #3498db;color: white"><p class="set" id="set">1세트</p></div>
-                        <div class="graph">
-                            <div class="panel-body" style="height: 195px;padding: 1px" id="container-speed"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3" style="float: right;">
-
-                <div class="row" style="margin: auto">
-                    <div class="panel panel-success">
-                        <div class="panel-heading" style="padding: 1px 1px;background-color: #3498db;color: white">
-                            <h3>다음 운동 정보</h3>
-                        </div>
-                        <div class="panel-body"style="height: 116px;padding: 1px;" id="nextInformation">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        </div>
     </div>
 </div>
+<div class="row" style="margin: auto">
+    <div class="col-md-11" style="margin: auto">
+        <h3 style="font-family: HANYG0230; text-align: left">진행률</h3>
+
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" id="first_bar" role="progressbar" aria-valuenow="20"
+                 aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-info active" id="second_bar" role="progressbar"
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-success active" id="third_bar" role="progressbar"
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-warning active" id="forth_bar" role="progressbar"
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+            <div class="progress-bar progress-bar-striped progress-bar-danger active" id="fifth_bar" role="progressbar"
+                 aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+            <div id="label" style="font-family: HANYG0230; text-align: center"></div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        // run the currently selected effect
+        function runEffect(part) {
+            // run the effect
+            console.log("run effect : "+part);
+            $(part).show("scale", "percent: 100", 50);
+
+            callback(part);
+        };
+
+        //callback function to bring a hidden box back
+        function callback(part) {
+            setTimeout(function () {
+                $(part).hide("scale", "percent: 0", 50);
+            }, 300);
+        };
+
+        var socket = io('http://jycom.asuscomm.com:5300');
+        socket.on('fromserver', function () {
+            console.log('socket connected');
+            socket.emit('fromclient', 'Hello From WEB');
+        });
+
+        socket.on('toWeb', function (data) {
+
+            //var keys;
+            //var muscleData="";
+            //keys = Object.keys(data);
+            //console.log(Object.keys(data.data));
+            //console.log(keys);
+            /*for(var i in keys){
+             muscleData += data[keys[i].toString()];
+             }
+             console.log('MusclePower Data : '+muscleData);*/
+
+            //var muscle_part = new Array(4);
+
+            //var part_num = parseInt(data.toString().substr(3,1));
+            //var power = parseInt(data.toString().substr(4,11));
+            var part_num = parseInt(data.data.toString().substr(0, 4), 2); //1, 2
+            var power = parseInt(data.data.toString().substr(4, 11), 2); // data : 0~1024
+            console.log("part_num : " + part_num);
+            //console.log("power : " + power);
+
+            var part;
+
+            if (part_num == 1)
+                part = '#deltoid_left';
+            else if (part_num == 2)
+                part = '#deltoid_right';
+
+            console.log("part name : " + part);
+
+
+            if (power <= 341) {
+                $(part).css("width", "16px");
+                $(part).css("height", "16px");
+                $(part).css('background-color', '#66b132');
+                $(part).css("box-shadow", "0px 0px 10px #66b132");
+            }
+            else if (power <= 682) {
+                $(part).css("width", "32px");
+                $(part).css("height", "32px");
+                $(part).css('background-color', '#f9bb04');
+                $(part).css("box-shadow", "0px 0px 10px #f9bb04");
+            }
+            else if (power <= 1024) {
+                $(part).css("width", "48px");
+                $(part).css("height", "48px");
+                $(part).css('background-color', '#a8184b');
+                $(part).css("box-shadow", "0px 0px 10px #a8184b");
+            }
+
+            runEffect(part);
+
+            $("#effect").hide();
+        });
+
+
+    });
+</script>
 </body>
 <script src="/public/js/bootstrap.min.js"></script>
 
-<script src="../../../public/js/highcharts.js"></script>
-<script src="../../../public/js/highcharts-more.js"></script>
-<script src="../../../public/js/solid-gauge.js"></script>
-<!--<script src="../../../public/js/ex_info.js"></script>-->
 <script src="../../../public/js/chart.js"></script>
 
 
-
 </html>
-

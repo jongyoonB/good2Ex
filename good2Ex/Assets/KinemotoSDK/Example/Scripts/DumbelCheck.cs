@@ -8,7 +8,7 @@ using System.Collections;
 public class DumbelCheck
 {
 
-    #region Member [bool 친구들]
+    #region Member [bool]
 
     // Start, Ready , Top , End
     public bool ready_Flag
@@ -28,50 +28,59 @@ public class DumbelCheck
         get; set;
     }
 
-    // Y
-    public bool wristLeft_Y
+
+    //angle
+    public bool wristLeftAngle_Check
     {
         get; set;
     }
-    public bool wristRight_Y
+    public bool wristRightAngle_Check
     {
         get; set;
     }
-    public bool elbowLeft_Y
+    public bool elbowLeftAngle_Check
     {
         get; set;
     }
-    public bool elbowRight_Y
+    public bool elbowRightAngle_Check
     {
         get; set;
     }
 
-    //Depth
-    public bool wristLeft_Z
+    //depth
+    public bool WristLeftDepthCheck {
+        get; set;
+    }
+    public bool WristRightDepthCheck
     {
         get; set;
     }
-    public bool wristRight_Z
+    public bool ElbowLeftDepthCheck
     {
         get; set;
     }
-    public bool elbowLeft_Z
+    public bool ElbowRightDepthCheck
     {
         get; set;
     }
-    public bool elbowRight_Z
+    public bool[] LeftArmDepth
+    {
+        get; set;
+    }
+    public bool[] RightArmDepth
     {
         get; set;
     }
 
-    //2016- 06-18 새로 추가
-    public bool elbowRight_Z_Flag;
-    public bool elbowLeft_Z_Flag;
-    public bool wristRight_Z_Flag;
-    public bool wristLeft_Z_Flag;
-    public bool elbow_right_angle_Flag;
-    public bool elbow_left_angle_Flag;
-
+    //muscle{
+    public bool LeftArmMuscle
+    {
+        get; set;
+    }
+    public bool RightArmMuscle
+    {
+        get; set;
+    }
 
     //MessageSwitch
     public int MSGorder = -1;
@@ -79,7 +88,7 @@ public class DumbelCheck
     public DumbelCoordinator dumbelCoordi = new DumbelCoordinator();
     #endregion
 
-    #region Member [double 친구들 == 각도값 저장]
+    #region Member [double 각도 저장]
 
     public double armpit_Left_Angle
     {
@@ -100,7 +109,7 @@ public class DumbelCheck
 
     #endregion
 
-    #region Member [short 친구들 == Count를 위한]
+    #region Member [short Count]
 
     public static short clear_Set
     {
@@ -112,36 +121,19 @@ public class DumbelCheck
         get; set;
     }
 
-    public short wristLeft_Y_Count
+    public short wristLeftAngle_Check_Count
     {
         get; set;
     }
-    public short wristRight_Y_Count
+    public short wristRightAngle_Check_Count
     {
         get; set;
     }
-    public short elbowLeft_Y_Count
+    public short elbowLeftAngle_Check_Count
     {
         get; set;
     }
-    public short elbowRight_Y_Count
-    {
-        get; set;
-    }
-
-    public short wristLeft_Z_Count
-    {
-        get; set;
-    }
-    public short wristRight_Z_Count
-    {
-        get; set;
-    }
-    public short elbowLeft_Z_Count
-    {
-        get; set;
-    }
-    public short elbowRight_Z_Count
+    public short elbowRightAngle_Check_Count
     {
         get; set;
     }
@@ -151,16 +143,13 @@ public class DumbelCheck
     public short score_Count;
 
 
-    //Fail Check Friends
-    bool WristLeftDepthFail;
-    bool WristRightDepthFail;
-    bool ElbowLeftDepthFail;
-    bool ElbowRightDepthFail;
-    bool ElbowAngleLeftFail;
-    bool ElbowAngleRightFail;
-    int[] fail = new int[6];
+    //Failed Check
+    int[,] fail = new int[4,6];
+    int[] judgment = new int[6];
     string failed_message = "";
 
+
+    //practice_mod
     static int good_count;
     static int practice_count;
     static int bad_count;
@@ -183,41 +172,16 @@ public class DumbelCheck
         bad_count = 0;
         good_count = 0;
         practice_count = 0;
+        LeftArmDepth = new bool[2];
+        RightArmDepth = new bool[2];
     }
 
     public void main()
     {
         AngleContorl();
-
+        checkP_clear();
         if (!ready_Flag)
         {
-            if (DumbelCoordinator.phase.GetComponentInChildren<Text>().text != "Phase1")
-            {
-                DumbelCoordinator.phase.GetComponentInChildren<Text>().text = "Phase1";
-                if (set_Count == 0  && score_Count < 2)
-                {
-                    if (!DumbelCoordinator.Toggle2.activeInHierarchy)
-                    {
-                        DumbelCoordinator.Toggle2.SetActive(true);
-                        DumbelCoordinator.Toggle3.SetActive(true);
-                        DumbelCoordinator.Toggle4.SetActive(true);
-                    }
-                    set_text("Toggle1", "왼팔과 몸의 각도 90도");
-                    set_text("Toggle2", "오른팔과 몸의 각도 90도");
-                    set_text("Toggle3", "왼쪽 팔꿈치의 각도 90도");
-                    set_text("Toggle4", "오른쪽 팔꿈치의 각도 90도");
-
-                    //GameObject.Find("Test1").GetComponent<Text>().text = "왼팔과 몸의 각도 90도";
-                    //GameObject.Find("Test2").GetComponent<Text>().text = "오른팔과 몸의 각도 90도";
-                    //GameObject.Find("Test3").GetComponent<Text>().text = "왼쪽 팔꿈치의 각도 90도";
-                    //GameObject.Find("Test4").GetComponent<Text>().text = "오른쪽 팔꿈치의 각도 90도";
-
-                    //set_textColor("Toggle1", Color.white);
-                    //set_textColor("Toggle2", Color.white);
-                    //set_textColor("Toggle3", Color.white);
-                    //set_textColor("Toggle4", Color.white);
-                }
-            }
             readyCheck();
         }
         else if (!start_Flag)
@@ -226,68 +190,14 @@ public class DumbelCheck
             {
                 DumbelCoordinator.count_timer.Start();
             }
-
-            if (DumbelCoordinator.phase.GetComponentInChildren<Text>().text != "Phase2")
-            {
-                DumbelCoordinator.phase.GetComponentInChildren<Text>().text = "Phase2";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    DumbelCoordinator.changeAni("idle_10");
-                    set_text("Toggle1", "양팔을 천천히 올리기");
-                    //set_textColor("Toggle1", Color.white);
-                    //set_text("Toggle2", "");
-                    //set_text("Toggle3", "");
-                    //set_text("Toggle4", "");
-
-                    DumbelCoordinator.Toggle2.SetActive(false);
-                    DumbelCoordinator.Toggle3.SetActive(false);
-                    DumbelCoordinator.Toggle4.SetActive(false);
-
-
-                }
-
-            }
             startCheck();
         }
         else if (!top_Flag)
         {
-            if (DumbelCoordinator.phase.GetComponentInChildren<Text>().text != "Phase3")
-            {
-                DumbelCoordinator.phase.GetComponentInChildren<Text>().text = "Phase3";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    DumbelCoordinator.Toggle2.SetActive(true);
-                    DumbelCoordinator.Toggle3.SetActive(true);
-                    DumbelCoordinator.Toggle4.SetActive(true);
-                    set_text("Toggle1", "왼팔과 몸의 각도 130도");
-                    set_text("Toggle2", "오른팔과 몸의 각도 130도");
-                    set_text("Toggle3", "왼팔을 어깨와 나란히");
-                    set_text("Toggle4", "오른팔을 어깨와 나란히");
-                    //set_textColor("Toggle3", Color.white);
-                    //set_textColor("Toggle4", Color.white);
-                }
-
-
-            }
             topCheck();
         }
         else if (!end_Flag)
         {
-            if (DumbelCoordinator.phase.GetComponentInChildren<Text>().text != "Phase4")
-            {
-                DumbelCoordinator.phase.GetComponentInChildren<Text>().text = "Phase4";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    set_text("Toggle1", "양팔의 각도를 90도로");
-                    set_text("Toggle2", "양팔을 천천히 내리기");
-                    set_text("Toggle3", "왼팔을 어깨와 나란히");
-                    set_text("Toggle4", "오른팔을 어깨와 나란히");
-                    //set_textColor("Toggle2", Color.white);
-                    //set_textColor("Toggle3", Color.white);
-                    //set_textColor("Toggle4", Color.white);
-                }
-
-            }
             endCheck();
         }
 
@@ -295,6 +205,7 @@ public class DumbelCheck
         {
             depth_Check();
         }
+        //UnityEngine.Debug.Log("Phase : " + DumbelCoordinator.current_phase);
 
     }
 
@@ -304,22 +215,19 @@ public class DumbelCheck
 
     void readyCheck()
     {
-        //DumbelCoordinator.setBallonText("팔을 천천히 들어 주세요");
-
-        y_False();
-
+        DumbelCoordinator.current_phase = 1;
         if (armpit_Left_Angle <= 100 && armpit_Left_Angle >= 85)
         {
             //set_textColor("Toggle1", Color.green);
             DumbelCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
-            wristLeft_Y = true;
+            wristLeftAngle_Check = true;
         }
         else
         {
             //set_textColor("Toggle1", Color.red);
             DumbelCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.red;
 
-            wristLeft_Y = false;
+            wristLeftAngle_Check = false;
         }
 
         if (armpit_Right_Angle <= 100 && armpit_Right_Angle >= 85)
@@ -327,14 +235,14 @@ public class DumbelCheck
             //set_textColor("Toggle2", Color.green);
             DumbelCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
 
-            wristRight_Y = true;
+            wristRightAngle_Check = true;
         }
         else
         {
             //set_textColor("Toggle2", Color.red);
             DumbelCoordinator.armpRightDegree.GetComponent<Text>().color = Color.red;
 
-            wristRight_Y = false;
+            wristRightAngle_Check = false;
         }
 
         if (elbow_Left_Angle >= 80 && elbow_Left_Angle <= 110)
@@ -342,13 +250,13 @@ public class DumbelCheck
             //set_textColor("Toggle3", Color.green);
             DumbelCoordinator.elbowLeftDegree.GetComponent<Text>().color = Color.black;
 
-            elbowLeft_Y = true;
+            elbowLeftAngle_Check = true;
         }
         else
         {
             //set_textColor("Toggle3", Color.red);
             DumbelCoordinator.elbowLeftDegree.GetComponent<Text>().color = Color.red;
-            elbowLeft_Y = false;
+            elbowLeftAngle_Check = false;
         }
 
         if (elbow_Right_Angle >= 80 && elbow_Right_Angle <= 110)
@@ -356,58 +264,23 @@ public class DumbelCheck
             //set_textColor("Toggle4", Color.green);
             DumbelCoordinator.elbowRightDegree.GetComponent<Text>().color = Color.black;
 
-            elbowRight_Y = true;
+            elbowRightAngle_Check = true;
         }
         else
         {
             //set_textColor("Toggle4", Color.red);
             DumbelCoordinator.elbowRightDegree.GetComponent<Text>().color = Color.red;
-
-            elbowRight_Y = false;
+            elbowRightAngle_Check = false;
         }
 
 
-        if (wristLeft_Y && wristRight_Y)
+        if (wristLeftAngle_Check && wristRightAngle_Check && elbowLeftAngle_Check && wristLeftAngle_Check)
         {
             ready_Flag = true;
-            if (score_Count == 0)
+            if (score_Count == 0 && set_Count == 0)
             {
                 MSGorder = 16;
             }
-            else if (wristLeft_Y && wristRight_Y && elbowRight_Y && !elbowLeft_Y)
-            {
-                ready_Flag = true;
-                if (score_Count == 0)
-                {
-                    MSGorder = 16;
-                }
-                ElbowAngleLeftFail = true;
-                Debug.Log("readyClear");
-
-            }
-            else if (wristLeft_Y && wristRight_Y && !elbowRight_Y && elbowLeft_Y)
-            {
-                ready_Flag = true;
-                if (score_Count == 0)
-                {
-                    MSGorder = 16;
-                }
-                ElbowAngleRightFail = true;
-                Debug.Log("readyClear");
-            }
-            else if (wristLeft_Y && wristRight_Y && !elbowRight_Y && !elbowLeft_Y)
-            {
-                ready_Flag = true;
-                if (score_Count == 0)
-                {
-                    MSGorder = 16;
-                }
-                ElbowAngleRightFail = true;
-                ElbowAngleLeftFail = true;
-                Debug.Log("readyClear");
-            }
-
-            Debug.Log("readyClear");
         }
     }
 
@@ -415,207 +288,168 @@ public class DumbelCheck
     {
         //DumbelCoordinator.setBallonText("팔을 천천히 들어 주세요");
 
-        y_False();
+        DumbelCoordinator.current_phase = 2;
+
         if (armpit_Left_Angle >= 115 && armpit_Left_Angle <= 125)
         {
-            wristLeft_Y = true;
+            wristLeftAngle_Check = true;
+        }
+        else
+        {
+            wristLeftAngle_Check = false;
         }
 
         if (armpit_Right_Angle >= 115 && armpit_Right_Angle <= 125)
         {
-            wristRight_Y = true;
+            wristRightAngle_Check = true;
+        }
+        else
+        {
+            wristRightAngle_Check = false;
+
         }
 
-        if (wristLeft_Y && wristRight_Y)
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
             start_Flag = true;
-            Debug.Log("startClear");
+            //Debug.Log("startClear");
         }
 
     }
 
     void topCheck()
     {
-        y_False();
+        DumbelCoordinator.current_phase = 3;
 
         if (armpit_Left_Angle >= 135)
         {
             //set_textColor("Toggle1", Color.green);
             DumbelCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
-            wristLeft_Y = true;
+            wristLeftAngle_Check = true;
         }
         else
         {
             //set_textColor("Toggle1", Color.red);
             DumbelCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.red;
-
+            wristLeftAngle_Check = false;
         }
 
         if (armpit_Right_Angle >= 135)
         {
             //set_textColor("Toggle2", Color.green);
             DumbelCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
-
-            wristRight_Y = true;
+            wristRightAngle_Check = true;
         }
         else
         {
             //set_textColor("Toggle2", Color.red);
             DumbelCoordinator.armpRightDegree.GetComponent<Text>().color = Color.red;
-
+            wristRightAngle_Check = false;
         }
 
-        if (wristLeft_Y && wristRight_Y)
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
             if (!(elbow_Left_Angle >= 135))
             {
                 ////set_textColor("Toggle3", Color.green);
-                elbowLeft_Y = true;
+                elbowLeftAngle_Check = true;
             }
             else
             {
                 ////set_textColor("Toggle3", Color.red);
+                elbowLeftAngle_Check = false;
             }
 
             if (!(elbow_Right_Angle >= 135))
             {
                 ////set_textColor("Toggle4", Color.green);
-                elbowRight_Y = true;
+                elbowRightAngle_Check = true;
             }
             else
             {
                 ////set_textColor("Toggle4", Color.red);
+                elbowRightAngle_Check = false;
             }
 
             top_Flag = true;
-            Sound_Controller();
-            Debug.Log("topClear");
-            sound_flag_false();
+            //Debug.Log("topClear");
         }
     }
 
     void endCheck()
     {
         //DumbelCoordinator.setBallonText("팔을 천천히 내려 주세요");
-
-        y_False();
+        DumbelCoordinator.current_phase = 4;
 
         if (armpit_Left_Angle <= 95)
         {
             DumbelCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
-            wristLeft_Y = true;
+            wristLeftAngle_Check = true;
         }
         else
         {
             DumbelCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.red;
+            wristLeftAngle_Check = false;
 
         }
 
         if (armpit_Right_Angle <= 95)
         {
             DumbelCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
-            wristRight_Y = true;
+            wristRightAngle_Check = true;
         }
         else
         {
             DumbelCoordinator.armpRightDegree.GetComponent<Text>().color = Color.red;
-
+            wristRightAngle_Check = false;
         }
 
 
-        if (wristLeft_Y && wristRight_Y)
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
-            if (ElbowLeftDepthFail)
-            {
-                fail[0] = 1;
-                ElbowLeftDepthFail = false;
-            }
-            else
-            {
-                fail[0] = 0;
-            }
+            judgment_position();
 
-            if (ElbowRightDepthFail)
-            {
-                fail[1] = 1;
-                ElbowRightDepthFail = false;
-            }
-            else
-            {
-                fail[1] = 0;
-
-            }
-
-            if (WristLeftDepthFail)
-            {
-                fail[2] = 1;
-                WristLeftDepthFail = false;
-            }
-            else
-            {
-                fail[2] = 0;
-            }
-
-            if (WristRightDepthFail)
-            {
-                fail[3] = 1;
-                WristRightDepthFail = false;
-            }
-            else
-            {
-                fail[3] = 0;
-            }
-
-            if (ElbowAngleLeftFail)
-            {
-                fail[4] = 1;
-                ElbowAngleLeftFail = false;
-            }
-            else
-            {
-                fail[4] = 0;
-            }
-
-            if (ElbowAngleRightFail)
-            {
-                fail[5] = 1;
-                ElbowAngleRightFail = false;
-            }
-            else
-            {
-                fail[5] = 0;
-            }
+            // 4,5 ->0
 
             GameObject PointsText;
-
-            if (fail[0] + fail[1] + fail[2] + fail[3] + fail[4] + fail[5] > 2)
+            int ct = 0;
+            UnityEngine.Debug.Log("Arm Check");
+            for(int i = 0; i < 2; i++)
             {
-                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
-                bad_count++;
-                Debug.Log("BAD");
+                UnityEngine.Debug.Log("LeftArm["+i+"]" + LeftArmDepth[i]);
+                UnityEngine.Debug.Log("RightArm[" + i + "]" + RightArmDepth[i]);
+                if (!LeftArmDepth[i])
+                {
+                    ct++;
+                }
+                if (!RightArmDepth[i])
+                {
+                    ct++;
+                }
             }
-            else
+            //UnityEngine.Debug.Log("CT = " + ct);
+            if (ct == 0)
             {
                 if (DumbelCoordinator.practice_On)
                 {
                     practice_count++;
                 }
+
                 PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/yosi")) as GameObject;
-                Debug.Log("yosi");
+                //Debug.Log("yosi");
+                DumbelCoordinator.changeAni("greet_03");
             }
-
-            for (int i = 0; i < fail.Length; i++)
+            else if (ct == 1)
             {
-                Debug.Log("failed[" + i.ToString() + "] = " + fail[i].ToString());
-
-                if (fail[i] >= 1)
-                {
-                    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(0, 2f, false);
-                }
-                else
-                {
-                    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(1, 2f, false);
-                }
+                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/soso")) as GameObject;
+                DumbelCoordinator.changeAni("pose_00");
+            }
+            else
+            {
+                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
+                DumbelCoordinator.changeAni("refuse_01");
+                bad_count++;
+                //Debug.Log("BAD");
             }
 
             PointsText.GetComponent<ParticleSystem>().loop = false;
@@ -625,56 +459,60 @@ public class DumbelCheck
 
             if (DumbelCoordinator.practice_On)
             {
-                Debug.Log(practice_count);
+                //Debug.Log(practice_count);
                 if (practice_count > 2)
                 {
                     practice_count = 0;
                     bad_count = 0;
-                    y_Count_False();
-                    z_Count_False();
-                
                     dumbelCoordi.ResumeScreen();
                 }
             }
-            
+
+
             else
             {
                 if (score_Count > 2 || set_Count != 0)
                 {
                     if (DumbelCoordinator.count_timer.ElapsedMilliseconds + 2000 > DumbelCoordinator.count_time_avg)
                     {
-                        Debug.Log("SLOW!!");
-                        MSGorder = 17;
+                        //Debug.Log("SLOW!!");
+                        DumbelCoordinator.changeAni("nod_01");
+                        MSGorder = 5;
                     }
                     else
                     {
                         DumbelCoordinator.count_time_avg = (DumbelCoordinator.count_time_avg + DumbelCoordinator.count_timer.ElapsedMilliseconds) / score_Count;
                     }
 
-                    Debug.Log(DumbelCoordinator.count_timer.ElapsedMilliseconds + " / " + DumbelCoordinator.count_time_avg);
+                    //Debug.Log(DumbelCoordinator.count_timer.ElapsedMilliseconds + " / " + DumbelCoordinator.count_time_avg);
                 }
                 score_Count++;
+                //if(status board is deactivate
+                if (!DumbelCoordinator.Status.activeInHierarchy)
+                {
+                    DumbelCoordinator.Status.SetActive(true);
+                }
+                //set board txt
+                clearBoard();
+                setBoard();
+
                 DumbelCoordinator.count_timer.Reset();
 
-                if (set_Count == 0 && score_Count == 2)
-                {
-                    //DumbelCoordinator.Status.SetActive(false);
-                    DumbelCoordinator.Status.GetComponent<Image>().material = Resources.Load("blackMaterial") as Material;
-                    DumbelCoordinator.Toggle1.SetActive(false);
-                    DumbelCoordinator.Toggle2.SetActive(false);
-                    DumbelCoordinator.Toggle3.SetActive(false);
-                    DumbelCoordinator.Toggle4.SetActive(false);
-
-                    DumbelCoordinator.phase.transform.parent = GameObject.Find("Canvas").transform;
-                    DumbelCoordinator.Status.GetComponent<RectTransform>().localScale = new Vector3(0.1203983f, 0.118181f, 1f);
-                    DumbelCoordinator.Status.GetComponent<RectTransform>().offsetMin = new Vector2(-462f, -77f);
-                    DumbelCoordinator.Status.GetComponent<RectTransform>().offsetMax = new Vector2(680f, 275f);
-                    DumbelCoordinator.phase.transform.parent = DumbelCoordinator.Status.transform;
-                }
+                //if (set_Count == 0 && score_Count == 2)
+                //{
+                //    //DumbelCoordinator.Status.SetActive(false);
+                //    DumbelCoordinator.Status.GetComponent<Image>().material = Resources.Load("blackMaterial") as Material;
+                //    DumbelCoordinator.title.transform.parent = GameObject.Find("Canvas").transform;
+                //    DumbelCoordinator.Status.GetComponent<RectTransform>().localScale = new Vector3(0.1203983f, 0.118181f, 1f);
+                //    DumbelCoordinator.Status.GetComponent<RectTransform>().offsetMin = new Vector2(-462f, -77f);
+                //    DumbelCoordinator.Status.GetComponent<RectTransform>().offsetMax = new Vector2(680f, 275f);
+                //    DumbelCoordinator.title.transform.parent = DumbelCoordinator.Status.transform;
+                //}
             }
-            
+
+
             Sound_Controller();
-            sound_flag_false();
+            clearFail();
             ready_Flag = false;
             start_Flag = false;
             top_Flag = false;
@@ -686,7 +524,7 @@ public class DumbelCheck
             //GameObject PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/Kinniku")) as GameObject;
             //PointsText.transform.position = new Vector3(DumbelCoordinator.JointInfo["SpineShoulder"].X, DumbelCoordinator.JointInfo["SpineShoulder"].Y);
 
-            if(!DumbelCoordinator.practice_On && bad_count > 2)
+            if (!DumbelCoordinator.practice_On && bad_count > 2)
             {
                 dumbelCoordi.SplitScreen();
             }
@@ -696,11 +534,88 @@ public class DumbelCheck
 
     #endregion
 
+    void clearBoard()
+    {
+        for(int i =  0; i < 2; i++)
+        {
+            for(int j = 0; j < 2; j++)
+            {
+                set_text(("CheckPoint" + ((i + 1).ToString().TrimStart('0')) + "_" + ((j + 1).ToString().TrimStart('0'))), "");
+            }
+        }
+        
+    }
+
+    void setBoard()
+    {
+        string[ , ] checkPoint = new string[2 , 2];
+        int ct = 0;
+
+        for(int i = 0; i < 2; i++)
+        {
+            //depth
+            if (!LeftArmDepth[i] && !RightArmDepth[i])
+            {
+                checkPoint[i , ct] = "양팔이 어깨와 평행하지 않음";
+                ct++;
+            }
+            else
+            {
+                if (!LeftArmDepth[i] && RightArmDepth[i])
+                {
+                    checkPoint[i , ct] = "왼팔과 어깨가 평행하지 않음";
+                    ct++;
+                }
+                else if (LeftArmDepth[i] && !RightArmDepth[i])
+                {
+                    checkPoint[i , ct] = "오른팔과 어깨가 평행하지 않음";
+                    ct++;
+                }
+            }
+
+            //muscle
+            if (!LeftArmMuscle && !RightArmMuscle)
+            {
+                checkPoint[i , ct] = "양쪽 승모근에 힘이 들어감";
+                ct++;
+            }
+            else
+            {
+                if (!LeftArmMuscle && RightArmMuscle)
+                {
+                    checkPoint[i , ct] = "왼쪽 승모근에 힘이 들어감";
+                    ct++;
+                }
+                else if (LeftArmMuscle && !RightArmMuscle)
+                {
+                    checkPoint[i , ct] = "오른쪽 승모근에 힘이 들어감";
+                    ct++;
+                }
+            }
+            ct = 0;
+        }
+        
+
+
+        for (int i = 0; i < 2; i++)
+        {
+            
+            for(int j = 0; j < 2; j++)
+            {
+                Debug.Log(checkPoint[i, j]);
+                try
+                {
+                    set_text(("CheckPoint" + ((i + 1).ToString().TrimStart('0')) + "_" + ((j + 1).ToString().TrimStart('0'))), checkPoint[i, j]);
+                }
+                catch{  }
+            }
+        }
+    }
+
     void show_pointText(GameObject PointsText)
     {
-
         PointsText.transform.position = new Vector3(DumbelCoordinator.JointInfo["Head"].X, DumbelCoordinator.JointInfo["Head"].Y + 2f, 0);
-        Debug.Log(PointsText.name);
+        //Debug.Log(PointsText.name);
         //yield return new WaitForSeconds(1);
         GameObject.Destroy(PointsText, 1);
         //yield return null;
@@ -708,34 +623,143 @@ public class DumbelCheck
 
     #region 메서드 [bool값 False]
 
-    void y_Count_False()
+    void checkP_clear()
     {
-        wristLeft_Y_Count = 0;
-        wristRight_Y_Count = 0;
-        elbowLeft_Y_Count = 0;
-        elbowRight_Y_Count = 0;
+        wristLeftAngle_Check = false;
+        wristRightAngle_Check = false;
+        elbowLeftAngle_Check = false;
+        elbowRightAngle_Check = false;
+    }
+    void record_mistake()
+    {
+        //UnityEngine.Debug.Log("currnet : " + DumbelCoordinator.current_phase + "     /     " + WristLeftDepthCheck + " / " + WristRightDepthCheck + " / "  + ElbowLeftDepthCheck + " / " + ElbowRightDepthCheck);
+        if (!WristLeftDepthCheck)
+        {
+            fail[DumbelCoordinator.current_phase - 1 , 0] = 1;
+        }
+        else
+        {
+            //fail[DumbelCoordinator.current_phase - 1 , 0] = 0;
+        }
+        if (!WristRightDepthCheck)
+        {
+            fail[DumbelCoordinator.current_phase - 1 , 1] = 1;
+        }
+        else
+        {
+            //fail[DumbelCoordinator.current_phase - 1 , 1] = 0;
+        }
+        if (!ElbowLeftDepthCheck)
+        {
+            fail[DumbelCoordinator.current_phase - 1 , 2] = 1;
+        }
+        else
+        {
+            //fail[DumbelCoordinator.current_phase - 1 , 2] = 0;
+        }
+        if (!ElbowRightDepthCheck)
+        {
+            fail[DumbelCoordinator.current_phase - 1 , 3] = 1;
+        }
+        else
+        {
+            //fail[DumbelCoordinator.current_phase - 1 , 3] = 0;
+        }
     }
 
-    void z_Count_False()
+    void judgment_position()
     {
-        wristLeft_Z_Count = 0;
-        wristRight_Z_Count = 0;
-        elbowLeft_Z_Count = 0;
-        elbowRight_Z_Count = 0;
-    }
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                //UnityEngine.Debug.Log(fail[i, j]);
+            }
+        }
+        for(int i = 0; i < 4; i++)
+        {
+            if (fail[1 , i] + fail[2 , i] + fail[3 , i] != 0)
+            {
+                judgment[i] = 1;
+            }
+            else
+            {
+                judgment[i] = 0;
+            }
+        }
+        judgment[4] = 0;
+        judgment[5] = 0;
 
-    void y_False()
-    {
-        wristLeft_Y = false;
-        wristRight_Y = false;
-        elbowLeft_Y = false;
-        elbowRight_Y = false;
+        //check point Depth Check
+        
+        //check point 2~3
+        if ((fail[1 , 0] + fail[1 , 2] + fail[2 , 0] + fail[2 , 2]) >= 1)
+        {
+            LeftArmDepth[0] = false;
+        }
+        else
+        {
+            LeftArmDepth[0] = true;
+        }
+        if ((fail[1 , 1] + fail[1 , 3] + fail[2 , 1] + fail[2 , 3]) >= 1)
+        {
+            RightArmDepth[0] = false;
+        }
+        else
+        {
+            RightArmDepth[0] = true;
+        }
+
+        //check point 4
+        if ((fail[3 , 0] + fail[3 , 2]) > 1)
+        {
+            LeftArmDepth[1] = false;
+        }
+        else
+        {
+            LeftArmDepth[1] = true;
+        }
+        if ((fail[3 , 1] + fail[3 , 3]) > 1)
+        {
+            RightArmDepth[1] = false;
+        }
+        else
+        {
+            RightArmDepth[1] = true;
+        }
+
+        for (int i = 0; i < fail.Length; i++)
+        {
+            //Debug.Log("failed[" + i.ToString() + "] = " + fail[i].ToString());
+
+            //if (judgment[i] >= 1)
+            //{
+            //    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(0, 2f, false);
+            //}
+            //else
+            //{
+            //    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(1, 2f, false);
+            //}
+        }
+
     }
 
     void set_text(string listName, string context)
     {
         //GameObject.Find(listName).GetComponent<TextMesh>().text = context;
-        GameObject.Find(listName).GetComponentInChildren<Text>().text = context;
+        if(context.Length == 0 || context == null)
+        {
+            context = "";
+        }
+        Debug.Log("set " + listName + " : " + context);
+        try
+        {
+            GameObject.Find(listName).GetComponentInChildren<Text>().text = context;
+        }
+        catch
+        {
+
+        }
     }
 
     void set_text4text(string listName, string context)
@@ -754,124 +778,118 @@ public class DumbelCheck
 
     public void depth_Check()
     {
+        if (DumbelCoordinator.title.GetComponentInChildren<Text>().text != "CheckPoint4")
+        {
+            failed_message = "";
+        }
+
         if ((DumbelCoordinator.JointInfo["ShoulderLeft"].Z - DumbelCoordinator.JointInfo["ElbowLeft"].Z) <= 0.08f)
         {
-            elbowLeft_Z = true;
+            ElbowLeftDepthCheck = true;
         }
         else
         {
-            elbowLeft_Z = false;
-            elbowLeft_Z_Flag = true;
-            elbowLeft_Z_Count++;
-            if (ElbowLeftDepthFail == false)
-            {
-                ElbowLeftDepthFail = true;
-                failed_message = "왼팔이 너무 앞으로 나왔어요";
-            }
+            ElbowLeftDepthCheck = false;
         }
 
         if ((DumbelCoordinator.JointInfo["ShoulderRight"].Z - DumbelCoordinator.JointInfo["ElbowRight"].Z) <= 0.08f)
         {
-            elbowRight_Z = true;
+            ElbowRightDepthCheck = true;
         }
         else
         {
-            elbowRight_Z = false;
-            elbowRight_Z_Count++;
-            elbowRight_Z_Flag = true;
-            if (ElbowRightDepthFail == false)
-            {
-                ElbowRightDepthFail = true;
-                failed_message = "오른팔이 너무 앞으로 나왔어요";
-            }
+            ElbowRightDepthCheck = false;
         }
 
         if ((DumbelCoordinator.JointInfo["ShoulderLeft"].Z - DumbelCoordinator.JointInfo["WristLeft"].Z) <= 0.15f)
         {
-            wristLeft_Z = true;
+            WristLeftDepthCheck = true;
         }
         else
         {
-            wristLeft_Z = false;
-            wristLeft_Z_Count++;
-            wristLeft_Z_Flag = true;
-            if (WristLeftDepthFail == false)
-            {
-                WristLeftDepthFail = true;
-                failed_message = "왼팔이 너무 앞으로 나왔어요";
-            }
+            WristLeftDepthCheck = false;
         }
 
         if ((DumbelCoordinator.JointInfo["ShoulderRight"].Z - DumbelCoordinator.JointInfo["WristRight"].Z) <= 0.15f)
         {
-            wristRight_Z = true;
+            WristRightDepthCheck = true;
         }
         else
         {
-            wristRight_Z = false;
-            wristRight_Z_Count++;
-            wristRight_Z_Flag = true;
-            if (WristRightDepthFail == false)
-            {
-                WristRightDepthFail = true;
-                failed_message = "오른팔이 너무 앞으로 나왔어요";
-            }
+            WristRightDepthCheck = false;
         }
 
-        if (armpit_Left_Angle < 75 && armpit_Right_Angle < 75)
+
+        if (!ElbowLeftDepthCheck && !ElbowRightDepthCheck)
         {
-            failed_message = "양팔이 너무 내려갔어요";
+            failed_message = "양팔이 너무 앞으로 나왔어요";
         }
-        else if (armpit_Left_Angle < 75)
+        else if (!ElbowLeftDepthCheck && ElbowRightDepthCheck)
         {
-            failed_message = "왼팔이 너무 내려갔어요";
+            failed_message = "왼팔이 너무 앞으로 나왔어요";
         }
-        else if (armpit_Right_Angle < 75)
+        else if (ElbowLeftDepthCheck && !ElbowRightDepthCheck)
         {
-            failed_message = "오른팔이 너무 내려갔어요";
-        }
-
-        if (elbowLeft_Z && elbowRight_Z && wristLeft_Z && wristRight_Z && armpit_Left_Angle > 75 && armpit_Right_Angle > 75)
-        {
-
-            if (start_Flag && !top_Flag && armpit_Left_Angle <= 110)
-            {
-                DumbelCoordinator.setBallonText("잠깐!!! 팔을 더 올리셔야죠!!");
-            }
-            else if (start_Flag && !top_Flag && armpit_Right_Angle <= 110)
-            {
-                DumbelCoordinator.setBallonText("잠깐!!! 팔을 더 올리셔야죠!!");
-            }
-            else if (!start_Flag && (elbow_Right_Angle < 75 || elbow_Right_Angle > 110) && (elbow_Left_Angle < 80 || elbow_Left_Angle > 110))
-            {
-                DumbelCoordinator.setBallonText("준비자세가 중 양팔꿈치가 올바르지 못합니다.");
-            }
-            else if (!start_Flag && (elbow_Right_Angle < 75 || elbow_Right_Angle > 110))
-            {
-                DumbelCoordinator.setBallonText("준비자세가 중 왼팔꿈치가 올바르지 못합니다.");
-                    
-                
-            }
-            else if (!start_Flag && (elbow_Left_Angle < 75 || elbow_Left_Angle > 110))
-            {
-                    DumbelCoordinator.setBallonText("준비자세가 중 오른팔꿈치가 올바르지 못합니다.");
-
-       
-            }
-            else if (DumbelCoordinator.phase.GetComponentInChildren<Text>().text != "Phase4")
-            {
-                DumbelCoordinator.setBallonText("잘 하고 있어요!");
-                DumbelCoordinator.changeAni("nod_01");
-            }
-
+            failed_message = "오른팔이 너무 앞으로 나왔어요";
         }
         else
+        {
+            failed_message = "";
+
+            if (armpit_Left_Angle > 75 && armpit_Right_Angle > 75)
+            {
+
+                if (start_Flag && !top_Flag && (armpit_Left_Angle <= 110 || armpit_Right_Angle <= 110))
+                {
+                    failed_message = "잠깐!!! 팔을 더 올리셔야죠!!";
+                }
+
+                //else if (!start_Flag)
+                //{
+                //    if (elbow_Right_Angle < 75 && elbow_Left_Angle < 80)
+                //    {
+                //        failed_message = "양팔을 더 펴 주세요";
+                //    }
+                //    else if (elbow_Right_Angle > 110 && elbow_Left_Angle > 110)
+                //    {
+                //        failed_message = "양팔을 조금 더 굽혀주세요";
+                //    }
+                //    else if (elbow_Right_Angle < 75)
+                //    {
+                //        failed_message = "오른팔을 더 펴 주세요";
+                //    }
+
+                //    else if (elbow_Right_Angle > 110)
+                //    {
+                //        failed_message = "오른팔을 조금 더 굽혀주세요";
+                //    }
+
+                //    else if (elbow_Left_Angle < 75)
+
+                //    {
+                //        failed_message = "왼팔을 더 펴 주세요";
+                //    }
+
+                //    else if (elbow_Left_Angle > 110)
+                //    {
+                //        failed_message = "왼팔을 조금 더 굽혀주세요";
+                //    }
+                //}
+
+            }
+        }
+        if (failed_message.Length != 0)
         {
             DumbelCoordinator.changeAni("refuse_01");
             DumbelCoordinator.setBallonText(failed_message);
         }
-
-        
+        else
+        {
+            //DumbelCoordinator.setBallonText("잘 하고 있어요!");
+            DumbelCoordinator.setBallonText("");
+            DumbelCoordinator.changeAni("nod_01");
+        }
+        record_mistake();
     }
 
     #endregion
@@ -908,8 +926,8 @@ public class DumbelCheck
 
         armpit_Left_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VSS_VSM), Vector3.Normalize(VSS_VEL)) * (180 / Math.PI));
         armpit_Right_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VSS_VSM), Vector3.Normalize(VSS_VER)) * (180 / Math.PI));
-        elbow_Left_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VER_VSR), Vector3.Normalize(VER_VWR)) * (180 / Math.PI));
-        elbow_Right_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VEL_VSL), Vector3.Normalize(VEL_VWL)) * (180 / Math.PI));
+        elbow_Left_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VEL_VSL), Vector3.Normalize(VEL_VWL)) * (180 / Math.PI));
+        elbow_Right_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VER_VSR), Vector3.Normalize(VER_VWR)) * (180 / Math.PI));
     }
 
     #endregion
@@ -918,87 +936,34 @@ public class DumbelCheck
 
     public void Sound_Controller()
     {
-        bool LG = false;
-        bool RG = false;
-        bool LE = false;
-        bool RE = false;
-        bool LW = false;
-        bool RW = false;
 
-        //왼팔꿈치가 굽었을 때
-        if (elbow_left_angle_Flag)
-        {
-            LG = true;
-        }
-
-        //오른팔꿈치가 굽었을 때
-        if (elbow_right_angle_Flag)
-        {
-            RG = true;
-        }
-
-        //왼팔꿈치가 앞으로 나왔을 때
-        if (elbowLeft_Z_Flag)
-        {
-            LE = true;
-        }
-
-        //오른팔꿈치가 앞으로 나왔을 때
-        if (elbowRight_Z_Flag)
-        {
-            RE = true;
-        }
-
-        //왼손목이 앞으로 나왔을 때
-        if (wristLeft_Z_Flag)
-        {
-            LW = true;
-        }
-
-        //오른손목이 앞으로 나왔을 때
-        if (wristRight_Z_Flag)
-        {
-            RW = true;
-        }
-
-
-        if (LE && RE && LW && RW)
+        if (judgment[0] + judgment[1] + judgment[2] + judgment[3] == 4)
         {
             MSGorder = 7;
         }
-        else if (RG && LG)
-        {
-            MSGorder = 3;
-        }
-        else if (LE && RE)
+        
+        else if (judgment[2] + judgment[3] == 2)
         {
             MSGorder = 2;
         }
-        else if (LW && RW)
+        else if (judgment[0] + judgment[1] == 2)
         {
             MSGorder = 4;
         }
-        else if (RG)
-        {
-            MSGorder = 14;
-        }
-        else if (LG)
-        {
-            MSGorder = 11;
-        }
-        else if (LE)
+       
+        else if (judgment[2] == 1)
         {
             MSGorder = 10;
         }
-        else if (RE)
+        else if (judgment[3] == 1)
         {
             MSGorder = 13;
         }
-        else if (LW)
+        else if (judgment[0] == 1)
         {
             MSGorder = 12;
         }
-        else if (RW)
+        else if (judgment[1] == 1)
         {
             MSGorder = 15;
         }
@@ -1012,14 +977,15 @@ public class DumbelCheck
         {
             if (!DumbelCoordinator.practice_On)
             {
-                dumbelCoordi.send2web(score_Count, fail);
+                dumbelCoordi.send2web(score_Count, judgment);
                 dumbelCoordi.msg2Web("from Unity score_count" + score_Count.ToString() + "/" + "clear_count" + clear_Score.ToString());
 
                 if ((clear_Score - 1) == score_Count)
                 {
+                    dumbelCoordi.firewall();
                     DumbelCoordinator.firewall_position = new Vector3(((DumbelCoordinator.JointInfo["FootLeft"].X + DumbelCoordinator.JointInfo["FootRight"].X) / 2), ((DumbelCoordinator.JointInfo["FootLeft"].Y) * 6));
-                    DumbelCoordinator.firewall.transform.position = DumbelCoordinator.firewall_position;
-                    DumbelCoordinator.firewall.SetActive(true);
+                    DumbelCoordinator.firewall_obj.transform.position = DumbelCoordinator.firewall_position;
+                    DumbelCoordinator.firewall_obj.SetActive(true);
                     MSGorder = 9;
 
                 }
@@ -1029,11 +995,11 @@ public class DumbelCheck
                 }
                 else if ((clear_Score - 3) == score_Count)
                 {
-                    MSGorder = 5;
+                    MSGorder = 8;
                 }
                 else if ((clear_Score == score_Count))
                 {
-                    DumbelCoordinator.firewall.SetActive(false);
+                    GameObject.Destroy(DumbelCoordinator.firewall_obj);
                     DumbelCoordinator.particle_position = new Vector3(((DumbelCoordinator.JointInfo["FootLeft"].X + DumbelCoordinator.JointInfo["FootRight"].X) / 2), ((DumbelCoordinator.JointInfo["FootLeft"].Y) * 7));
                     DumbelCoordinator.particle.transform.position = DumbelCoordinator.particle_position;
                     DumbelCoordinator.particle.SetActive(true);
@@ -1041,23 +1007,24 @@ public class DumbelCheck
                     score_Count = 0;
                     set_Count++;
                     DumbelCoordinator.set_time = DumbelCoordinator.set_timer.Elapsed.ToString().Substring(3, 5);
-                    Debug.Log(DumbelCoordinator.set_time);
+                    //Debug.Log(DumbelCoordinator.set_time);
                     //MSGorder = 6;
                 }
             }
         }
-        Debug.Log("EndClear");
+        //Debug.Log("EndClear");
 
     }
 
-    public void sound_flag_false()
+    void clearFail()
     {
-        elbow_left_angle_Flag = false;
-        elbow_right_angle_Flag = false;
-        wristLeft_Z_Flag = false;
-        wristRight_Z_Flag = false;
-        elbowRight_Z_Flag = false;
-        elbowLeft_Z_Flag = false;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                fail[i, j] = 0;
+            }
+        }
     }
 
     #endregion

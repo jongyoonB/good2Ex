@@ -26,7 +26,10 @@ if (isset($_SESSION["user_info"])) {
 
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <style>
-
+        @font-face {
+            font-family: HANYG0230;
+            src: url('../../../public/fonts/HANYGO230.ttf'); format('truetype');
+        }
         a:hover {
             color: blue;
             text-decoration: none
@@ -83,13 +86,13 @@ if (isset($_SESSION["user_info"])) {
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="/main/exercise_Go">운동시작</a></li>
-                    <li><a href="/main/exercise_Free">자유게시판</a></li>
-                    <li><a href="/main/exercise_QnA">QNA</a></li>
+                    <li><a href="/main/exercise_Go" style="font-family: HANYG0230">운동시작</a></li>
+                    <li><a href="/main/exercise_Free" style="font-family: HANYG0230">자유게시판</a></li>
+                    <li><a href="/main/exercise_QnA" style="font-family: HANYG0230">QNA</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/sign/logout">LOGOUT</a></li>
+                    <li><a href="/sign/logout" style="font-family: HANYG0230">LOGOUT</a></li>
 
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -124,25 +127,25 @@ if ('exercise_Plan/exercise_preview') {
     </div>
 <?php } ?>
 <div class="preview_body">
-    <h1>운동 계획이 완료 되었습니다!</h1>
+    <h1  style="font-family: HANYG0230">운동 계획이 완료 되었습니다!</h1>
 
     <?php
     //exit(var_dump($user_complete_info));
     for($i=0; $i < count($user_complete_info); $i++){
         foreach ($user_complete_info[$i] as $row) {
             echo "<table class='table'>";
-            echo "<tr style='text-align: center;background-color: #1e87c3;color: white'><td>날짜</td><td>루틴 이름</td><td>운동 이름</td><td>운동 설명</td><td>횟수</td><td>세트</td></tr>";
+            echo "<tr style='font-family: HANYG0230;text-align: center;background-color: #1e87c3;color: white'><td>날짜</td><td>루틴 이름</td><td>운동 이름</td><td>운동 설명</td><td>횟수</td><td>세트</td></tr>";
             echo "<tr class='border_chart'><td>". $row->routine_date . "</td>";
-            echo "<td style='width: 15%;text-align: center'>". $row->routine_name . "</td>";
-            echo "<td style='width: 17%;text-align: center'>". $row->exercise_name . "</td>";
-            echo "<td>". $row->exercise_info . "</td>";
-            echo "<td style='width: 5%;text-align: center'>". $row->number_of_count . "</td>";
-            echo "<td style='width: 5%;text-align: center'>".  $row->number_of_set . "</td>";
+            echo "<td style='font-family: HANYG0230;width: 15%;text-align: center'>". $row->routine_name . "</td>";
+            echo "<td style='font-family: HANYG0230;width: 17%;text-align: center'>". $row->exercise_name . "</td>";
+            echo "<td style='font-family: HANYG0230'>". $row->exercise_info . "</td>";
+            echo "<td style='font-family: HANYG0230;width: 5%;text-align: center'>". $row->number_of_count . "</td>";
+            echo "<td style='font-family: HANYG0230;width: 5%;text-align: center'>".  $row->number_of_set . "</td>";
             echo "</table>";
         }
     }
     ?>
-    <a class="btn btn-primary raised" href="/main/exercise_Main" role="button">완료</a>
+    <a class="btn btn-primary raised" href="/main/exercise_Main" role="button" style="font-family: HANYG0230">완료</a>
 </div>
 <br>
 <br>

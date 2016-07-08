@@ -15,7 +15,10 @@ exercise_date 정보로 달력에 표시
     <link href="/public/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
     <style>
-
+        @font-face {
+            font-family: HANYG0230;
+            src: url('../../../public/fonts/HANYGO230.ttf'); format('truetype');
+        }
         a:hover {
             color: blue;
             text-decoration: none
@@ -70,16 +73,16 @@ exercise_date 정보로 달력에 표시
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/main/exercise_Go">운동시작</a></li>
-                <li><a href="/main/exercise_Free">자유게시판</a></li>
-                <li><a href="/main/exercise_QnA">QNA</a></li>
+                <li><a href="/main/exercise_Go" style="font-family: HANYG0230">운동시작</a></li>
+                <li><a href="/main/exercise_Free" style="font-family: HANYG0230">자유게시판</a></li>
+                <li><a href="/main/exercise_QnA" style="font-family: HANYG0230">QNA</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 <?php
                 /*                if(isset($_SESSION["user_info"]))
                                 {*/ ?>
-                <li><<a href="/sign/logout">LOGOUT</a></li>
+                <li><a href="/sign/logout">LOGOUT</a></li>
                 <?php /*}*/ ?>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -92,7 +95,7 @@ exercise_date 정보로 달력에 표시
             날짜선택</a></span>
     <span class="fa fa-check-square-o list-group-item" style="width: 100%" aria-hidden="true"><a href="#">
             계획완료</a></span>
-    <button type="button" id="nextButton" class="btn btn-success" style="text-align: center; margin-top: 10px">날짜 선택 완료</button>
+    <button type="button" id="nextButton" class="btn btn-success" style="text-align: center;font-family: HANYG0230;background-color: palevioletred; margin-top: 10px">날짜 선택 완료</button>
 </div>
 
 
