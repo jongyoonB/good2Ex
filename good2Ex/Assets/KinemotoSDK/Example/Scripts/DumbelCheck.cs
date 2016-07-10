@@ -464,6 +464,7 @@ public class DumbelCheck
                 {
                     practice_count = 0;
                     bad_count = 0;
+                    dumbelCoordi.practice_mod(false);
                     dumbelCoordi.ResumeScreen();
                 }
             }
@@ -523,9 +524,9 @@ public class DumbelCheck
             //Floating Text
             //GameObject PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/Kinniku")) as GameObject;
             //PointsText.transform.position = new Vector3(DumbelCoordinator.JointInfo["SpineShoulder"].X, DumbelCoordinator.JointInfo["SpineShoulder"].Y);
-
             if (!DumbelCoordinator.practice_On && bad_count > 2)
             {
+                dumbelCoordi.practice_mod(true);
                 dumbelCoordi.SplitScreen();
             }
 
@@ -669,13 +670,13 @@ public class DumbelCheck
 
     void judgment_position()
     {
-        for(int i = 0; i < 4; i++)
-        {
-            for(int j = 0; j < 4; j++)
-            {
-                //UnityEngine.Debug.Log(fail[i, j]);
-            }
-        }
+        //for(int i = 0; i < 4; i++)
+        //{
+        //    for(int j = 0; j < 4; j++)
+        //    {
+        //        UnityEngine.Debug.Log(fail[i, j]);
+        //    }
+        //}
         for(int i = 0; i < 4; i++)
         {
             if (fail[1 , i] + fail[2 , i] + fail[3 , i] != 0)
@@ -696,57 +697,88 @@ public class DumbelCheck
         if ((fail[1 , 0] + fail[1 , 2] + fail[2 , 0] + fail[2 , 2]) >= 1)
         {
             LeftArmDepth[0] = false;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark1_1, "bad");
+            }
         }
         else
         {
             LeftArmDepth[0] = true;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark1_1, "good");
+            }
         }
         if ((fail[1 , 1] + fail[1 , 3] + fail[2 , 1] + fail[2 , 3]) >= 1)
         {
             RightArmDepth[0] = false;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark1_2, "bad");
+            }
         }
         else
         {
             RightArmDepth[0] = true;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark1_2, "good");
+            }
         }
 
         //check point 4
         if ((fail[3 , 0] + fail[3 , 2]) > 1)
         {
             LeftArmDepth[1] = false;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark2_1, "bad");
+            }
         }
         else
         {
             LeftArmDepth[1] = true;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark2_1, "good");
+            }
         }
         if ((fail[3 , 1] + fail[3 , 3]) > 1)
         {
             RightArmDepth[1] = false;
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark2_2, "bad");
+            }
         }
         else
         {
             RightArmDepth[1] = true;
-        }
-
-        for (int i = 0; i < fail.Length; i++)
-        {
-            //Debug.Log("failed[" + i.ToString() + "] = " + fail[i].ToString());
-
-            //if (judgment[i] >= 1)
-            //{
-            //    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(0, 2f, false);
-            //}
-            //else
-            //{
-            //    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(1, 2f, false);
-            //}
+            if (DumbelCoordinator.practice_On)
+            {
+                set_icon(DumbelCoordinator.Mark2_2, "good");
+            }
         }
 
     }
 
+    void set_icon(GameObject name, string texture)
+    {
+        if (!name.activeInHierarchy)
+        {
+            name.SetActive(true);
+            name.GetComponent<RawImage>().CrossFadeAlpha(1000, 2.0f, false);
+        }
+        try
+        {
+            name.GetComponent<RawImage>().texture = Resources.Load("IMG/" + texture) as Texture;
+        }
+        catch { }
+    }
+
     void set_text(string listName, string context)
     {
-        //GameObject.Find(listName).GetComponent<TextMesh>().text = context;
         if(context.Length == 0 || context == null)
         {
             context = "";
@@ -778,11 +810,6 @@ public class DumbelCheck
 
     public void depth_Check()
     {
-        if (DumbelCoordinator.title.GetComponentInChildren<Text>().text != "CheckPoint4")
-        {
-            failed_message = "";
-        }
-
         if ((DumbelCoordinator.JointInfo["ShoulderLeft"].Z - DumbelCoordinator.JointInfo["ElbowLeft"].Z) <= 0.08f)
         {
             ElbowLeftDepthCheck = true;
@@ -843,39 +870,6 @@ public class DumbelCheck
                 {
                     failed_message = "잠깐!!! 팔을 더 올리셔야죠!!";
                 }
-
-                //else if (!start_Flag)
-                //{
-                //    if (elbow_Right_Angle < 75 && elbow_Left_Angle < 80)
-                //    {
-                //        failed_message = "양팔을 더 펴 주세요";
-                //    }
-                //    else if (elbow_Right_Angle > 110 && elbow_Left_Angle > 110)
-                //    {
-                //        failed_message = "양팔을 조금 더 굽혀주세요";
-                //    }
-                //    else if (elbow_Right_Angle < 75)
-                //    {
-                //        failed_message = "오른팔을 더 펴 주세요";
-                //    }
-
-                //    else if (elbow_Right_Angle > 110)
-                //    {
-                //        failed_message = "오른팔을 조금 더 굽혀주세요";
-                //    }
-
-                //    else if (elbow_Left_Angle < 75)
-
-                //    {
-                //        failed_message = "왼팔을 더 펴 주세요";
-                //    }
-
-                //    else if (elbow_Left_Angle > 110)
-                //    {
-                //        failed_message = "왼팔을 조금 더 굽혀주세요";
-                //    }
-                //}
-
             }
         }
         if (failed_message.Length != 0)

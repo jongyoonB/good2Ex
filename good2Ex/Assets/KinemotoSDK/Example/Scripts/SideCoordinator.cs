@@ -49,9 +49,11 @@ public class SideCoordinator : MonoBehaviour
     public GameObject AnkleLAndFootL;
 
     //AudioSource & AudioClip 
+
     public GameObject BGM;
     public GameObject MessageController;
     private MessageController msgController;
+
 
 
 
@@ -86,6 +88,7 @@ public class SideCoordinator : MonoBehaviour
     private GameObject prefab;
     public static GameObject Status;
 
+
     //GameObject For BreakTime
     public GameObject breakTimeMask;
 
@@ -99,27 +102,48 @@ public class SideCoordinator : MonoBehaviour
     [SerializeField]
     private static GameObject Timer;
     private static float BreakTime;
+    private int counter;
+
     public static Timer time;
 
     //angle
+
+
     public static GameObject armpRightDegree;
     public static GameObject armpLeftDegree;
+
+    //What's wrong
+    public static GameObject title;
+    public static GameObject Message;
+    public static GameObject checkPoint1;
+    public static GameObject checkPoint1_1;
+    public static GameObject checkPoint1_2;
+    public static GameObject checkPoint2;
+    public static GameObject checkPoint2_1;
+    public static GameObject checkPoint2_2;
+
+    //practice mod
+    public static GameObject Mark1_1;
+    public static GameObject Mark1_2;
+    public static GameObject Mark1_3;
+    public static GameObject Mark2_1;
+    public static GameObject Mark2_2;
+    public static GameObject Mark2_3;
+
+
+    //set current phase
+    public static int current_phase;
+
     public static GameObject elbowLeftDegree;
     public static GameObject elbowRightDegree;
 
-    //phase
-    public static GameObject phase;
-    public static GameObject Toggle1;
-    public static GameObject Toggle2;
-    public static GameObject Toggle3;
-    public static GameObject Toggle4;
+
 
     //helper
     public static GameObject helper;
     public changeAnimation changeAnimation;
     private GameObject balloon;
     private static GameObject balloon_text;
-    private static GameObject text_background;
 
     //stop_watch(timer)
     public static Stopwatch set_timer = new Stopwatch();
@@ -137,11 +161,12 @@ public class SideCoordinator : MonoBehaviour
 
     void Start()
     {
+
         //call javascript function
         Application.ExternalCall("orderPlus", "ok");
+        Application.ExternalCall("UnityReady", "ok");
         if (!GameObject.Find("BGM"))
         {
-            
             BGM = new GameObject("BGM");
             BGM.AddComponent<AudioSource>();
             BGM.AddComponent<MusicSingleton>();
@@ -150,28 +175,31 @@ public class SideCoordinator : MonoBehaviour
         {
             this.BGM = GameObject.Find("BGM");
         }
-        
+
+
         MessageController = new GameObject("MessageController");
         MessageController.AddComponent<AudioSource>();
         MessageController.AddComponent<MessageController>();
         msgController = gameObject.GetComponent("ScriptName") as MessageController;
 
-        phase = GameObject.Find("phase");
+
 
         //helper
         helper = GameObject.Find("helper");
         changeAnimation = gameObject.GetComponent("ScriptName") as changeAnimation;
         helper.SetActive(false);
-        //balloon = GameObject.Find("balloon");
-        //balloon.SetActive(false);
+        balloon = GameObject.Find("balloon");
+        balloon.SetActive(false);
         balloon_text = GameObject.Find("balloon_text");
-        text_background = GameObject.Find("text_background");
         balloon_text.SetActive(false);
-        text_background.SetActive(false);
 
         //angle object
+
+
         armpLeftDegree = GameObject.Find("armpRightDegree");
         armpRightDegree = GameObject.Find("armpLeftDegree");
+
+
 
         //clear EngagedUser
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
@@ -189,12 +217,14 @@ public class SideCoordinator : MonoBehaviour
         particle_position = new Vector3(0, 0);
 
         //firewall effect set
-        
+
         firework = GameObject.Find("firework");
         if (firework.activeInHierarchy)
         {
             firework.SetActive(false);
         }
+
+
 
         //Timer
         Timer = GameObject.Find("Timer");
@@ -205,36 +235,75 @@ public class SideCoordinator : MonoBehaviour
         movieTexture.transform.parent = GameObject.Find("Panel").transform;
         PlayMovieTexture.StartAllMovies();
 
+
         //panel set
         panel = GameObject.Find("Panel");
+
         breakTimeMask = GameObject.Find("breakTimeMask");
+
+
         breakTimeMask.SetActive(false);
 
         //Status.SetActive(false);
         breakTimeMask.SetActive(false);
-        prefab = Resources.Load("prefabs/ToggleListMenu") as GameObject;
+        prefab = Resources.Load("prefabs/ToggleListMenu4Canvas1") as GameObject;
         Status = GameObject.Instantiate(prefab) as GameObject;
         Status.name = "status";
         Status.transform.parent = GameObject.Find("Canvas").transform;
-        Status.transform.localPosition = new Vector3(470f, -37f, -10);
+        Status.transform.localPosition = new Vector3(470f, -30f, -10);
         Status.transform.localScale = new Vector3(0.711432f, 1.08361f, 0.7343858f);
 
-        //phase = GameObject.Find("phase");
-        phase = GameObject.Find("Title");
-        Toggle1 = GameObject.Find("Toggle1");
-        Toggle2 = GameObject.Find("Toggle2");
-        Toggle3 = GameObject.Find("Toggle3");
-        Toggle4 = GameObject.Find("Toggle4");
 
-        Toggle1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
-        Toggle2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
-        Toggle3.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
-        Toggle4.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        //title = GameObject.Find("title");
+        title = GameObject.Find("Title");
+        Message = GameObject.Find("Message");
+        Message.SetActive(false);
 
-        Toggle1.GetComponentInChildren<Text>().color = Color.black;
-        Toggle2.GetComponentInChildren<Text>().color = Color.black;
-        Toggle3.GetComponentInChildren<Text>().color = Color.black;
-        Toggle4.GetComponentInChildren<Text>().color = Color.black;
+
+        //what's wrong
+        checkPoint1 = GameObject.Find("CheckPoint1");
+        checkPoint1_1 = GameObject.Find("CheckPoint1_1");
+        checkPoint1_2 = GameObject.Find("CheckPoint1_2");
+
+        checkPoint2 = GameObject.Find("CheckPoint2");
+        checkPoint2_1 = GameObject.Find("CheckPoint2_1");
+        checkPoint2_2 = GameObject.Find("CheckPoint2_2");
+
+        //practice mod
+        Mark1_1 = GameObject.Find("Mark1_1");
+        Mark1_2 = GameObject.Find("Mark1_2");
+        Mark1_3 = GameObject.Find("Mark1_3");
+        Mark2_1 = GameObject.Find("Mark2_1");
+        Mark2_2 = GameObject.Find("Mark2_2");
+        Mark2_3 = GameObject.Find("Mark2_3");
+
+        Mark1_1.SetActive(false);
+        Mark1_2.SetActive(false);
+        Mark1_3.SetActive(false);
+        Mark2_1.SetActive(false);
+        Mark2_2.SetActive(false);
+        Mark2_3.SetActive(false);
+
+        checkPoint1.GetComponentInChildren<Text>().text = "팔을 올릴 때";
+        checkPoint1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint1_1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint1_2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+        checkPoint1.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint1_1.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint1_2.GetComponentInChildren<Text>().color = Color.black;
+
+
+        checkPoint2.GetComponentInChildren<Text>().text = "팔을 내릴 때";
+        checkPoint2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint2_1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+        checkPoint2_2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+
+        checkPoint2.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint2_1.GetComponentInChildren<Text>().color = Color.black;
+        checkPoint2_2.GetComponentInChildren<Text>().color = Color.black;
+
+
 
         Status.SetActive(false);
 
@@ -265,10 +334,12 @@ public class SideCoordinator : MonoBehaviour
 
         //생성자
 
+
+
         side = new SideCheck();
 
         ConfigureCoordinateMapper(mapRenderer);
-        
+
         //camera
         MainCamera = GameObject.Find("Main Camera");
         SplitCamera = GameObject.Find("Split Camera");
@@ -287,6 +358,7 @@ public class SideCoordinator : MonoBehaviour
             GameObject.Find("TakeArest").GetComponent<Text>().color = new Color(GameObject.Find("TakeArest").GetComponent<Text>().color.r, GameObject.Find("TakeArest").GetComponent<Text>().color.g, GameObject.Find("TakeArest").GetComponent<Text>().color.b, Mathf.PingPong(Time.time, 1));
             UnityEngine.Debug.Log(BreakTime);
         }
+
         if (!MessageController.GetComponent<AudioSource>().isPlaying && BGM.GetComponent<AudioSource>().volume != 0.5f)
         {
             BGM.GetComponent<AudioSource>().volume = 0.5f;
@@ -299,7 +371,7 @@ public class SideCoordinator : MonoBehaviour
         cm = new CoordinateMapper(render);
         cm.instantUpdate = true;
         // wether to check for new positions every frame
-        UnityEngine.Debug.Log(render.gameObject.name);
+        //UnityEngine.Debug.Log(render.gameObject.name);
     }
 
 
@@ -308,12 +380,18 @@ public class SideCoordinator : MonoBehaviour
 
         if (body.IsTracked)
         {
+
             //Resize Unity Player Size & stop movie & hide startinfo
             if (!screenSet)
             {
+
+
+                //Message.SetActive(true);
+                //Time.captureFramerate = 60;
                 PlayMovieTexture.StopAllMovies();
                 GameMask.SetActive(false);
-                Status.SetActive(true);
+                //Status.SetActive(true);
+                //Status_panel.GetComponent<RawImage>().CrossFadeAlpha(1000, 2.0f, false);
                 Application.ExternalCall("screenSize", "ok");
                 screenSet = true;
                 //MessageController.GetComponent<MessageController>().playClip(1);
@@ -321,9 +399,9 @@ public class SideCoordinator : MonoBehaviour
                 //balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(89.7f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
                 //helper.GetComponent<Transform>().localPosition = new Vector3(215f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
                 helper.SetActive(true);
-                //balloon.SetActive(true);
+                balloon.SetActive(true);
                 balloon_text.SetActive(true);
-                text_background.SetActive(true);
+
                 changeAni("pose_00");
                 set_timer.Start();
 
@@ -396,20 +474,25 @@ public class SideCoordinator : MonoBehaviour
             // 뼈대 생성 메서드
             makeBones();
 
+
+
+
             //뼈 색 조절
-            depthJointColor();
+            //depthJointColor();
 
             //side 의 main 함수를 계속 실행.
+            side.main();
 
             //텍스트 색 조절 및 값 조절
             textController();
 
-            side.main();
 
             //소리 실행
             Sound_Controller();
 
-            
+
+
+
 
         }
     }
@@ -476,57 +559,82 @@ public class SideCoordinator : MonoBehaviour
         lr.SetWidth(.1f, .1f);
     }
 
-    void depthJointColor()
-    {
-        if (!side.elbowLeft_Z)
-        {
-            Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["ElbowLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["ElbowLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-        if (!side.elbowRight_Z)
-        {
-            Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["ElbowRight"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["ElbowRight"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-        if (!side.wristLeft_Z)
-        {
-            Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["WristLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["WristLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-        if (!side.wristRight_Z)
-        {
-            Joints["WristRight"].GetComponent<MeshRenderer>().material = materialR;
-            Joints["WristRight"].transform.localScale = new Vector3(0.7f, 0.7f);
-        }
-        else
-        {
-            Joints["WristRight"].GetComponent<MeshRenderer>().material = materialG;
-            Joints["WristRight"].transform.localScale = new Vector3(0.15f, 0.15f);
-        }
-    }
+    //void depthJointColor()
+    //{
+    //    if (!side.elbowLeft_Z)
+
+    //    {
+    //        Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["ElbowLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
+
+
+
+    //    }
+    //    else
+    //    {
+    //        Joints["ElbowLeft"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["ElbowLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
+
+    //    }
+    //    if (!side.elbowRight_Z)
+
+    //    {
+    //        Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["ElbowRight"].transform.localScale = new Vector3(0.7f, 0.7f);
+
+
+
+    //    }
+    //    else
+    //    {
+    //        Joints["ElbowRight"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["ElbowRight"].transform.localScale = new Vector3(0.15f, 0.15f);
+
+    //    }
+    //    if (!side.wristLeft_Z)
+
+    //    {
+    //        Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["WristLeft"].transform.localScale = new Vector3(0.7f, 0.7f);
+
+
+
+    //    }
+    //    else
+    //    {
+    //        Joints["WristLeft"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["WristLeft"].transform.localScale = new Vector3(0.15f, 0.15f);
+
+    //    }
+    //    if (!side.wristRight_Z)
+
+    //    {
+    //        Joints["WristRight"].GetComponent<MeshRenderer>().material = materialR;
+    //        Joints["WristRight"].transform.localScale = new Vector3(0.7f, 0.7f);
+
+
+
+    //    }
+    //    else
+    //    {
+    //        Joints["WristRight"].GetComponent<MeshRenderer>().material = materialG;
+    //        Joints["WristRight"].transform.localScale = new Vector3(0.15f, 0.15f);
+
+
+    //    }
+    //}
 
     //화면에 보이는 텍스트 컨트롤
     public void textController()
     {
-        
-
-        if (phase.GetComponentInChildren<Text>().text == "Phase2" || phase.GetComponentInChildren<Text>().text == "Phase3")
+        if (current_phase == 2 || current_phase == 3)
         {
+            if (!Message.activeInHierarchy)
+            {
+                Message.SetActive(true);
+            }
+
+            Message.GetComponent<RawImage>().texture = Resources.Load("IMG/raiseArm") as Texture;
             armpLeftDegree.GetComponent<Text>().text = ((int)side.armpit_Left_Angle).ToString();
             armpLeftDegree.transform.position = new Vector3((Joints["ShoulderLeft"].transform.position.x + 1f), (Joints["ShoulderLeft"].transform.position.y - 0.35f), 10);
             armpLeftDegree.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -540,6 +648,12 @@ public class SideCoordinator : MonoBehaviour
             armpLeftDegree.GetComponent<Text>().text = "";
 
             armpRightDegree.GetComponent<Text>().text = "";
+
+            if (current_phase == 4)
+            {
+                Message.GetComponent<RawImage>().texture = Resources.Load("IMG/downArm") as Texture;
+            }
+
         }
 
     }
@@ -547,12 +661,14 @@ public class SideCoordinator : MonoBehaviour
     public void setGetSide(int set)
     {
         SetGoal.GetComponent<Text>().text = set.ToString() + "세트";
+
         SideCheck.clear_Set = (short)set;
     }
 
     public void scoreGetSide(int score)
     {
         ScoreGoal.GetComponent<Text>().text = score.ToString() + "회";
+
         SideCheck.clear_Score = (short)score;
     }
 
@@ -560,22 +676,24 @@ public class SideCoordinator : MonoBehaviour
     {
         Application.ExternalCall("screenResize", "ok");
         Application.ExternalCall("sendTest", "LoadScene");
+
         Application.ExternalCall("send_time", set_time);
         msg2Web(scene);
-        msg2Web((scene=="end").ToString());
+        msg2Web((scene == "end").ToString());
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
         KinemotoSDK.EngagementHandler.HandRaiseCounter.Clear();
         Status.SetActive(false);
+        Message.SetActive(false);
+
         breakTimeMask.SetActive(true);
         //elbowLeftDegree.SetActive(false);
         //elbowRightDegree.SetActive(false);
         armpRightDegree.SetActive(false);
         armpLeftDegree.SetActive(false);
         helper.SetActive(false);
-        //balloon.SetActive(false);
+        balloon.SetActive(false);
         balloon_text.SetActive(false);
-        text_background.SetActive(false);
         sendTime(set_time);
         set_timer.Stop();
         //balloon.GetComponent<RectTransform>().localPosition = new Vector3(277f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
@@ -608,6 +726,7 @@ public class SideCoordinator : MonoBehaviour
                 }
                 else
                 {
+
                     BreakTime = 10f;
                     GameObject.Find("Finish").GetComponent<Text>().text = "목표 운동 완료";
                     GameObject.Find("TakeArest").GetComponent<RectTransform>().localPosition = new Vector3(507f, -200f);
@@ -623,6 +742,7 @@ public class SideCoordinator : MonoBehaviour
     IEnumerator LoadNewScene(string scene, float BreakTime)
     {
 
+
         // This line waits for 3 seconds before executing the next line in the coroutine.
         // This line is only necessary for this demo. The scenes are so simple that they load too fast to read the "Loading..." text.
 
@@ -630,7 +750,7 @@ public class SideCoordinator : MonoBehaviour
 
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
         //AsyncOperation async = Application.LoadLevelAsync(scene);
-        if(scene != "end")
+        if (scene != "end")
         {
             AsyncOperation async = SceneManager.LoadSceneAsync(scene);
             while (!async.isDone)
@@ -644,7 +764,7 @@ public class SideCoordinator : MonoBehaviour
         }
 
         // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
-        
+
 
     }
 
@@ -657,7 +777,7 @@ public class SideCoordinator : MonoBehaviour
 
     public static void changeAni(string aniName)
     {
-        UnityEngine.Debug.Log("Call changeAni");
+        //UnityEngine.Debug.Log("Call changeAni");
         helper.GetComponent<changeAnimation>().changeAni(aniName);
     }
 
@@ -665,11 +785,14 @@ public class SideCoordinator : MonoBehaviour
     {
         balloon_text.GetComponent<Text>().text = text;
         //balloon_text.GetComponent<Text>().CrossFadeColor(Color.black, 2f, false, false);
+
+
     }
 
     public void send2web(int count, int[] fail)
     {
         Application.ExternalCall("send_score", count, fail);
+
     }
 
     public void msg2Web(string msg)
@@ -691,9 +814,23 @@ public class SideCoordinator : MonoBehaviour
         {
             SplitCamera.SetActive(true);
         }
-        phase.GetComponent<RectTransform>().localPosition = new Vector3(1816f, 547f, phase.GetComponent<RectTransform>().localPosition.z);
+        Status.SetActive(false);
         balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(2f, 271f, balloon_text.GetComponent<RectTransform>().localPosition.z);
-        text_background.GetComponent<Transform>().localPosition = new Vector3(1f, 291f, text_background.GetComponent<Transform>().localPosition.z);
+        try
+        {
+            if (balloon.activeInHierarchy)
+            {
+                balloon.GetComponent<RectTransform>().localPosition = new Vector3(-17f, 274f, -64f);
+            }
+        }
+        catch
+        {
+            if (GameObject.Find("balloon").activeInHierarchy)
+            {
+                GameObject.Find("balloon").GetComponent<RectTransform>().localPosition = new Vector3(-17f, 274f, -64f);
+            }
+        }
+
         helper.GetComponent<Transform>().localPosition = new Vector3(-352f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
 
         practice_mod(true);
@@ -706,9 +843,30 @@ public class SideCoordinator : MonoBehaviour
             SplitCamera.SetActive(false);
         }
         practice_mod(false);
-        phase.GetComponent<RectTransform>().localPosition = new Vector3(3124f, 413f, phase.GetComponent<RectTransform>().localPosition.z);
+
+        Status.SetActive(true);
+        Mark1_1.SetActive(false);
+        Mark1_2.SetActive(false);
+        Mark1_3.SetActive(false);
+        Mark2_1.SetActive(false);
+        Mark2_2.SetActive(false);
+        Mark2_3.SetActive(false);
+
         balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(-192f, 248f, balloon_text.GetComponent<RectTransform>().localPosition.z);
-        text_background.GetComponent<Transform>().localPosition = new Vector3(-193f, 268f, text_background.GetComponent<Transform>().localPosition.z);
+        try
+        {
+            if (balloon.activeInHierarchy)
+            {
+                balloon.GetComponent<RectTransform>().localPosition = new Vector3(-193f, 253f, -64f);
+            }
+        }
+        catch
+        {
+            if (GameObject.Find("balloon").activeInHierarchy)
+            {
+                GameObject.Find("balloon").GetComponent<RectTransform>().localPosition = new Vector3(-193f, 253f, -64f);
+            }
+        }
         helper.GetComponent<Transform>().localPosition = new Vector3(-422f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
     }
 
@@ -719,25 +877,6 @@ public class SideCoordinator : MonoBehaviour
             set_timer.Stop();
             count_timer.Stop();
             practice_On = true;
-            //GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 굽음 X " + side.elbowLeft_Y_Count.ToString();
-            //GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 굽음 X " + side.elbowRight_Y_Count.ToString();
-            //GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 앞으로 나옴 X " + side.elbowLeft_Z_Count.ToString();
-            //GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 앞으로 나옴 X " + side.elbowLeft_Z_Count.ToString();
-            //GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "왼손목이 앞으로 나옴 X " + side.wristLeft_Z_Count.ToString();
-            //GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "오른손목이 앞으로 나옴 X " + side.wristLeft_Z_Count.ToString();
-
-            GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 굽음";
-            GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 굽음";
-            GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼팔꿈치가 앞으로 나옴";
-            GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른팔꿈치가 앞으로 나옴";
-            GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "왼손목이 앞으로 나옴";
-            GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "오른손목이 앞으로 나옴";
-            GameObject.Find("strike1").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike2").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike3").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike4").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike5").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike6").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
         }
         else
         {

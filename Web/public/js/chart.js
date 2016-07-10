@@ -8,18 +8,15 @@ var next_ex_name;
 var sended_score = 0;
 var set_num = 1;
 var min = 0;
+var loaded;
 
-$(document).ready(function () {
-    u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
-
-});
-
+function loadFirstExercise() {
+    console.log("LoadFirstExercise");
+    orderPlus("");
+}
 
 function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올림
 {
-    console.log("!");
-    console.log(temp);
-
     jQuery(function () {
 
         function order()//운동 하나 끝나면 aPlus 호출해서 숫자 올림
@@ -43,17 +40,33 @@ function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올�
 
 }
 
+function counter() {
+    $('.counter').counter();
+}
+
+
+//$('#dd').click(function () {
+//    var a = $(".counter").attr("data-stop");
+//    a ++;
+//    $(".counter").attr("data-stop", a);
+//    $('.counter').counter();
+//});
+
 function exerciseGet() {
     console.log("order" + order + " / " + final_order);
     final_order = Number(routine.length);
     if (order < final_order) {
         document.getElementById('information').innerHTML =
-            '<h1 style="color: #00bf6f">' + routine[order].exercise_name + '</h1>';
+            '<span style="font-size: 35px;color: gold">' + routine[order].exercise_name + '</span>';
         document.getElementById('information_set').innerHTML =
-            '<h3 style=""> 세트수 :' + set_num + '/' + routine[order].number_of_set + '</h3>';
-        document.getElementById('information_count').innerHTML =
-            '<h3 style="">운동 횟수 :' + sended_score + '/' + routine[order].number_of_count + '</h3>';
 
+            "<span style='font-size: 25px;color: white'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
+            + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;<span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_set + "'>" + routine[order].number_of_set + "</span>";
+        document.getElementById('information_count').innerHTML =
+            "<span style='font-size: 25px;color: white;font-size: 20px;'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
+            + '<span style="color: white">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_count + "'>" + routine[order].number_of_count + "</span>";
+
+        counter();
         clear_score = Number(routine[order].number_of_count);
         clear_set = Number(routine[order].number_of_set);
         switch (Number(routine[order].exercise_numb)) {
@@ -85,7 +98,8 @@ function exerciseGet() {
 
         u.getUnity().SendMessage("CoordinateMapper", "setGet" + current_ex_name, clear_set);
         u.getUnity().SendMessage("CoordinateMapper", "scoreGet" + current_ex_name, clear_score);
-        //progress_bars();
+
+        progress_bars();
     }
 
 
@@ -122,8 +136,14 @@ function exerciseGet() {
         }
 
     }
-
-    order++;
+    if (!loaded) {
+        u.getUnity().SendMessage("SceneLoader", "LoadFirstScene", current_ex_name.toLowerCase());
+        loaded = true;
+        console.log("LoadFirstScene");
+    }
+    else {
+        order++;
+    }
     //make_chart()
 
 }
@@ -175,10 +195,19 @@ function sendTest(msg) {
  }
  }*/
 
-function send_score(score, fail_body_point) {
+function set_score(){
+    document.getElementById('information_count').innerHTML =
+        "<span style='font-size: 20px'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
+        + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + clear_score + "'>" + clear_score + "</span>";
+    counter();
+    console.log("Printed Score = " + sended_score);
+}
+
+function send_score(score, fail_body_point) { // 점수 받아옴
     if (sended_score != score) {
         sended_score = score;
         progress_bars();
+        set_score();
         if (sended_score == Number(clear_score)) {
             sended_score = 0;
             ++set_num;
@@ -201,15 +230,14 @@ function send_score(score, fail_body_point) {
                     u.getUnity().SendMessage("CoordinateMapper", "LoadScene", next_ex_name);
                 }
             }
+            else{
+                setTimeout(set_score(), 1000);
+            }
             //ready -> current_ex_name -> setGet / scoreGet
 
             insert_set(set_num);
 
         }
-        document.getElementById('information_count').innerHTML =
-            '<h3 style="">운동 횟수 :' + sended_score + '/' + clear_score + '</h3>';
-        //make_chart();
-        console.log(fail_body_point);
 
         $.ajax({
             type: "post",
@@ -260,7 +288,9 @@ function init_score(score) {
 
 function insert_set(set_num) {
     document.getElementById('information_set').innerHTML =
-        '<h3 style=""> 세트수 :' + set_num + '/' + routine[order].number_of_set + '</h3>';
+        "<span style='font-size:20px;'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
+        + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_set + "'>" + routine[order].number_of_set + "</span>";
+    counter();
 }
 
 function move_Page(temp) {
@@ -270,11 +300,11 @@ function move_Page(temp) {
 
 function progress_bars() {
 
-    //console.log((((clear_score * (set_num-1)+sended_score) / (clear_set * clear_score) * 100) / 100));
-    //console.log((((clear_score * (set_num-1)+sended_score)*1.0 / (clear_set * clear_score))).toFixed(1));
+    console.log("dd");
     var progress_percent = (((clear_score * (set_num - 1) + sended_score) * 1.0 / (clear_set * clear_score)).toFixed(1)) * 100;
-    console.log(progress_percent);
-    var width = document.getElementById('label').innerHTML;
+
+    console.log("dddd"+ progress_percent);
+    var width = document.getElementById("percent").innerHTML;
 
     if (width)
         width = width.replace("%", "");
@@ -288,46 +318,23 @@ function progress_bars() {
             clearInterval(id);
 
         } else {
-            var change_width;
             width++;
 
-            if (width <= 20)
-                $("#first_bar").css("width", width + "%");
-            else {
-                if (width <= 40) {
-                    change_width = width - 20;
-                    $("#second_bar").css("width", change_width + "%");
-                }
-                else if (width <= 60) {
-                    change_width = width - 40;
-                    $("#third_bar").css("width", change_width + "%");
-                }
-                else if (width <= 80) {
-                    change_width = width - 60;
-                    $("#forth_bar").css("width", change_width + "%");
-                }
-                else if (width <= 100) {
-                    change_width = width - 80;
-                    $("#fifth_bar").css("width", change_width + "%");
-                }
+            $("#myBar").css("width", width + "%");
+            $("#runner").css("width", width + "%");
 
-            }
-
-            if(progress_percent == 100){
-                setTimeout(function(){
+            if (progress_percent == 100) {
+                setTimeout(function () {
                     width = 0;
-                    $("#first_bar").css("width", width + "%");
-                    $("#second_bar").css("width", width + "%");
-                    $("#third_bar").css("width", width + "%");
-                    $("#forth_bar").css("width", width + "%");
-                    $("#fifth_bar").css("width", width + "%");
+                    $("#myBar").css("width", width + "%");
+                    $("#runner").css("width", width + "%");
                     //clearInterval(id);
-                    document.getElementById("label").innerHTML = 0 + '%';
-                },1000);
+                    document.getElementById("percent").innerHTML = 0 + '%';
+                }, 1000);
             }
 
 
-            document.getElementById("label").innerHTML = width * 1 + '%';
+            document.getElementById("percent").innerHTML = width * 1 + '%';
         }
     }
 };

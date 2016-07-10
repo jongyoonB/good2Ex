@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Threading;
 using System;
+using System.Collections;
+
 
 public class SideCheck
 {
@@ -27,46 +29,53 @@ public class SideCheck
         get; set;
     }
 
-    // Y
-    public bool elbowLeft_Y
+    //angle
+    public bool wristLeftAngle_Check
+
+
     {
         get; set;
     }
-    public bool elbowRight_Y
-    {
-        get; set;
-    }
-    public bool wristLeft_Y
-    {
-        get; set;
-    }
-    public bool wristRight_Y
+    public bool wristRightAngle_Check
+
     {
         get; set;
     }
 
-
-
-
-
-
-
-
-
-    //Depth
-    public bool wristLeft_Z
+    //depth
+    public bool WristLeftDepthCheck
     {
         get; set;
     }
-    public bool wristRight_Z
+    public bool WristRightDepthCheck
     {
         get; set;
     }
-    public bool elbowLeft_Z
+    public bool ElbowLeftDepthCheck
     {
         get; set;
     }
-    public bool elbowRight_Z
+    public bool ElbowRightDepthCheck
+    {
+        get; set;
+    }
+    public bool[] LeftArmDepth
+    {
+        get; set;
+    }
+    public bool[] RightArmDepth
+
+    {
+        get; set;
+    }
+
+    //muscle{
+    public bool LeftArmMuscle
+    {
+        get; set;
+    }
+    public bool RightArmMuscle
+
     {
         get; set;
     }
@@ -74,13 +83,14 @@ public class SideCheck
     //MessageSwitch
     public int MSGorder = -1;
 
+
     public SideCoordinator sideCoordi = new SideCoordinator();
 
 
 
     #endregion
 
-    #region Member [double 친구들 == 각도값 저장]
+    #region Member [double 각도값 저장]
 
     public double armpit_Left_Angle
     {
@@ -90,18 +100,11 @@ public class SideCheck
     {
         get; set;
     }
-    public double elbow_Left_Angle
-    {
-        get; set;
-    }
-    public double elbow_Right_Angle
-    {
-        get; set;
-    }
 
+    
     #endregion
 
-    #region Member [short 친구들 == Count를 위한]
+    #region Member [short Count]
 
     public static short clear_Set
     {
@@ -113,60 +116,23 @@ public class SideCheck
         get; set;
     }
 
-    public short wristLeft_Y_Count
-    {
-        get; set;
-    }
-    public short wristRight_Y_Count
-    {
-        get; set;
-    }
-    public short elbowLeft_Y_Count
-    {
-        get; set;
-    }
-    public short elbowRight_Y_Count
-    {
-        get; set;
-    }
-
-    public short wristLeft_Z_Count
-    {
-        get; set;
-    }
-    public short wristRight_Z_Count
-    {
-        get; set;
-    }
-    public short elbowLeft_Z_Count
-    {
-        get; set;
-    }
-    public short elbowRight_Z_Count
-    {
-        get; set;
-    }
-    //2016- 06-18 새로 추가
-    public bool elbowRight_Z_Flag;
-    public bool elbowLeft_Z_Flag;
-    public bool wristRight_Z_Flag;
-    public bool wristLeft_Z_Flag;
-    public bool elbow_right_angle_Flag;
-    public bool elbow_left_angle_Flag;
 
     //Score Count 변수
     public short set_Count;
     public short score_Count;
 
 
-    //Fail Check Friends
-    bool WristLeftDepthFail;
-    bool WristRightDepthFail;
-    bool ElbowLeftDepthFail;
-    bool ElbowRightDepthFail;
-    int[] fail = new int[6];
+    //Failed Check
+    int[,] fail = new int[4, 6];
+
+
+
+
+    int[] judgment = new int[6];
     string failed_message = "";
 
+
+    //practice_mod
     static int good_count;
     static int practice_count;
     static int bad_count;
@@ -183,6 +149,7 @@ public class SideCheck
     #region 생성자 및 주요 구동 메서드
 
 
+
     public SideCheck()
     {
         set_Count = 0;
@@ -190,33 +157,19 @@ public class SideCheck
         bad_count = 0;
         good_count = 0;
         practice_count = 0;
+        LeftArmDepth = new bool[2];
+        RightArmDepth = new bool[2];
+
     }
 
     public void main()
     {
         AngleContorl();
+        checkP_clear();
+
 
         if (!ready_Flag)
         {
-            if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "CheckPoint1")
-            {
-                SideCoordinator.phase.GetComponentInChildren<Text>().text = "CheckPoint1";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    set_text("Toggle1", "차렷자세");
-                    //set_text("Toggle2", "");
-                    //set_text("Toggle3", "");
-                    //set_text("Toggle4", "");
-                    SideCoordinator.Toggle2.SetActive(false);
-                    if(score_Count==0 && set_Count == 0)
-                    {
-                        SideCoordinator.Toggle3.SetActive(false);
-                        SideCoordinator.Toggle4.SetActive(false);
-                    }
-                    //SideCoordinator.Toggle3.SetActive(false);
-                    //SideCoordinator.Toggle4.SetActive(false);
-                }
-            }
             readyCheck();
         }
         else if (!start_Flag)
@@ -225,61 +178,23 @@ public class SideCheck
             {
                 SideCoordinator.count_timer.Start();
             }
-            
-            if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "CheckPoint2")
-            {
-                SideCoordinator.phase.GetComponentInChildren<Text>().text = "CheckPoint2";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    SideCoordinator.changeAni("idle_10");
-                    SideCoordinator.Toggle2.SetActive(true);
-                    SideCoordinator.Toggle3.SetActive(true);
-                    SideCoordinator.Toggle4.SetActive(true);
-                    set_text("Toggle1", "팔을 천천히 올리기");
-                    set_text("Toggle2", "왼팔과 어깨가 평행하게");
-                    set_text("Toggle3", "오른팔과 어깨가 평행하게");
-                    set_text("Toggle4", "팔이 어깨 앞으로 나가지 않기");
-                }
-            }
+
             startCheck();
         }
         else if (!top_Flag)
         {
-            if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "CheckPoint3")
-            {
-                SideCoordinator.phase.GetComponentInChildren<Text>().text = "CheckPoint3";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    set_text("Toggle1", "팔을 천천히 올리기");
-                    set_text("Toggle2", "왼팔과 어깨가 평행하게");
-                    set_text("Toggle3", "오른팔과 어깨가 평행하게");
-                    set_text("Toggle4", "양팔이 어깨와 나란히");
-                }
-            }
             topCheck();
         }
         else if (!end_Flag)
         {
-            if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "CheckPoint4")
-            {
-                SideCoordinator.phase.GetComponentInChildren<Text>().text = "CheckPoint4";
-                if (set_Count == 0 && score_Count < 2)
-                {
-                    SideCoordinator.Toggle3.SetActive(false);
-                    SideCoordinator.Toggle4.SetActive(false);
-                    set_text("Toggle1", "팔을 천천히 내리리기");
-                    set_text("Toggle2", "양팔이 어깨 보다 앞으로 나가지 않기");
-                    //set_text("Toggle3", "");
-                    //set_text("Toggle4", "");
-                }
-            }
             endCheck();
         }
 
-        if (start_Flag)
+        if (ready_Flag)
         {
             depth_Check();
         }
+
 
     }
 
@@ -289,30 +204,33 @@ public class SideCheck
 
     void readyCheck()
     {
-
-        //SideCoordinator.setBallonText("팔을 천천히 들어 주세요");
-
-        y_False();
+        SideCoordinator.current_phase = 1;
 
         if (armpit_Left_Angle <= 40 && armpit_Left_Angle >= 25)
         {
-            wristLeft_Y = true;
+            SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
+            wristLeftAngle_Check = true;
         }
         else
         {
-            wristLeft_Y = false;
+            SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.red;
+            wristLeftAngle_Check = false;
         }
 
         if (armpit_Right_Angle <= 40 && armpit_Right_Angle >= 25)
         {
-            wristRight_Y = true;
+            SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
+            wristRightAngle_Check = true;
         }
         else
         {
-            wristRight_Y = false;
+            SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.red;
+            wristRightAngle_Check = false;
         }
 
-        if (wristLeft_Y && wristRight_Y)
+
+
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
             ready_Flag = true;
             if (score_Count == 0 && set_Count == 0)
@@ -325,19 +243,28 @@ public class SideCheck
 
     void startCheck()
     {
-        y_False();
+        SideCoordinator.current_phase = 2;
 
         if (armpit_Left_Angle >= 55)
         {
-            wristLeft_Y = true;
+            wristLeftAngle_Check = true;
+        }
+        else
+        {
+            wristLeftAngle_Check = false;
         }
 
         if (armpit_Right_Angle >= 55)
         {
-            wristRight_Y = true;
+            wristRightAngle_Check = true;
+        }
+        else
+        {
+            wristRightAngle_Check = false;
         }
 
-        if (wristLeft_Y && wristRight_Y)
+        //Debug.Log(wristLeftAngle_Check + " / " + wristRightAngle_Check);
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
             start_Flag = true;
             Debug.Log("startClear");
@@ -346,157 +273,137 @@ public class SideCheck
 
     void topCheck()
     {
-        y_False();
+        SideCoordinator.current_phase = 3;
 
         if (armpit_Left_Angle >= 80 && armpit_Left_Angle <= 100)
         {
             //set_textColor("Toggle2", Color.green);
-            //SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
-
-            wristLeft_Y = true;
+            SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
+            wristLeftAngle_Check = true;
         }
+        else
+        {
+            SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.red;
+            wristLeftAngle_Check = false;
+        }
+
 
         if (armpit_Right_Angle >= 80 && armpit_Right_Angle <= 100)
         {
-            //set_textColor("Toggle3", Color.green);
-            //SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
-
-            wristRight_Y = true;
+            SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
+            wristRightAngle_Check = true;
+        }
+        else
+        {
+            SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.red;
+            wristRightAngle_Check = false;
         }
 
 
-        if (wristLeft_Y && wristRight_Y)
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
             top_Flag = true;
-            sound_flag_false();
             Debug.Log("topClear");
         }
+
     }
 
     void endCheck()
     {
 
-        y_False();
+        SideCoordinator.current_phase = 4;
 
         if (armpit_Left_Angle <= 40)
         {
-            wristLeft_Y = true;
+            SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.black;
+            wristLeftAngle_Check = true;
+        }
+        else
+        {
+            SideCoordinator.armpLeftDegree.GetComponent<Text>().color = Color.red;
+            wristLeftAngle_Check = false;
         }
         if (armpit_Right_Angle <= 40)
         {
-            wristRight_Y = true;
+            SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.black;
+            wristRightAngle_Check = true;
+        }
+        else
+        {
+            SideCoordinator.armpRightDegree.GetComponent<Text>().color = Color.red;
+            wristRightAngle_Check = false;
         }
 
 
 
-        if (wristLeft_Y && wristRight_Y)
+        if (wristLeftAngle_Check && wristRightAngle_Check)
         {
-            if (ElbowLeftDepthFail)
-            {
-                fail[0] = 1;
-                ElbowLeftDepthFail = false;
-            }
-            else
-            {
-                fail[0] = 0;
-            }
+            judgment_position();
 
-            if (ElbowRightDepthFail)
-            {
-                fail[1] = 1;
-                ElbowRightDepthFail = false;
-            }
-            else
-            {
-                fail[1] = 0;
-
-            }
-
-            if (WristLeftDepthFail)
-            {
-                fail[2] = 1;
-                WristLeftDepthFail = false;
-            }
-            else
-            {
-                fail[2] = 0;
-            }
-
-            if (WristRightDepthFail)
-            {
-                fail[3] = 1;
-                WristRightDepthFail = false;
-            }
-            else
-            {
-                fail[3] = 0;
-            }
-
-            if (elbowLeft_Y)
-            {
-                fail[4] = 1;
-            }
-            else
-            {
-                fail[4] = 0;
-            }
-
-            if (elbowRight_Y)
-            {
-                fail[5] = 1;
-            }
-            else
-            {
-                fail[5] = 0;
-            }
             GameObject PointsText;
-            if (fail[0] + fail[1] + fail[2] + fail[3] + fail[4] + fail[5] >= 2)
+            int ct = 0;
+            UnityEngine.Debug.Log("Arm Check");
+            for (int i = 0; i < 2; i++)
+
             {
-                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
-                bad_count++;
-                Debug.Log("BAD");
+                UnityEngine.Debug.Log("LeftArm[" + i + "]" + LeftArmDepth[i]);
+                UnityEngine.Debug.Log("RightArm[" + i + "]" + RightArmDepth[i]);
+                if (!LeftArmDepth[i])
+                {
+                    ct++;
+                }
+                if (!RightArmDepth[i])
+                {
+                    ct++;
+                }
+
+
+
             }
-            else
+            //UnityEngine.Debug.Log("CT = " + ct);
+            if (ct == 0)
+
             {
                 if (SideCoordinator.practice_On)
+
                 {
                     practice_count++;
                 }
+
                 PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/yosi")) as GameObject;
-                Debug.Log("yosi");
+                //Debug.Log("yosi");
+                SideCoordinator.changeAni("greet_03");
             }
-            for (int i = 0; i < fail.Length; i++)
+            else if (ct == 1)
             {
-                Debug.Log("failed[" + i.ToString() + "] = " + fail[i].ToString());
-                if (fail[i] >= 1)
-                {
-                    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-                }
-                else
-                {
-                    GameObject.Find("strike" + (i + 1).ToString()).GetComponent<RawImage>().CrossFadeAlpha(1, 1.5f, false);
-                }
+                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/soso")) as GameObject;
+                SideCoordinator.changeAni("pose_00");
             }
+            else
+
+            {
+                PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/bad")) as GameObject;
+                SideCoordinator.changeAni("refuse_01");
+                bad_count++;
+                //Debug.Log("BAD");
+            }
+
             PointsText.GetComponent<ParticleSystem>().loop = false;
             show_pointText(PointsText);
 
-            if (!SideCoordinator.practice_On && bad_count > 2)
-            {
-                sideCoordi.SplitScreen();
-            }
-
             end_Flag = true;
+
             if (SideCoordinator.practice_On)
             {
+                //Debug.Log(practice_count);
                 if (practice_count > 2)
                 {
                     practice_count = 0;
                     bad_count = 0;
-                    y_Count_False();
-                    z_Count_False();
                     sideCoordi.ResumeScreen();
                 }
             }
+
 
             else
             {
@@ -504,7 +411,7 @@ public class SideCheck
                 {
                     if (SideCoordinator.count_timer.ElapsedMilliseconds + 2000 > SideCoordinator.count_time_avg)
                     {
-                        Debug.Log("SLOW!!");
+                        //Debug.Log("SLOW!!");
                         SideCoordinator.changeAni("nod_01");
                         MSGorder = 5;
                     }
@@ -513,50 +420,135 @@ public class SideCheck
                         SideCoordinator.count_time_avg = (SideCoordinator.count_time_avg + SideCoordinator.count_timer.ElapsedMilliseconds) / score_Count;
                     }
 
-                    Debug.Log(SideCoordinator.count_timer.ElapsedMilliseconds + " / " + SideCoordinator.count_time_avg);
+                    //Debug.Log(SideCoordinator.count_timer.ElapsedMilliseconds + " / " + SideCoordinator.count_time_avg);
                 }
                 score_Count++;
+                //if(status board is deactivate
+                if (!SideCoordinator.Status.activeInHierarchy)
+                {
+                    SideCoordinator.Status.SetActive(true);
+                }
+                //set board txt
+                clearBoard();
+                setBoard();
+
+
                 SideCoordinator.count_timer.Reset();
 
-                if (set_Count == 0 && score_Count == 2)
-                {
-                    //SideCoordinator.Status.SetActive(false);
-                    SideCoordinator.Status.GetComponent<Image>().material = Resources.Load("blackMaterial") as Material;
-                    SideCoordinator.Toggle1.SetActive(false);
-                    SideCoordinator.Toggle2.SetActive(false);
-                    SideCoordinator.Toggle3.SetActive(false);
-                    SideCoordinator.Toggle4.SetActive(false);
-
-                    SideCoordinator.phase.transform.parent = GameObject.Find("Canvas").transform;
-                    SideCoordinator.Status.GetComponent<RectTransform>().localScale = new Vector3(0.1203983f, 0.118181f, 1f);
-                    SideCoordinator.Status.GetComponent<RectTransform>().offsetMin = new Vector2(-462f, -77f);
-                    SideCoordinator.Status.GetComponent<RectTransform>().offsetMax = new Vector2(680f, 275f);
-                    SideCoordinator.phase.transform.parent = SideCoordinator.Status.transform;
-                }
             }
+
+
             Sound_Controller();
-            sound_flag_false();
+            clearFail();
+
             ready_Flag = false;
             start_Flag = false;
             top_Flag = false;
             end_Flag = false;
-            
-            //Application.ExternalCall("cut_view", score_Count, clear_Score);
 
+
+
+            sideCoordi.msg2Web("re:" + ready_Flag + " /st:" + start_Flag + " /tp:" + top_Flag + " /en:" + end_Flag);
+            sideCoordi.msg2Web("after send" + score_Count);
             //Floating Text
-            
+            //GameObject PointsText = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/Kinniku")) as GameObject;
+            //PointsText.transform.position = new Vector3(SideCoordinator.JointInfo["SpineShoulder"].X, SideCoordinator.JointInfo["SpineShoulder"].Y);
 
-            //Debug.Log("EndClear");
+            if (!SideCoordinator.practice_On && bad_count > 2)
+            {
+                sideCoordi.SplitScreen();
+            }
+
+
+
         }
     }
 
     #endregion
 
+    void clearBoard()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                set_text(("CheckPoint" + ((i + 1).ToString().TrimStart('0')) + "_" + ((j + 1).ToString().TrimStart('0'))), "");
+            }
+        }
+
+    }
+
+    void setBoard()
+    {
+        string[,] checkPoint = new string[2, 2];
+        int ct = 0;
+
+        for (int i = 0; i < 2; i++)
+        {
+            //depth
+            if (!LeftArmDepth[i] && !RightArmDepth[i])
+            {
+                checkPoint[i, ct] = "양팔이 어깨와 평행하지 않음";
+                ct++;
+            }
+            else
+            {
+                if (!LeftArmDepth[i] && RightArmDepth[i])
+                {
+                    checkPoint[i, ct] = "왼팔과 어깨가 평행하지 않음";
+                    ct++;
+                }
+                else if (LeftArmDepth[i] && !RightArmDepth[i])
+                {
+                    checkPoint[i, ct] = "오른팔과 어깨가 평행하지 않음";
+                    ct++;
+                }
+            }
+
+            //muscle
+            if (!LeftArmMuscle && !RightArmMuscle)
+            {
+                checkPoint[i, ct] = "양쪽 승모근에 힘이 들어감";
+                ct++;
+            }
+            else
+            {
+                if (!LeftArmMuscle && RightArmMuscle)
+                {
+                    checkPoint[i, ct] = "왼쪽 승모근에 힘이 들어감";
+                    ct++;
+                }
+                else if (LeftArmMuscle && !RightArmMuscle)
+                {
+                    checkPoint[i, ct] = "오른쪽 승모근에 힘이 들어감";
+                    ct++;
+                }
+            }
+            ct = 0;
+        }
+
+
+
+        for (int i = 0; i < 2; i++)
+        {
+
+            for (int j = 0; j < 2; j++)
+            {
+                Debug.Log(checkPoint[i, j]);
+                try
+                {
+                    set_text(("CheckPoint" + ((i + 1).ToString().TrimStart('0')) + "_" + ((j + 1).ToString().TrimStart('0'))), checkPoint[i, j]);
+                }
+                catch { }
+            }
+        }
+    }
+
     void show_pointText(GameObject PointsText)
     {
 
         PointsText.transform.position = new Vector3(SideCoordinator.JointInfo["Head"].X, SideCoordinator.JointInfo["Head"].Y + 2f, 0);
-        Debug.Log(PointsText.name);
+        //Debug.Log(PointsText.name);
         //yield return new WaitForSeconds(1);
         GameObject.Destroy(PointsText, 1);
         //yield return null;
@@ -564,32 +556,191 @@ public class SideCheck
 
     #region 메서드 [bool값 False]
 
-    void y_Count_False()
+    void checkP_clear()
     {
-        wristLeft_Y_Count = 0;
-        wristRight_Y_Count = 0;
-        elbowLeft_Y_Count = 0;
-        elbowRight_Y_Count = 0;
+        wristLeftAngle_Check = false;
+        wristRightAngle_Check = false;
+    }
+    void record_mistake()
+    {
+        //UnityEngine.Debug.Log("currnet : " + SideCoordinator.current_phase + "     /     " + WristLeftDepthCheck + " / " + WristRightDepthCheck + " / "  + ElbowLeftDepthCheck + " / " + ElbowRightDepthCheck);
+        if (!WristLeftDepthCheck)
+        {
+            fail[SideCoordinator.current_phase - 1, 0] = 1;
+        }
+        else
+        {
+            //fail[SideCoordinator.current_phase - 1 , 0] = 0;
+        }
+        if (!WristRightDepthCheck)
+        {
+            fail[SideCoordinator.current_phase - 1, 1] = 1;
+        }
+        else
+        {
+            //fail[SideCoordinator.current_phase - 1 , 1] = 0;
+        }
+        if (!ElbowLeftDepthCheck)
+        {
+            fail[SideCoordinator.current_phase - 1, 2] = 1;
+        }
+        else
+        {
+            //fail[SideCoordinator.current_phase - 1 , 2] = 0;
+        }
+        if (!ElbowRightDepthCheck)
+        {
+            fail[SideCoordinator.current_phase - 1, 3] = 1;
+        }
+        else
+        {
+            //fail[SideCoordinator.current_phase - 1 , 3] = 0;
+        }
     }
 
-    void z_Count_False()
+    void judgment_position()
+
     {
-        wristLeft_Z_Count = 0;
-        wristRight_Z_Count = 0;
-        elbowLeft_Z_Count = 0;
-        elbowRight_Z_Count = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                Debug.Log(fail[i, j]);
+            }
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            if (fail[1, i] + fail[2, i] + fail[3, i] != 0)
+            {
+                judgment[i] = 1;
+            }
+            else
+            {
+                judgment[i] = 0;
+            }
+        }
+        judgment[4] = 0;
+        judgment[5] = 0;
+
+        //check point Depth Check
+
+        //check point 2~3
+        if ((fail[1, 0] + fail[1, 2] + fail[2, 0] + fail[2, 2]) >= 1)
+        {
+            LeftArmDepth[0] = false;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark1_1, "bad");
+            }
+        }
+        else
+        {
+            LeftArmDepth[0] = true;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark1_1, "good");
+            }
+        }
+        if ((fail[1, 1] + fail[1, 3] + fail[2, 1] + fail[2, 3]) >= 1)
+        {
+            RightArmDepth[0] = false;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark1_2, "bad");
+            }
+        }
+        else
+        {
+            RightArmDepth[0] = true;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark1_2, "good");
+            }
+        }
+
+        //check point 4
+        if ((fail[3, 0] + fail[3, 2]) > 1)
+        {
+            LeftArmDepth[1] = false;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark2_1, "bad");
+            }
+        }
+        else
+        {
+            LeftArmDepth[1] = true;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark2_1, "good");
+            }
+        }
+        if ((fail[3, 1] + fail[3, 3]) > 1)
+        {
+            RightArmDepth[1] = false;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark2_2, "bad");
+            }
+        }
+        else
+        {
+            RightArmDepth[1] = true;
+            if (SideCoordinator.practice_On)
+            {
+                set_icon(SideCoordinator.Mark2_2, "good");
+            }
+        }
+
+
+
+
+
     }
 
-    void y_False()
+    void set_icon(GameObject name, string texture)
+
     {
-        wristLeft_Y = false;
-        wristRight_Y = false;
+        if (!name.activeInHierarchy)
+        {
+            name.SetActive(true);
+            name.GetComponent<RawImage>().CrossFadeAlpha(1000, 2.0f, false);
+        }
+        try
+        {
+            name.GetComponent<RawImage>().texture = Resources.Load("IMG/" + texture) as Texture;
+        }
+        catch { }
+
+
+
 
     }
 
     void set_text(string listName, string context)
+
     {
-        GameObject.Find(listName).GetComponentInChildren<Text>().text = context;
+        if (context.Length == 0 || context == null)
+        {
+            context = "";
+        }
+        Debug.Log("set " + listName + " : " + context);
+        try
+        {
+            GameObject.Find(listName).GetComponentInChildren<Text>().text = context;
+        }
+        catch
+        {
+
+
+
+        }
+    }
+
+    void set_text4text(string listName, string context)
+
+    {
+        GameObject.Find(listName).GetComponent<Text>().text = context;
     }
 
     void set_textColor(string listName, Color color)
@@ -603,80 +754,52 @@ public class SideCheck
 
     public void depth_Check()
     {
-        if (SideCoordinator.phase.GetComponentInChildren<Text>().text != "CheckPoint4")
+        if ((SideCoordinator.JointInfo["ShoulderLeft"].Z - SideCoordinator.JointInfo["ElbowLeft"].Z) <= 0.08f)
         {
-            failed_message = "";
-        }
-
-        if ((SideCoordinator.JointInfo["ShoulderLeft"].Z - SideCoordinator.JointInfo["ElbowLeft"].Z) <= 0.2f)
-        {
-            elbowLeft_Z = true;
+            ElbowLeftDepthCheck = true;
         }
         else
         {
-            elbowLeft_Z = false;
-            elbowLeft_Z_Flag = true;
-            elbowLeft_Z_Count++;
-            if (ElbowLeftDepthFail == false)
-            {
-                ElbowLeftDepthFail = true;
-            }
+            ElbowLeftDepthCheck = false;
         }
 
-        if ((SideCoordinator.JointInfo["ShoulderRight"].Z - SideCoordinator.JointInfo["ElbowRight"].Z) <= 0.2f)
+        if ((SideCoordinator.JointInfo["ShoulderRight"].Z - SideCoordinator.JointInfo["ElbowRight"].Z) <= 0.08f)
         {
-            elbowRight_Z = true;
+            ElbowRightDepthCheck = true;
         }
         else
         {
-            elbowRight_Z = false;
-            elbowRight_Z_Flag = true;
-            elbowRight_Z_Count++;
-            if (ElbowRightDepthFail == false)
-            {
-                ElbowRightDepthFail = true;
-            }
+            ElbowRightDepthCheck = false;
         }
 
-        if ((SideCoordinator.JointInfo["ElbowLeft"].Z - SideCoordinator.JointInfo["WristLeft"].Z) <= 0.2f)
+        if ((SideCoordinator.JointInfo["ShoulderLeft"].Z - SideCoordinator.JointInfo["WristLeft"].Z) <= 0.15f)
         {
-            wristLeft_Z = true;
+            WristLeftDepthCheck = true;
         }
         else
         {
-            wristLeft_Z = false;
-            wristLeft_Z_Flag = true;
-            wristLeft_Z_Count++;
-            if (WristLeftDepthFail == false)
-            {
-                WristLeftDepthFail = true;
-            }
+            WristLeftDepthCheck = false;
         }
 
-        if ((SideCoordinator.JointInfo["ElbowRight"].Z - SideCoordinator.JointInfo["WristRight"].Z) <= 0.2f)
+        if ((SideCoordinator.JointInfo["ShoulderRight"].Z - SideCoordinator.JointInfo["WristRight"].Z) <= 0.15f)
         {
-            wristRight_Z = true;
+            WristRightDepthCheck = true;
         }
         else
         {
-            wristRight_Z = false;
-            wristRight_Z_Flag = true;
-            wristRight_Z_Count++;
-            if (WristRightDepthFail == false)
-            {
-                WristRightDepthFail = true;
-            }
+            WristRightDepthCheck = false;
         }
 
-        if ((!elbowLeft_Z || !wristLeft_Z) && (!elbowRight_Z || !wristRight_Z))
+
+        if (!ElbowLeftDepthCheck && !ElbowRightDepthCheck)
         {
             failed_message = "양팔이 너무 앞으로 나왔어요";
         }
-        else if ((!elbowLeft_Z || !wristLeft_Z) && (elbowRight_Z && wristRight_Z))
+        else if (!ElbowLeftDepthCheck && ElbowRightDepthCheck)
         {
             failed_message = "왼팔이 너무 앞으로 나왔어요";
         }
-        else if ((elbowLeft_Z && wristLeft_Z) && (!elbowRight_Z || !wristRight_Z))
+        else if (ElbowLeftDepthCheck && !ElbowRightDepthCheck)
         {
             failed_message = "오른팔이 너무 앞으로 나왔어요";
         }
@@ -684,31 +807,18 @@ public class SideCheck
         else
         {
             failed_message = "";
-            if (elbowLeft_Z && elbowRight_Z && wristLeft_Z && wristRight_Z)
+
+            if (armpit_Left_Angle < 55 && armpit_Right_Angle < 55)
             {
-                if (!(elbow_Left_Angle >= 140) && !(elbow_Right_Angle >= 140))
+
+                if (start_Flag && !top_Flag && (armpit_Left_Angle <= 100 || armpit_Right_Angle <= 100))
                 {
-                    failed_message = "양팔이 굽혀졌내요";
-                    elbow_right_angle_Flag = true;
-                    elbow_left_angle_Flag = true;
-                }
-                else if (!(elbow_Left_Angle >= 140))
-                {
-                    failed_message = "왼팔이 굽혀졌내요";
-                    elbow_left_angle_Flag = true;
-                }
-                else if (!(elbow_Right_Angle >= 140))
-                {
-                    failed_message = "오른팔이 굽혀졌내요";
-                    elbow_right_angle_Flag = true;
-                }
-                else if (start_Flag && !top_Flag && (armpit_Left_Angle < 54 || armpit_Right_Angle < 54))
-                {
-                    failed_message = "잠깐!! 덜 올라갔어요!";
+                    failed_message = "잠깐!!! 팔을 더 올리셔야죠!!";
                 }
             }
+            
         }
-        
+
 
         if (failed_message.Length != 0)
         {
@@ -717,18 +827,12 @@ public class SideCheck
         }
         else
         {
+            //SideCoordinator.setBallonText("잘 하고 있어요!");
+            SideCoordinator.setBallonText("");
             SideCoordinator.changeAni("nod_01");
-            SideCoordinator.setBallonText("잘 하고 있어요!");
-        }
 
-        //if (!(elbow_Left_Angle >= 140))
-        //{
-        //    elbowLeft_Y_Count++;
-        //}
-        //if (!(elbow_Right_Angle >= 140))
-        //{
-        //    elbowRight_Y_Count++;
-        //}
+        }
+        record_mistake();
     }
 
     #endregion
@@ -765,8 +869,6 @@ public class SideCheck
 
         armpit_Left_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VSS_VSM), Vector3.Normalize(VSS_VEL)) * (180 / Math.PI));
         armpit_Right_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VSS_VSM), Vector3.Normalize(VSS_VER)) * (180 / Math.PI));
-        elbow_Left_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VEL_VSL), Vector3.Normalize(VEL_VWL)) * (180 / Math.PI));
-        elbow_Right_Angle = (AngleBetweenTwoVectors(Vector3.Normalize(VER_VSR), Vector3.Normalize(VER_VWR)) * (180 / Math.PI));
     }
 
     #endregion
@@ -774,92 +876,35 @@ public class SideCheck
     #region 메서드 [Sound Control]
 
     public void Sound_Controller()
-    {
-        bool LG = false;
-        bool RG = false;
-        bool LE = false;
-        bool RE = false;
-        bool LW = false;
-        bool RW = false;
-
-        //왼팔꿈치가 굽었을 때
-        if (elbow_left_angle_Flag)
-        {
-            LG = true;
-        }
-
-        //오른팔꿈치가 굽었을 때
-        if (elbow_right_angle_Flag)
-        {
-            RG = true;
-        }
-
-        //왼팔꿈치가 앞으로 나왔을 때
-        if (elbowLeft_Z_Flag)
-        {
-            LE = true;
-        }
-
-        //오른팔꿈치가 앞으로 나왔을 때
-        if (elbowRight_Z_Flag)
-        {
-            RE = true;
-        }
-
-        //왼손목이 앞으로 나왔을 때
-        if (wristLeft_Z_Flag)
-        {
-            LW = true;
-        }
-
-        //오른손목이 앞으로 나왔을 때
-        if (wristRight_Z_Flag)
-        {
-            RW = true;
-        }
-
-        if(MSGorder == 5)
-        {
-
-        }
-
-        else if (LE && RE && LW && RW)
+    {        
+        if (judgment[0] + judgment[1] + judgment[2] + judgment[3] == 4)
         {
             MSGorder = 7;
         }
-        else if (RG && LG)
-        {
-            MSGorder = 3;
-        }
-        else if (LE && RE)
+
+        else if (judgment[2] + judgment[3] == 2)
         {
             MSGorder = 2;
         }
-        else if (LW && RW)
+        else if (judgment[0] + judgment[1] == 2)
         {
             MSGorder = 4;
         }
-        else if (RG)
+
+        else if (judgment[2] == 1)
         {
-            MSGorder = 14;
-        }
-        else if (LG)
-        {
-            MSGorder = 11;
-        }
-        else if (LE)
-        {
+            
             MSGorder = 10;
         }
-        else if (RE)
+        else if (judgment[3] == 1)
         {
             MSGorder = 13;
         }
-        else if (LW)
+        else if (judgment[0] == 1)
         {
             MSGorder = 12;
         }
-        else if (RW)
+        else if (judgment[1] == 1)
         {
             MSGorder = 15;
         }
@@ -868,15 +913,18 @@ public class SideCheck
             MSGorder = 6;
         }
 
+
         if (end_Flag)
         {
             if (!SideCoordinator.practice_On)
             {
-                sideCoordi.send2web(score_Count, fail);
+                sideCoordi.send2web(score_Count, judgment);
+                sideCoordi.msg2Web("from Unity score_count" + score_Count.ToString() + "/" + "clear_count" + clear_Score.ToString());
 
                 if ((clear_Score - 1) == score_Count)
                 {
                     sideCoordi.firewall();
+
                     SideCoordinator.firewall_position = new Vector3(((SideCoordinator.JointInfo["FootLeft"].X + SideCoordinator.JointInfo["FootRight"].X) / 2), ((SideCoordinator.JointInfo["FootLeft"].Y) * 6));
                     SideCoordinator.firewall_obj.transform.position = SideCoordinator.firewall_position;
                     SideCoordinator.firewall_obj.SetActive(true);
@@ -903,23 +951,26 @@ public class SideCheck
                     score_Count = 0;
                     set_Count++;
                     SideCoordinator.set_time = SideCoordinator.set_timer.Elapsed.ToString().Substring(3, 5);
-                    Debug.Log(SideCoordinator.set_time);
-                    Debug.Log("Score : " + score_Count);
-                    Debug.Log("Set : " + set_Count);
+                    //Debug.Log(SideCoordinator.set_time);
+
+
                     //MSGorder = 6;
                 }
             }
-        }    
+        }
+        //Debug.Log("EndClear");
     }
 
-    public void sound_flag_false()
+    void clearFail()
     {
-        elbow_left_angle_Flag = false;
-        elbow_right_angle_Flag = false;
-        wristLeft_Z_Flag = false;
-        wristRight_Z_Flag = false;
-        elbowRight_Z_Flag = false;
-        elbowLeft_Z_Flag = false;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                fail[i, j] = 0;
+            }
+        }
+
     }
 
     #endregion

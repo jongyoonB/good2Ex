@@ -108,7 +108,7 @@ public class DumbelCoordinator : MonoBehaviour
     public static GameObject armpRightDegree;
     public static GameObject armpLeftDegree;
 
-    //title
+    //What's wrong
     public static GameObject title;
     public static GameObject Message;
     public static GameObject checkPoint1;
@@ -118,6 +118,15 @@ public class DumbelCoordinator : MonoBehaviour
     public static GameObject checkPoint2_1;
     public static GameObject checkPoint2_2;
 
+    //practice mod
+    public static GameObject Mark1_1;
+    public static GameObject Mark1_2;
+    public static GameObject Mark1_3;
+    public static GameObject Mark2_1;
+    public static GameObject Mark2_2;
+    public static GameObject Mark2_3;
+
+    //set current phase
     public static int current_phase;
 
     //helper
@@ -125,7 +134,6 @@ public class DumbelCoordinator : MonoBehaviour
     public changeAnimation changeAnimation;
     private GameObject balloon;
     private static GameObject balloon_text;
-    private static GameObject text_background;
 
     //stop_watch(timer)
     public static Stopwatch set_timer = new Stopwatch();
@@ -143,9 +151,13 @@ public class DumbelCoordinator : MonoBehaviour
 
     void Start()
     {
+        KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
+        KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
+        KinemotoSDK.EngagementHandler.HandRaiseCounter.Clear();
         //Time.captureFramerate = 30;
         //call javascript function
         Application.ExternalCall("orderPlus", "ok");
+        Application.ExternalCall("UnityReady", "ok");
         if (!GameObject.Find("BGM"))
         {
             BGM = new GameObject("BGM");
@@ -168,12 +180,10 @@ public class DumbelCoordinator : MonoBehaviour
         helper = GameObject.Find("helper");
         changeAnimation = gameObject.GetComponent("ScriptName") as changeAnimation;
         helper.SetActive(false);
-        //balloon = GameObject.Find("balloon");
-        //balloon.SetActive(false);
+        balloon = GameObject.Find("balloon");
+        balloon.SetActive(false);
         balloon_text = GameObject.Find("balloon_text");
-        text_background = GameObject.Find("text_background");
         balloon_text.SetActive(false);
-        text_background.SetActive(false);
 
         //angle object
         elbowLeftDegree = GameObject.Find("elbowLeftDegree");
@@ -225,7 +235,7 @@ public class DumbelCoordinator : MonoBehaviour
         Status = GameObject.Instantiate(prefab) as GameObject;
         Status.name = "status";
         Status.transform.parent = GameObject.Find("Canvas").transform;
-        Status.transform.localPosition = new Vector3(470f, -37f, -10);
+        Status.transform.localPosition = new Vector3(470f, -30f, -10);
         Status.transform.localScale = new Vector3(0.711432f, 1.080361f, 0.734385f);
 
         //title = GameObject.Find("title");
@@ -233,13 +243,8 @@ public class DumbelCoordinator : MonoBehaviour
         Message = GameObject.Find("Message");
         Message.SetActive(false);
 
-        //public static GameObject checkPoint1;
-        //public static GameObject checkPoint1_1;
-        //public static GameObject checkPoint1_2;
-        //public static GameObject checkPoint2;
-        //public static GameObject checkPoint2_1;
-        //public static GameObject checkPoint2_2;
 
+        //what's wrong
         checkPoint1 = GameObject.Find("CheckPoint1");
         checkPoint1_1 = GameObject.Find("CheckPoint1_1");
         checkPoint1_2 = GameObject.Find("CheckPoint1_2");
@@ -247,6 +252,21 @@ public class DumbelCoordinator : MonoBehaviour
         checkPoint2 = GameObject.Find("CheckPoint2");
         checkPoint2_1 = GameObject.Find("CheckPoint2_1");
         checkPoint2_2 = GameObject.Find("CheckPoint2_2");
+
+        //practice mod
+        Mark1_1 = GameObject.Find("Mark1_1");
+        Mark1_2 = GameObject.Find("Mark1_2");
+        Mark1_3 = GameObject.Find("Mark1_3");
+        Mark2_1 = GameObject.Find("Mark2_1");
+        Mark2_2 = GameObject.Find("Mark2_2");
+        Mark2_3 = GameObject.Find("Mark2_3");
+
+        Mark1_1.SetActive(false);
+        Mark1_2.SetActive(false);
+        Mark1_3.SetActive(false);
+        Mark2_1.SetActive(false);
+        Mark2_2.SetActive(false);
+        Mark2_3.SetActive(false);
 
         checkPoint1.GetComponentInChildren<Text>().text = "팔을 올릴 때";
         checkPoint1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
@@ -265,7 +285,7 @@ public class DumbelCoordinator : MonoBehaviour
         checkPoint2.GetComponentInChildren<Text>().color = Color.black;
         checkPoint2_1.GetComponentInChildren<Text>().color = Color.black;
         checkPoint2_2.GetComponentInChildren<Text>().color = Color.black;
-
+        
         Status.SetActive(false);
 
         //goal set
@@ -353,9 +373,8 @@ public class DumbelCoordinator : MonoBehaviour
                 //balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(89.7f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
                 //helper.GetComponent<Transform>().localPosition = new Vector3(215f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
                 helper.SetActive(true);
-                //balloon.SetActive(true);
+                balloon.SetActive(true);
                 balloon_text.SetActive(true);
-                text_background.SetActive(true);
                 changeAni("pose_00");
                 set_timer.Start();
             }
@@ -618,9 +637,8 @@ public class DumbelCoordinator : MonoBehaviour
         armpRightDegree.SetActive(false);
         armpLeftDegree.SetActive(false);
         helper.SetActive(false);
-        //balloon.SetActive(false);
+        balloon.SetActive(false);
         balloon_text.SetActive(false);
-        text_background.SetActive(false);
         sendTime(set_time);
         set_timer.Stop();
         //balloon.GetComponent<RectTransform>().localPosition = new Vector3(277f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
@@ -732,6 +750,7 @@ public class DumbelCoordinator : MonoBehaviour
 
     public void SplitScreen()
     {
+
         MainCamera.GetComponent<Camera>().rect = new Rect(0, 0, 0.7f, 1);
         if (!SplitCamera.activeInHierarchy)
         {
@@ -739,11 +758,22 @@ public class DumbelCoordinator : MonoBehaviour
         }
         //title.GetComponent<RectTransform>().localPosition = new Vector3(1816f, 547f, title.GetComponent<RectTransform>().localPosition.z);
         Status.SetActive(false);
+        try
+        {
+            if (balloon.activeInHierarchy)
+            {
+                balloon.GetComponent<RectTransform>().localPosition = new Vector3(-17f, 274f, -64f);
+            }
+        }
+        catch
+        {
+            if (GameObject.Find("balloon").activeInHierarchy)
+            {
+                GameObject.Find("balloon").GetComponent<RectTransform>().localPosition = new Vector3(-17f, 274f, -64f);
+            }
+        }
         balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(2f, 271f, balloon_text.GetComponent<RectTransform>().localPosition.z);
-        text_background.GetComponent<Transform>().localPosition = new Vector3(1f, 291f, text_background.GetComponent<Transform>().localPosition.z);
         helper.GetComponent<Transform>().localPosition = new Vector3(-352f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
-
-        practice_mod(true);
     }
     public void ResumeScreen()
     {
@@ -752,11 +782,29 @@ public class DumbelCoordinator : MonoBehaviour
         {
             SplitCamera.SetActive(false);
         }
-        practice_mod(false);
         Status.SetActive(true);
+        Mark1_1.SetActive(false);
+        Mark1_2.SetActive(false);
+        Mark1_3.SetActive(false);
+        Mark2_1.SetActive(false);
+        Mark2_2.SetActive(false);
+        Mark2_3.SetActive(false);
         //title.GetComponent<RectTransform>().localPosition = new Vector3(3124f, 413f, title.GetComponent<RectTransform>().localPosition.z);
         balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(-192f, 248f, balloon_text.GetComponent<RectTransform>().localPosition.z);
-        text_background.GetComponent<Transform>().localPosition = new Vector3(-193f, 268f, text_background.GetComponent<Transform>().localPosition.z);
+        try
+        {
+            if (balloon.activeInHierarchy)
+            {
+                balloon.GetComponent<RectTransform>().localPosition = new Vector3(-193f, 253f, -64f);
+            }
+        }
+        catch
+        {
+            if (GameObject.Find("balloon").activeInHierarchy)
+            {
+                GameObject.Find("balloon").GetComponent<RectTransform>().localPosition = new Vector3(-193f, 253f, -64f);
+            }
+        }
         helper.GetComponent<Transform>().localPosition = new Vector3(-422f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
     }
 
@@ -766,37 +814,13 @@ public class DumbelCoordinator : MonoBehaviour
         {
             set_timer.Stop();
             count_timer.Stop();
-            practice_On = true;
-            GameObject.Find("Toggle1-2").GetComponentInChildren<Text>().text = "왼팔을 어깨와 나란히";
-            GameObject.Find("Toggle2-2").GetComponentInChildren<Text>().text = "오른팔을 어깨와 나란히";
-            GameObject.Find("Toggle3-2").GetComponentInChildren<Text>().text = "왼쪽 승모근 자극하지 않기";
-            GameObject.Find("Toggle4-2").GetComponentInChildren<Text>().text = "오른쪽 승모근 자극하지 않기";
-            GameObject.Find("Toggle5-2").GetComponentInChildren<Text>().text = "";
-            GameObject.Find("Toggle6-2").GetComponentInChildren<Text>().text = "";
-            GameObject.Find("strike1").GetComponent<RawImage>().CrossFadeAlpha(0, 0,false);
-            GameObject.Find("strike2").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike3").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike4").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike5").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
-            GameObject.Find("strike6").GetComponent<RawImage>().CrossFadeAlpha(0, 0, false);
         }
         else
         {
             set_timer.Start();
             count_timer.Start();
-            practice_On = false;
         }
-    }
-
-    public string StrikeThrough(string s)
-    {
-        //UnityEngine.Debug.Log("StrikeThrough");
-        string strikethrough = "";
-        foreach (char c in s)
-        {
-            strikethrough = strikethrough + c + '\u0336';
-        }
-        return strikethrough;
+        practice_On = on;
     }
 
     public void firewall()

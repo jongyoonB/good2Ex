@@ -48,6 +48,7 @@
      <Compile Include="Assets\ClickMe.cs" />
      <Compile Include="Assets\Fireworks\Scripts\Demo\SmoothCameraOrbit.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\ClickEvnt.cs" />
+     <Compile Include="Assets\KinemotoSDK\Example\Scripts\DefaultSceneLoad.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\DepthViewerExtended.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\DumbelCheck.cs" />
      <Compile Include="Assets\KinemotoSDK\Example\Scripts\DumbelCoordinator.cs" />

@@ -379,12 +379,10 @@
                 </div>
             </div>
             <ul class="nav nav-sidebar" style="text-align: center; font-size: 20px">
-                <li><a href="#" style="font-family: HANYG0230">프로필</a>
-                </li>
-                <li><a href="#"  style="font-family: HANYG0230">회원정보설정</a></li>
+<!--                <li><a href="#" style="font-family: HANYG0230">프로필</a>-->
+<!--                </li>-->
+<!--                <li><a href="#"  style="font-family: HANYG0230">회원정보설정</a></li>-->
                 <li class="active" style="font-family: HANYG0230"><a href="#">BodyCheck</a></li>
-                <li><a href="#" style="font-family: HANYG0230">도전과제</a></li>
-                <li><a href="#" style="font-family: HANYG0230">랭킹</a></li>
             </ul>
         </div>
 
@@ -392,7 +390,7 @@
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#graph" data-toggle="tab" style="font-family: HANYG0230">그래프</a></li>
-                <li><a href="#picture" data-toggle="tab" style="font-family: HANYG0230">사진 모음</a>
+                <!--<li><a href="#picture" data-toggle="tab" style="font-family: HANYG0230">사진 모음</a>-->
                 </li>
             </ul>
 

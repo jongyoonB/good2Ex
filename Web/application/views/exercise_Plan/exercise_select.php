@@ -5,7 +5,7 @@
 <?php
 if (isset($_SESSION["user_info"])) {
     $user_info = $_SESSION["user_info"];
-    echo "로그인중";
+    //echo "로그인중";
 } else {
     $user_info = false;
 }
