@@ -213,8 +213,8 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="/main/exercise_Go">운동시작</a></li>
-                <li><a href="/main/exercise_Free">자유게시판</a></li>
-                <li><a href="/main/exercise_QnA">QNA</a></li>
+<!--                <li><a href="/main/exercise_Free">자유게시판</a></li>-->
+<!--                <li><a href="/main/exercise_QnA">QNA</a></li>-->
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -252,10 +252,10 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
             <div class="row"
                  style="background-image:url('/public/img/exercise/Kcal.jpg'); background-size: cover;  margin: auto; background-repeat: no-repeat;margin-bottom: 15px; color: white;">
                 <div style="padding: 20px 0px 20px 30px; box-shadow: 0px 2px 3px #cccccc;">
-                    <p style="font-size: 25px">칼로리 정보</p>
+                    <p style="font-size: 25px;text-align: center">칼로리 정보</p>
 
-                    <p style="font-size: 75px">
-                        <strong id="calorie_count" style="color: #d2ff00"><?php echo $calorie_info ?></strong>Kcal
+                    <p style="font-size: 75px;text-align: center">
+                        <strong id="calorie_count" style="color: #d2ff00;"><?php echo $calorie_info ?></strong>Kcal
                     </p>
                 </div>
             </div>
@@ -273,13 +273,21 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                 </div>
                 <div class="col-md-6" style="padding-left: 0;">
                     <div class="row" style="margin-bottom: 150%">
+<!--                        <div class="btn-group" data-toggle="buttons" style="float: right">-->
+<!--                            <label class="btn btn-default round btn-md" id="point_check">-->
+<!--                                <input type="radio" name="menu" autocomplete="off">지적사항-->
+<!--                            </label>-->
+<!--                            <label class="btn btn-default round btn-md" id="muscle">-->
+<!--                                <input type="radio" name="options" autocomplete="off">근육-->
+<!--                            </label>-->
+<!--                        </div>-->
                         <div class="btn-group" data-toggle="buttons" style="float: right">
                             <label class="btn btn-default round btn-md" id="point_check">
                                 <input type="radio" name="menu" autocomplete="off">지적사항
                             </label>
-                            <label class="btn btn-default round btn-md" id="muscle">
-                                <input type="radio" name="options" autocomplete="off">근육
-                            </label>
+<!--                            <label class="btn btn-default round btn-md" id="muscle">-->
+<!--                                <input type="radio" name="options" autocomplete="off">근육-->
+<!--                            </label>-->
                         </div>
                     </div>
                     <div class="row" style="padding-right: 15px;">
@@ -338,12 +346,12 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
     $(document).ready(function () {
 
         var result = '<?= json_encode($position_check_on_today)?>';
-        //console.log(result);
+        console.log(result);
         var position_check_on_today = JSON.parse(result);
 
-        result = '<?= json_encode($position_check_on_another_day)?>';
+//        result = '//= json_encode($position_check_on_another_day)?>//';
         //console.log(result);
-        var position_check_on_another_day = JSON.parse(result);
+        //var position_check_on_another_day = JSON.parse(result);
 
         <?php
         echo "var now_routine_info = " . json_encode($_SESSION['now_routine']) . ";"
@@ -387,6 +395,9 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
         $('.btn').click(
             function () {
 
+                if(!position_check_on_today)
+                    alert("지적사항이 없습니다!");
+
                 $('.exercise_info').removeAttr("disabled");
                 $('#radio1').attr("checked", "");
 
@@ -400,7 +411,7 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
 
                     point_numb = find_point(exercise_name);
 
-                    //console.log(point_numb);
+                    console.log(point_numb);
 
                     drow_point(point_numb);
 
@@ -440,17 +451,18 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                 }
             }
 
-            var value2 = Array();
-            value_count = 0;
-            for (var i = 0; i < position_check_on_another_day.length; i++) {
-                if (exercise_name == position_check_on_another_day[i].exercise_name) {
-                    value2[value_count] = position_check_on_another_day[i].point_numb;
-
-                    value_count++;
-                }
-            }
-
-            var value = value1.concat(value2);
+//            var value2 = Array();
+//            value_count = 0;
+//            for (var i = 0; i < position_check_on_another_day.length; i++) {
+//                if (exercise_name == position_check_on_another_day[i].exercise_name) {
+//                    value2[value_count] = position_check_on_another_day[i].point_numb;
+//
+//                    value_count++;
+//                }
+//            }
+//
+//            var value = value1.concat(value2);
+           var value = value1;
 
             var point_numb = [];
             $.each(value, function (i, el) {
@@ -515,21 +527,21 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                         }
                     }
 
-                    for (var i = 0; i < position_check_on_another_day.length; i++) {
-                        if (exercise_name == position_check_on_another_day[i]['exercise_name'] && point_numb == position_check_on_another_day[i]['point_numb'])
-                            recent_check[position_check_on_another_day[i]['position_check']] = position_check_on_another_day[i]['position_count'];
-                    }
+//                    for (var i = 0; i < position_check_on_another_day.length; i++) {
+//                        if (exercise_name == position_check_on_another_day[i]['exercise_name'] && point_numb == position_check_on_another_day[i]['point_numb'])
+//                            recent_check[position_check_on_another_day[i]['position_check']] = position_check_on_another_day[i]['position_count'];
+//                    }
 
                     i = 0;
                     var categories = [];
                     for (var value1 in today_check) {
-                        for (var value2 in recent_check) {
-                            if (value1 == value2) {
+//                        for (var value2 in recent_check) {
+//                            if (value1 == value2) {
                                 //console.log(value1);
                                 categories.push(value1);
-                                //console.log(categories);
-                            }
-                        }
+                                console.log(categories);
+//                            }
+//                        }
                     }
 
                     var new_point = [];
@@ -561,60 +573,61 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
 
 
                         //console.log(new_point);
-                        var recent_data = [];
-                        for (var value in recent_check) {
-                            var flag = false;
-                            for (var i = 0; i < categories.length; i++) {
-                                if (categories[i] == value) {
-                                    //console.log("같을 때2 : " + value);
-                                    flag = true;
-                                    var data = recent_check[value] - 0;
-                                    recent_data.push(data);
-                                }
-                            }
-
-                            if(!flag)
-                            {
-                                //console.log("다를때2");
-                                //console.log(value);
-                                var data = value;
-                                no_point.push(data);
-                                //console.log(no_point);
-                                 //console.log(new_point);
-                            }
-
-                        }
+//                        var recent_data = [];
+//                        for (var value in recent_check) {
+//                            var flag = false;
+//                            for (var i = 0; i < categories.length; i++) {
+//                                if (categories[i] == value) {
+//                                    //console.log("같을 때2 : " + value);
+//                                    flag = true;
+//                                    var data = recent_check[value] - 0;
+//                                    recent_data.push(data);
+//                                }
+//                            }
+//
+//                            if(!flag)
+//                            {
+//                                //console.log("다를때2");
+//                                //console.log(value);
+//                                var data = value;
+//                                no_point.push(data);
+//                                //console.log(no_point);
+//                                 //console.log(new_point);
+//                            }
+//
+//                        }
                         $("#check_point_info").empty();
                         $("#check_point_info").append("<div id='check_point'></div>");
 
-                        check(categories, today_data, recent_data);
+                        check(categories, today_data);
+//                        check(categories, today_data, recent_data);
 
                     } else {
                         $("#check_point_info").empty();
                     }
 
 
-                    if (no_point.length > 0) {
-                        $("#check_point_info").append("<div class='row'><div id='no_point'>전에 받은 지적사항</div></div>");
+//                    if (no_point.length > 0) {
+//                        $("#check_point_info").append("<div class='row'><div id='no_point'>전에 받은 지적사항</div></div>");
+//
+//                        for(var i=0; i<no_point.length; i++){
+//                            $("#no_point").append("<p></p>");
+//                        }
+//
+//                        //console.log("ddd");
+//                    }
+//
+//                    if (new_point.length > 0) {
+//                        $("#check_point_info").append("<div class='row'><div id='new_point'>새로 받은 지적사항</div></div>");
+//
+//                        for(var i=0; i<new_point.length; i++){
+//                            $("#new_point").append("<p></p>");
+//                        }
+//                        //console.log("d");
+//                    }
 
-                        for(var i=0; i<no_point.length; i++){
-                            $("#no_point").append("<p></p>");
-                        }
-
-                        //console.log("ddd");
-                    }
-
-                    if (new_point.length > 0) {
-                        $("#check_point_info").append("<div class='row'><div id='new_point'>새로 받은 지적사항</div></div>");
-
-                        for(var i=0; i<new_point.length; i++){
-                            $("#new_point").append("<p></p>");
-                        }
-                        //console.log("d");
-                    }
-
-                    var left = event.pageX - $(this).offset().left + 0;
-                    var top = event.pageY - $(this).offset().top + 200;
+                    var left = event.pageX - $(this).offset().left + 30;
+                    var top = event.pageY - $(this).offset().top + 500;
                     $('#check_point_info').css({top: top, left: left}).show();
 
                 },
@@ -626,7 +639,8 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
             );
         }
 
-        function check(categories, today_data, recent_data) {
+        function check(categories, today_data) {
+//        function check(categories, today_data, recent_data) {
 
             var height;
             if (categories.length == 1) {
@@ -690,10 +704,12 @@ exercise_record 테이블에서 현재 날짜를 이용하여  user_routine_info
                     credits: {
                         enabled: false
                     },
-                    series: [{
-                        name: '이전',
-                        data: recent_data
-                    }, {
+                    series: [
+//                        {
+//                        name: '이전',
+//                        data: recent_data
+//                    },
+                        {
                         name: '현재',
                         data: today_data
                     }]

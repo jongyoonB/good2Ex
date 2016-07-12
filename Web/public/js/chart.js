@@ -10,9 +10,18 @@ var set_num = 1;
 var min = 0;
 var loaded;
 
-function loadFirstExercise() {
+function loadFirstExercise(tmp) {
     console.log("LoadFirstExercise");
     orderPlus("");
+}
+
+function reset_exercise(tmp){
+    $.ajax({
+        url: "/main/Delete_result_info",
+        success: function (data) {
+            console.log(data);
+        }
+    });
 }
 
 function orderPlus(temp)//운동 하나 끝나면 aPlus 호출해서 숫자 올림
@@ -64,7 +73,7 @@ function exerciseGet() {
             + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;<span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_set + "'>" + routine[order].number_of_set + "</span>";
         document.getElementById('information_count').innerHTML =
             "<span style='font-size: 25px;color: white;font-size: 20px;'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
-            + '<span style="color: white">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_count + "'>" + routine[order].number_of_count + "</span>";
+            + '<span style="color: white; font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_count + "'>" + routine[order].number_of_count + "</span>";
 
         counter();
         clear_score = Number(routine[order].number_of_count);
@@ -220,8 +229,6 @@ function send_score(score, fail_body_point) { // 점수 받아옴
                     console.log("finish Exercise");
                     //location.href="jycom.asuscomm.com:5080/main/exercise_Result";
                     u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
-
-
                 }
                 else {
                     newVal = 0;
@@ -232,13 +239,14 @@ function send_score(score, fail_body_point) { // 점수 받아옴
             }
             else{
                 setTimeout(set_score(), 1000);
+                insert_set(set_num);
             }
             //ready -> current_ex_name -> setGet / scoreGet
 
-            insert_set(set_num);
 
         }
 
+        console.log("fail point : " + fail_body_point);
         $.ajax({
             type: "post",
             url: "/main/insert_check_point",
@@ -289,7 +297,7 @@ function init_score(score) {
 function insert_set(set_num) {
     document.getElementById('information_set').innerHTML =
         "<span style='font-size:20px;'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
-        + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_set + "'>" + routine[order].number_of_set + "</span>";
+        + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + clear_set + "'>" + clear_set + "</span>";
     counter();
 }
 
@@ -328,8 +336,9 @@ function progress_bars() {
                     width = 0;
                     $("#myBar").css("width", width + "%");
                     $("#runner").css("width", width + "%");
-                    //clearInterval(id);
+
                     document.getElementById("percent").innerHTML = 0 + '%';
+                    clearInterval(id);
                 }, 1000);
             }
 

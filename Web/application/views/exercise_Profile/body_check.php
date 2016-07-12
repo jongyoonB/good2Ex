@@ -192,7 +192,7 @@
                     enabled: false
                 },
                 tooltip: {
-                    valueSuffix: 'kg'
+                    valueSuffix: null
                 },
                 series: [{
                     name: 'BMI',
@@ -222,6 +222,7 @@
         /* Move down content because we have a fixed navbar that is 50px tall */
         body {
             padding-top: 50px;
+
         }
 
         /*
@@ -348,8 +349,6 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="/main/exercise_Go"  style="font-family: HANYG0230">운동시작</a></li>
-                <li><a href="/main/exercise_Free"  style="font-family: HANYG0230">자유게시판</a></li>
-                <li><a href="/main/exercise_QnA"  style="font-family: HANYG0230">QNA</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -397,8 +396,26 @@
             <!-- Tab panes -->
             <div class="tab-content" style="border-color: #e5e5e5; border-style: solid; border-width: 0px 1px 1px 1px;">
                 <div class="tab-pane active" id="graph">
-                    <p style="font-family: HANYG0230;padding: 10px; padding-left: 20px; padding-top: 20px; border-bottom: 1px solid #eee; font-size: 25px">
+                    <p style="font-family: HANYG0230; padding-left: 20px; padding-top: 20px; margin: 0; border-bottom: 1px solid #eee; font-size: 25px">
                         BMI</p>
+
+                    <form class="form-horizontal" style="background-color: #eee">
+                        <div class="form-group"
+                             style="padding:0; padding-bottom:20px;padding-top:20px; font-family: HANYG0230; font-size: 20px;">
+                            <div class="col-lg-6">
+                                <div class="col-md-4">
+                                    <h2 style="margin-top: -3px">몸무게:</h2>
+                                </div>
+                                <div class="input-group">
+                                    <input type="text" id="people_weight" class="form-control" placeholder="몸무게를 입력해주세요">
+                                        <span class="input-group-btn">
+                                         <button class="btn btn-default" type="button" onclick="weight()">입력</button>
+                                         </span>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                        </div>
+                    </form>
+
                     <div id="container" style="width: 90%; margin: auto"></div>
 
                     <p style="font-family: HANYG0230;padding: 10px; padding-left: 20px; padding-top: 30px; border-bottom: 1px solid #eee; font-size: 25px">
@@ -543,6 +560,26 @@
 
 <script src="/public/graph/highcharts.js" language="JavaScript"></script>
 <script src="/public/graph/drilldown.js" language="JavaScript"></script>
+<script>
+    $(document).ready(function () {
+    });
+    function weight(){
+        var people_weight = $('#people_weight').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/main/exercise_weight",
+            data: {
+                people_weight: people_weight
+            }, success: function (data) {
+                location.href = "http://localhost/main/exercise_Bodycheck";
+
+            },error: function (err) {
+                location.href = "http://localhost/main/exercise_Bodycheck";
+            }
+        });
+    }
+</script>
 </body>
 </html>
 

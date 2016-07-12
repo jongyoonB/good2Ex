@@ -167,7 +167,9 @@ class Exercise extends CI_Model
                 FROM exercise_record r, exercise_info i
                 WHERE r.exercise_numb = i.exercise_numb
                 and user_numb = ?
-                and r.exercise_date < ?
+                and r.exercise_date <= ?
+                and not i.exercise_numb = 1
+                and not i.exercise_numb = 4
                 GROUP BY r.exercise_numb;";
         $query = $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $today));
 
@@ -189,7 +191,9 @@ class Exercise extends CI_Model
                 FROM exercise_record r, exercise_info i
                 WHERE r.exercise_numb = i.exercise_numb
                 and r.user_numb = ?
-                and r.exercise_date < ?
+                and r.exercise_date <= ?
+                and not i.exercise_numb = 1
+                and not i.exercise_numb = 4
                 GROUP BY r.exercise_numb, r.exercise_date;";
 
         $query = $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $today));
@@ -444,6 +448,24 @@ where er.exercise_numb = ei.exercise_numb
 
     }
 
+    function Delete_check_point($today){
+
+        $sql = "DELETE FROM user_position_record
+                WHERE position_check_date = ?
+                AND user_numb = ?;";
+
+        $this->db->query($sql, array($today, $_SESSION["user_info"]->user_numb));
+
+
+        $sql = "UPDATE exercise_record
+                SET clear_count = 0
+                WHERE user_numb= ?
+                AND exercise_date = ?;";
+
+        $this->db->query($sql, array($_SESSION["user_info"]->user_numb, $today));
+
+
+    }
 
     function Exercise_routine_complete($exercise_count, $user_num, $select_routine, $day)
     {
@@ -598,12 +620,98 @@ and u.user_numb = ? order by o.exercise_order";
         $this->db->query($sql);
     }
 
-    function update_exercise($u_num, $nowdate, $nextdate)
+    function update_exercise($date, $exercise_numb, $number_of_set, $number_of_count)
     {
-        $sql = "UPDATE user_routine_info SET routine_date = '{$nextdate}' WHERE user_numb= {$u_num} AND routine_date = '{$nowdate}'";
-        $this->db->query($sql);
-        $sql = "UPDATE exercise_record SET exercise_date = '{$nextdate}' WHERE user_numb = {$u_num} AND exercise_date = '{$nowdate}'";
-        $this->db->query($sql);
+        if (count($exercise_numb) == 2) {
+            $target_count[0] = $number_of_set[0] * $number_of_count[0];
+            $target_count[1] = $number_of_set[1] * $number_of_count[1];
+
+            //return $target_count;
+
+            $sql = "UPDATE exercise_repeat_numb
+                    SET number_of_count = ?, number_of_set = ?
+                    WHERE numb_set_index = 8";
+
+            $this->db->query($sql, array($number_of_count[0], $number_of_set[0]));
+
+            $sql = "UPDATE exercise_repeat_numb
+                    SET number_of_count = ?, number_of_set = ?
+                    WHERE numb_set_index = 9";
+
+            $query = $this->db->query($sql, array($number_of_count[1], $number_of_set[1]));
+
+            if ($query)
+                $sql = "delete from exercise_record
+                    WHERE user_numb = 2 and exercise_date = ?";
+
+            $this->db->query($sql, array($date));
+
+            $sql = "insert into exercise_record
+                    (user_numb, exercise_numb, target_count, clear_count, exercise_date)
+                    VALUES (2, 2, ?, 0, ?)";
+
+            $this->db->query($sql, array($target_count[0], $date));
+
+
+            $sql = "insert into exercise_record
+                    (user_numb, exercise_numb, target_count, clear_count, exercise_date)
+                    VALUES (2, 3, ?, 0, ?)";
+
+            $this->db->query($sql, array($target_count[1], $date));
+
+            $sql = "UPDATE user_routine_info
+                    SET routine_list_index = 9
+                    WHERE user_numb = 2
+                    and routine_date = ?";
+
+            $this->db->query($sql, array($date));
+
+
+        } elseif (count($exercise_numb) == 1) {
+
+            $target_count = $number_of_set[0] * $number_of_count[0];
+
+            if ($exercise_numb[0] == 2) {
+                $sql = "UPDATE exercise_repeat_numb
+                    SET number_of_count = ?, number_of_set = ?
+                    WHERE numb_set_index = 8";
+
+                $this->db->query($sql, array($number_of_count[0], $number_of_set[0]));
+
+                $sql = "UPDATE user_routine_info
+                    SET routine_list_index = 10
+                    WHERE user_numb = 2
+                    and routine_date = ?";
+
+                $this->db->query($sql, array($date));
+
+            } elseif ($exercise_numb[0] == 3) {
+
+                $sql = "UPDATE exercise_repeat_numb
+                    SET number_of_count = ?, number_of_set = ?
+                    WHERE numb_set_index = 9";
+                $this->db->query($sql, array($number_of_count[0], $number_of_set[0]));
+
+                $sql = "UPDATE user_routine_info
+                    SET routine_list_index = 11
+                    WHERE user_numb = 2
+                    and routine_date = ?";
+
+                $this->db->query($sql, array($date));
+            }
+
+            $sql = "delete from exercise_record
+                    WHERE user_numb = 2 and exercise_date = ?";
+
+            $this->db->query($sql, array($date));
+
+
+            $sql = "insert into exercise_record
+                    (user_numb, exercise_numb, target_count, clear_count, exercise_date)
+                    VALUES (2, ?, ?, 0, ?)";
+
+            $this->db->query($sql, array($exercise_numb[0], $target_count, $date));
+        }
     }
 
     function get_calorie_info($exercise_time)

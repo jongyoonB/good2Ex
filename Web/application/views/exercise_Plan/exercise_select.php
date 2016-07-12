@@ -210,8 +210,6 @@ if (isset($_SESSION["user_info"])) {
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="/main/exercise_Go" style="font-family: HANYG0230">운동시작</a></li>
-                    <li><a href="/main/exercise_Free" style="font-family: HANYG0230">자유게시판</a></li>
-                    <li><a href="/main/exercise_QnA" style="font-family: HANYG0230">QNA</a></li>
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

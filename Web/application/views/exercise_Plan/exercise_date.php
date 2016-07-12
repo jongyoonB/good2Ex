@@ -19,6 +19,7 @@ exercise_date 정보로 달력에 표시
             font-family: HANYG0230;
             src: url('../../../public/fonts/HANYGO230.ttf'); format('truetype');
         }
+
         a:hover {
             color: blue;
             text-decoration: none
@@ -74,8 +75,6 @@ exercise_date 정보로 달력에 표시
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="/main/exercise_Go" style="font-family: HANYG0230">운동시작</a></li>
-                <li><a href="/main/exercise_Free" style="font-family: HANYG0230">자유게시판</a></li>
-                <li><a href="/main/exercise_QnA" style="font-family: HANYG0230">QNA</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -95,9 +94,10 @@ exercise_date 정보로 달력에 표시
             날짜선택</a></span>
     <span class="fa fa-check-square-o list-group-item" style="width: 100%" aria-hidden="true"><a href="#">
             계획완료</a></span>
-    <button type="button" id="nextButton" class="btn btn-success" style="text-align: center;font-family: HANYG0230;background-color: palevioletred; margin-top: 10px">날짜 선택 완료</button>
+    <button type="button" id="nextButton" class="btn btn-success"
+            style="text-align: center;font-family: HANYG0230;background-color: palevioletred; margin-top: 10px">날짜 선택 완료
+    </button>
 </div>
-
 
 
 <div style="margin:auto; width:80%; margin-bottom: 10px; float: left">
@@ -241,55 +241,155 @@ exercise_date 정보로 달력에 표시
         });
     });
 
-    function update_Exercise()
-    {
+    function update_Exercise() {
         var date = $('#exercise_hidden_date').val();
+
         var year = date.substring(0, 4);
         var month = date.substring(5, 7);
         var day = date.substring(8, date.length);
 
+        console.log(typeof date);
+
         $('.modal-content').html("<div class='modal-header'>" +
             "<button type='button' class='close'><span aria-hidden='true'>×</span><span class='sr-only'>Close</span></button>" +
-            "<h4 class='modal-title' id='myModalLabel'>Modal title</h4>" +
+            "<h4 class='modal-title' id='myModalLabel'>운동계획 수정</h4>" +
             "</div>" +
             "<div class='modal-body' id='exercise_modal'>" +
-            "<input type='hidden' id='click_date'>" +
-            "<input type='date' id='exercise_update_date'>" +
+            "<div class='row'>" +
+            "<div class='col-md-offset-1 col-md-11'>" +
+            "<label class='checkbox-inline'>" +
+            "<input type='checkbox' name='exercise_numb' value='2'> 덤벨 숄더 프레스" +
+            "</label>" +
             "</div>" +
+            "</div><br>" +
+            "<div class='row'>" +
+            "<div class='col-md-offset-1 col-md-3'>" +
+            "<label for='set_num'>세트 수</label>" +
+            "<select class='form-control' id='set_num2'>" +
+            "<option value='selected'>선택</option>" +
+            "<option>1</option>" +
+            "<option>2</option>" +
+            "<option>3</option>" +
+            "<option>4</option>" +
+            "<option>5</option>" +
+            "</select>" +
+            "</div>" +
+            "<div class='col-md-3'>" +
+            "<label for='set_of_num'>셋트당 횟수</label>" +
+            "<select class='form-control' id='set_of_num2'>" +
+            "<option value='selected'>선택</option>" +
+            "<option>1</option>" +
+            "<option>2</option>" +
+            "<option>3</option>" +
+            "<option>4</option>" +
+            "<option>5</option>" +
+            "<option>6</option>" +
+            "<option>7</option>" +
+            "<option>8</option>" +
+            "<option>9</option>" +
+            "<option>10</option>" +
+            "</select>" +
+            "</div>" +
+            "</div><br><br>" +
+            "<div class='row'>" +
+            "<div class='col-md-offset-1 col-md-11'>" +
+            "<label class='checkbox-inline'>" +
+            "<input type='checkbox' name='exercise_numb' value='3'> 사이드 레터럴 레이즈" +
+            "</label>" +
+            "</div>" +
+            "</div><br>" +
+            "<div class='row'>" +
+            "<div class='col-md-offset-1 col-md-3'>" +
+            "<label for='set_num'>세트 수</label>" +
+            "<select class='form-control' id='set_num3'>" +
+            "<option value='selected'>선택</option>" +
+            "<option>1</option>" +
+            "<option>2</option>" +
+            "<option>3</option>" +
+            "<option>4</option>" +
+            "<option>5</option>" +
+            "</select>" +
+            "</div>" +
+            "<div class='col-md-3'>" +
+            "<label for='set_of_num'>셋트당 횟수</label>" +
+            "<select class='form-control' id='set_of_num3'>" +
+            "<option value='selected'>선택</option>" +
+            "<option>1</option>" +
+            "<option>2</option>" +
+            "<option>3</option>" +
+            "<option>4</option>" +
+            "<option>5</option>" +
+            "<option>6</option>" +
+            "<option>7</option>" +
+            "<option>8</option>" +
+            "<option>9</option>" +
+            "<option>10</option>" +
+            "</select>" +
+            "</div>" +
+            "</div>"+
+            "<br>" +
             "<div class='modal-footer'>" +
             "<button type='button' class='btn btn-default' onclick='update_ExerciseR()'>확인</button>" +
+            "<input type='hidden' id='exercise_hidden_date'>" +
             "</div>");
-        $('#click_date').attr({value: date});
 
+        $('#exercise_hidden_date').val(date);
     }
 
-    function update_ExerciseR()
-    {
-        var date = $('#exercise_update_date').val();
-        var click = $('#click_date').val();
+    function update_ExerciseR(date) {
+        var date = $('#exercise_hidden_date').val();
+        //console.log(date);
+        var selected_exercise = document.getElementsByName("exercise_numb");
+
+        var exercise_numb = new Array();
+        var set_num = new Array();
+        var set_of_num = new Array();
+
+        //console.log(typeof date);
+
+        if (document.getElementById("set_num2").value != 'selected')
+            set_num.push(document.getElementById("set_num2").value);
+        if (document.getElementById("set_num3").value != 'selected')
+            set_num.push(document.getElementById("set_num3").value);
+        if (document.getElementById("set_of_num2").value != 'selected')
+            set_of_num.push(document.getElementById("set_of_num2").value);
+        if (document.getElementById("set_of_num3").value != 'selected')
+            set_of_num.push(document.getElementById("set_of_num3").value);
+
+        for (var i = 0; i < selected_exercise.length; i++) {
+            if (selected_exercise[i].checked)
+                exercise_numb.push(selected_exercise[i].value);
+        }
+
+
+        console.log(date);
+        console.log(exercise_numb);
+        console.log(set_num);
+        console.log(set_of_num);
 
         $.ajax({
             type: "post",
             url: '/main/update_exercise',
             data: {
-                date: click, nextdate: date
+                date : date,
+                exercise_numb: exercise_numb,
+                set_num: set_num,
+                set_of_num: set_of_num
             },
             dataType: 'json',
-            success: function(data) {
-                location.href="http://jycom.asuscomm.com:5080/main/exercise_Beginner_date";
+            success: function (data) {
+                console.log(data);
+                location.href = "exercise_date";
             },
-            error: function(err) {
-                location.href="http://jycom.asuscomm.com:5080/main/exercise_Beginner_date";
+            error: function (err) {
+                console.log(err);
             }
         });
     }
 
-    function delete_Exercise()
-    {
+    function delete_Exercise() {
         var date = $('#exercise_hidden_date').val();
-        var year = date.substring(0, 4);
-        var month = date.substring(5, 7);
-        var day = date.substring(8, date.length);
+
         $.ajax({
             type: "post",
             url: '/main/delete_exercise',
@@ -297,54 +397,14 @@ exercise_date 정보로 달력에 표시
                 date: date
             },
             dataType: 'json',
-            success: function(data) {
-                location.href="http://jycom.asuscomm.com:5080/main/exercise_Beginner_date";
+            success: function (data) {
+                location.href = "exercise_date";
             },
-            error: function(err) {
-                location.href="http://jycom.asuscomm.com:5080/main/exercise_Beginner_date";
+            error: function (err) {
+                location.href = "exercise_date";
             }
         });
     }
-
-
-    //    function hover($date) {
-    //        console.log($date);
-    //
-    //        var date = String($date);
-    //        var year = date.substring(0, 4);
-    //        var month = date.substring(4, 6);
-    //        var day = date.substring(6, date.length);
-    //
-    //        date = year + '-' + month + '-' + day;
-    //
-    //        $.ajax({
-    //            type: "post",
-    //            url: '/main/get_exercise_plan',
-    //            data: {
-    //                date: date
-    //            },
-    //            dataType: 'json',
-    //            success: function (data) {
-    //                console.log(data);
-    //
-    //
-    //                var title = $( "#"+day ).attr( "data-content", "dd");
-    //            },
-    //            error: function (data, error, result) {
-    //                console.log(data);
-    //                console.log(result);
-    //                console.log(error);
-    //            }
-    //        });
-    //
-    //    }
-    //    $(document).ready(function(){
-    //console.log("d");
-    //        $('[data-toggle="popover"]').popover({
-    //            trigger: 'hover',
-    //            title : "운동 계획"
-    //        });
-    //    });
 </script>
 
 <div></div>

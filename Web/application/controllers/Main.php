@@ -124,6 +124,13 @@ class Main extends CI_Controller
         echo json_encode($k);
     }
 
+    public function Delete_result_info(){
+        $this->load->model('Exercise');
+
+        $today = date("Y-m-d");
+        $this->Exercise->Delete_check_point($today);
+    }
+
     public function numPlus()
     {
         echo json_encode($_SESSION["now_routine"]);
@@ -165,12 +172,15 @@ class Main extends CI_Controller
 
     public function update_exercise()
     {
-        $user_num = $_SESSION['user_info']->user_numb;
-        $nowdate = $_POST['date'];
-        $nextdate = $_POST['nextdate'];
+        $date = $_REQUEST['date'];
+        $exercise_name = $_REQUEST['exercise_numb'];
+        $number_of_set = $_REQUEST['set_num'];
+        $number_of_count = $_REQUEST['set_of_num'];
 
         $this->load->model('Exercise');
-        $this->Exercise->update_exercise($user_num,$nowdate,$nextdate);
+        $result=$this->Exercise->update_exercise($date, $exercise_name, $number_of_set, $number_of_count);
+
+        echo json_encode($result);
     }
 
     public function exercise_Beginner_date($year = null, $month = null){
@@ -308,7 +318,7 @@ class Main extends CI_Controller
 
         $data['achievement_count'] = $this->Exercise->exercise_Result($today);
         $data['position_check_on_today'] = $this->Exercise->get_position_check_on_today($today);
-        $data['position_check_on_another_day'] = $this->Exercise->get_position_check_on_another_day($today);
+        //$data['position_check_on_another_day'] = $this->Exercise->get_position_check_on_another_day($today);
         $result = $this->Exercise->get_calorie_info($exercise_time);
 
         $data['calorie_info'] = 0;
@@ -327,6 +337,31 @@ class Main extends CI_Controller
     public function exercise_Free()
     {
         $this->load->view('exercise_Freeboard/index');
+    }
+
+    public function exercise_weight()
+    {
+        if ($_POST) {
+            $people_weight = $_POST['people_weight'];
+            $today = date("Y-m-d");
+
+            $this->load->model('Weight');
+            $this->load->model('Weight');
+
+            $result = $this->Weight->insert_weight($people_weight, $today);
+
+            $type = gettype($result);
+
+            if ($type == "array") {
+                $data = $result;
+            } else
+                $data = "데이터가 없습니다.";
+
+            echo json_encode($data);
+
+        } else
+            echo "error";
+
     }
 
 }

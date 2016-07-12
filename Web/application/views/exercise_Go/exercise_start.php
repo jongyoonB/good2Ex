@@ -300,7 +300,7 @@
         // run the currently selected effect
         function runEffect(part) {
             // run the effect
-            console.log("run effect : " + part);
+            //console.log("run effect : " + part);
             $(part).show("scale", "percent: 100", 50);
 
             callback(part);
@@ -313,142 +313,101 @@
             }, 300);
         }
 
-        function rand(start, end)
+
+        var socket = io('http://127.0.0.1:3000');
+        socket.on('fromserver', function () {
+            console.log('socket connected');
+            socket.emit('fromclient', 'Hello From WEB');
+        });
+
         {
-            return Math.floor((Math.random() * (end-start+1)) + start);
+            socket.on('toWeb', function (data) {
+                if(UnityLoaded && data != null){
+
+                    var part_num = parseInt(data.data.toString().substr(0, 4), 2); //1, 2
+                    var power = parseInt(data.data.toString().substr(4, 12), 2); // data : 0~1024
+
+                    if(power != 0){
+                        var part;
+
+                        if(part_num == 1){
+                            if(current_ex_name == "Dumbel"){
+                                if(power >= 500){
+                                    console.log("send Muscle Failed Message to " + current_ex_name);
+                                    u.getUnity().SendMessage("CoordinateMapper", "muscleFail", "");
+                                }
+                            }
+                            else if(current_ex_name == "Side"){
+                                if(power >= 600){
+                                    console.log("send Muscle Failed Message to " + current_ex_name);
+                                    u.getUnity().SendMessage("CoordinateMapper", "muscleFail", "");
+                                }
+                            }
+                        }
+
+
+
+                        if (part_num == 1)
+                            part = '#deltoid_left';
+                        else if (part_num == 2)
+                            part = '#deltoid_right';
+
+                        //console.log("part name : " + part);
+
+
+                        if (power <= 341) {
+                            $(part).css("width", "16px");
+                            $(part).css("height", "16px");
+                            $(part).css('background-color', '#66b132');
+                            $(part).css("box-shadow", "0px 0px 10px #66b132");
+                        }
+                        else if (power <= 682) {
+                            $(part).css("width", "32px");
+                            $(part).css("height", "32px");
+                            $(part).css('background-color', '#f9bb04');
+                            $(part).css("box-shadow", "0px 0px 10px #f9bb04");
+                        }
+                        else if (power <= 1024) {
+                            $(part).css("width", "48px");
+                            $(part).css("height", "48px");
+                            $(part).css('background-color', '#a8184b');
+                            $(part).css("box-shadow", "0px 0px 10px #a8184b");
+                        }
+
+                        if(part_num == 1 && power <= 341){
+                            $(part).css("top", "26.5%");
+                            $(part).css("left", "23.5%");
+                        }
+                        else if(part_num == 1 && power <= 682){
+                            $(part).css("top", "25.5%");
+                            $(part).css("left", "22.5%");
+                        }
+                        else if(part_num == 1 && power <= 1024){
+                            $(part).css("top", "24%");
+                            $(part).css("left", "21%");
+                        }
+                        else if(part_num == 2 && power <= 341){
+                            $(part).css("top", "21%");
+                            $(part).css("left", "36%");
+                        }
+                        else if(part_num == 2 && power <= 682){
+                            $(part).css("top", "19.5%");
+                            $(part).css("left", "34.5%");
+                        }
+                        else if(part_num == 2 && power <= 1024){
+                            $(part).css("top", "18%");
+                            $(part).css("left", "33%");
+                        }
+
+                        runEffect(part);
+
+                        $("#effect").hide();
+
+                }
+                }
+            });
         }
-        setInterval(function(){
-            if(UnityLoaded){
-                var part_num = parseInt(rand(1,2)); //1, 2
-                var power = parseInt(rand(0,1024)); // data : 0~1024
-                //console.log("part_num : " + part_num);
-                //console.log("power : " + power);
 
-                var part;
-
-                if (part_num == 1)
-                    part = '#deltoid_left';
-
-                else if (part_num == 2)
-                    part = '#deltoid_right';
-
-                console.log("part name : " + part);
-
-
-                if (power <= 341) {
-                    $(part).css("width", "16px");
-                    $(part).css("height", "16px");
-                    $(part).css('background-color', '#66b132');
-                    $(part).css("box-shadow", "0px 0px 10px #66b132");
-                }
-                else if (power <= 682) {
-                    $(part).css("width", "32px");
-                    $(part).css("height", "32px");
-                    $(part).css('background-color', '#f9bb04');
-                    $(part).css("box-shadow", "0px 0px 10px #f9bb04");
-                }
-                else if (power <= 1024) {
-                    $(part).css("width", "48px");
-                    $(part).css("height", "48px");
-                    $(part).css('background-color', '#a8184b');
-                    $(part).css("box-shadow", "0px 0px 10px #a8184b");
-                }
-
-                if(part_num == 1 && power <= 341){
-                    $(part).css("top", "26.5%");
-                    $(part).css("left", "23.5%");
-                }
-                else if(part_num == 1 && power <= 682){
-                    $(part).css("top", "25.5%");
-                    $(part).css("left", "22.5%");
-                }
-                else if(part_num == 1 && power <= 1024){
-                    $(part).css("top", "24%");
-                    $(part).css("left", "21%");
-                }
-                else if(part_num == 2 && power <= 341){
-                    $(part).css("top", "21%");
-                    $(part).css("left", "36%");
-                }
-                else if(part_num == 2 && power <= 682){
-                    $(part).css("top", "19.5%");
-                    $(part).css("left", "34.5%");
-                }
-                else if(part_num == 2 && power <= 1024){
-                    $(part).css("top", "18%");
-                    $(part).css("left", "33%");
-                }
-
-
-
-                runEffect(part);
-
-                $("#effect").hide();
-
-            }
-        }, 1000);
-        if(UnityLoaded){
-            /*var socket = io('http://jycom.asuscomm.com:5300');
-             socket.on('fromserver', function () {
-             console.log('socket connected');
-             socket.emit('fromclient', 'Hello From WEB');
-             });
-
-             socket.on('toWeb', function (data) {
-
-             //var keys;
-             //var muscleData="";
-             //keys = Object.keys(data);
-             //console.log(Object.keys(data.data));
-             //console.log(keys);
-             /!*for(var i in keys){
-             muscleData += data[keys[i].toString()];
-             }
-             console.log('MusclePower Data : '+muscleData);*!/
-
-             //var muscle_part = new Array(4);
-
-             //var part_num = parseInt(data.toString().substr(3,1));
-             //var power = parseInt(data.toString().substr(4,11));
-             var part_num = parseInt(data.data.toString().substr(0, 4), 2); //1, 2
-             var power = parseInt(data.data.toString().substr(4, 11), 2); // data : 0~1024
-             console.log("part_num : " + part_num);
-             //console.log("power : " + power);
-
-             var part;
-
-             if (part_num == 1)
-             part = '#deltoid_left';
-             else if (part_num == 2)
-             part = '#deltoid_right';
-
-             console.log("part name : " + part);
-
-
-             if (power <= 341) {
-             $(part).css("width", "16px");
-             $(part).css("height", "16px");
-             $(part).css('background-color', '#66b132');
-             $(part).css("box-shadow", "0px 0px 10px #66b132");
-             }
-             else if (power <= 682) {
-             $(part).css("width", "32px");
-             $(part).css("height", "32px");
-             $(part).css('background-color', '#f9bb04');
-             $(part).css("box-shadow", "0px 0px 10px #f9bb04");
-             }
-             else if (power <= 1024) {
-             $(part).css("width", "48px");
-             $(part).css("height", "48px");
-             $(part).css('background-color', '#a8184b');
-             $(part).css("box-shadow", "0px 0px 10px #a8184b");
-             }
-
-             runEffect(part);
-
-             $("#effect").hide();
-             });*/
-        }
     });
 </script>
 </body>
