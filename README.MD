@@ -20,16 +20,16 @@ Kinectを利用し既存のパーソナルトレーナの長所に加えて家�
  * KinemotoSDK
 
 
-![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e1-300x192.png)  
+![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e1.png)  
 
-![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e2-300x192.png)  
+![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e2.png)  
 
-![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e3-300x176.png)  
+![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e3.png)  
 
-![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e4-300x207.png)  
+![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e4.png)  
 
-![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e5-300x182.png)  
+![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e5.png)  
 
-![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e6-300x198.png)  
+![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e6.png)  
 
 <a href="http://jycom.asuscomm.com:5080" target="_blank">Live Preview</a>
