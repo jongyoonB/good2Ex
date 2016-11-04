@@ -522,7 +522,7 @@ public class SideCoordinator : MonoBehaviour
     {
         if (!MessageController.GetComponent<AudioSource>().isPlaying)
         {
-            if (side.MSGorder > 0)
+            if (side.MSGorder >= 0)
             {
                 playMSGClip(side.MSGorder);
                 side.MSGorder = -1;
@@ -691,7 +691,7 @@ public class SideCoordinator : MonoBehaviour
     {
         Application.ExternalCall("screenResize", "ok");
         Application.ExternalCall("sendTest", "LoadScene");
-
+        playMSGClip(1);
         Application.ExternalCall("send_time", set_time);
         msg2Web(scene);
         msg2Web((scene == "end").ToString());

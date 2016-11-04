@@ -180,7 +180,6 @@ public class DumbelCheck
         LeftArmMuscle[1] = true;
         RightArmMuscle[0] = true;
         RightArmMuscle[1] = true;
-
     }
 
     public void main()
@@ -965,37 +964,21 @@ public class DumbelCheck
     public void Sound_Controller()
     {
 
-        if (judgment[0] + judgment[1] + judgment[2] + judgment[3] == 4)
+        if (judgment[0] + judgment[1] == 2)
         {
             MSGorder = 7;
         }
         
-        else if (judgment[2] + judgment[3] == 2)
-        {
-            //MSGorder = 2;
-        }
-        else if (judgment[0] + judgment[1] == 2)
-        {
-            //MSGorder = 4;
-        }
-       
-        else if (judgment[2] == 1)
+        else if (judgment[0] == 1)
         {
             MSGorder = 10;
         }
-        else if (judgment[3] == 1)
+        else if (judgment[1] == 1)
         {
             MSGorder = 13;
         }
-        else if (judgment[0] == 1)
-        {
-            //MSGorder = 12;
-        }
-        else if (judgment[1] == 1)
-        {
-            //MSGorder = 15;
-        }
-        else
+
+        else if(judgment[0] + judgment[1] + judgment[2] + judgment[3] + judgment[4] + judgment[5] == 0)
         {
             MSGorder = 6;
         }

@@ -487,7 +487,7 @@ public class DumbelCoordinator : MonoBehaviour
     {
         if (!MessageController.GetComponent<AudioSource>().isPlaying)
         {
-            if (dumbel.MSGorder > 0)
+            if (dumbel.MSGorder >= 0)
             {
                 playMSGClip(dumbel.MSGorder);
                 dumbel.MSGorder = -1;
@@ -636,7 +636,7 @@ public class DumbelCoordinator : MonoBehaviour
     {
         Application.ExternalCall("screenResize", "ok");
         Application.ExternalCall("sendTest", "LoadScene");
-
+        playMSGClip(1);
         msg2Web(scene);
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();

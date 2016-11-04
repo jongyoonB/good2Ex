@@ -27,3 +27,17 @@ ERROR - 2016-07-12 12:35:57 --> Severity: Notice --> Undefined index: time E:\20
 ERROR - 2016-07-12 12:43:29 --> 404 Page Not Found: Faviconico/index
 ERROR - 2016-07-12 12:43:29 --> 404 Page Not Found: Faviconico/index
 ERROR - 2016-07-12 12:44:12 --> Severity: Notice --> Undefined index: time E:\2016 3WDJ Project\project\application\controllers\Main.php 303
+ERROR - 2016-07-12 12:53:45 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 12:53:45 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 13:32:59 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 13:32:59 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 14:09:46 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 14:09:46 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 14:14:07 --> Severity: Notice --> Undefined index: time E:\2016 3WDJ Project\project\application\controllers\Main.php 303
+ERROR - 2016-07-12 23:20:26 --> 404 Page Not Found: Public/css
+ERROR - 2016-07-12 23:20:26 --> 404 Page Not Found: Public/css
+ERROR - 2016-07-12 23:20:47 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 23:20:47 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 23:33:26 --> Severity: Notice --> Undefined index: time E:\2016 3WDJ Project\project\application\controllers\Main.php 303
+ERROR - 2016-07-12 23:51:59 --> 404 Page Not Found: Faviconico/index
+ERROR - 2016-07-12 23:51:59 --> 404 Page Not Found: Faviconico/index

@@ -9,13 +9,16 @@ var sended_score = 0;
 var set_num = 1;
 var min = 0;
 var loaded;
+var information_set;
+var information_count;
 
-function loadFirstExercise(tmp) {
+function loadFirstExercise() {
     console.log("LoadFirstExercise");
     orderPlus("");
+
 }
 
-function reset_exercise(tmp){
+function reset_exercise(){
     $.ajax({
         url: "/main/Delete_result_info",
         success: function (data) {
@@ -54,26 +57,42 @@ function counter() {
 }
 
 
-//$('#dd').click(function () {
-//    var a = $(".counter").attr("data-stop");
-//    a ++;
-//    $(".counter").attr("data-stop", a);
-//    $('.counter').counter();
-//});
-
 function exerciseGet() {
+
+    information_set= $('#information_set').FlipClock(0, {
+        clockFace: 'MinuteCounter'
+    });
+
+    information_count= $('#information_count').FlipClock(0, {
+        clockFace: 'MinuteCounter'
+    });
+
+    information_set.stop();
+    information_count.stop();
+
+    var set_ = (set_num*6)+routine[order].number_of_set;
+    var score = (sended_score*6)+routine[order].number_of_count;
+
+    information_set.setTime(set_);
+    information_count.setTime(score);
+
+    $('.seconds').html("<span style='font-size: 80px'>/</span>");
+
     console.log("order" + order + " / " + final_order);
     final_order = Number(routine.length);
     if (order < final_order) {
+
         document.getElementById('information').innerHTML =
             '<span style="font-size: 35px;color: gold">' + routine[order].exercise_name + '</span>';
-        document.getElementById('information_set').innerHTML =
+        /*
+         document.getElementById('information_set').innerHTML =
 
-            "<span style='font-size: 25px;color: white'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
-            + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;<span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_set + "'>" + routine[order].number_of_set + "</span>";
-        document.getElementById('information_count').innerHTML =
-            "<span style='font-size: 25px;color: white;font-size: 20px;'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
-            + '<span style="color: white; font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_count + "'>" + routine[order].number_of_count + "</span>";
+         "<span style='font-size: 25px;color: white'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
+         + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;<span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_set + "'>" + routine[order].number_of_set + "</span>";
+         document.getElementById('information_count').innerHTML =
+         "<span style='font-size: 25px;color: white;font-size: 20px;'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
+         + '<span style="color: white; font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + routine[order].number_of_count + "'>" + routine[order].number_of_count + "</span>";
+         */
 
         counter();
         clear_score = Number(routine[order].number_of_count);
@@ -205,10 +224,12 @@ function sendTest(msg) {
  }*/
 
 function set_score(){
-    document.getElementById('information_count').innerHTML =
-        "<span style='font-size: 20px'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
-        + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + clear_score + "'>" + clear_score + "</span>";
-    counter();
+    var score = (sended_score*60)+clear_score;
+    information_count.setTime(score);
+    /*document.getElementById('information_count').innerHTML =
+     "<span style='font-size: 20px'> 운동횟수 </span><span class='counter counter-analog' id='count_num' data-direction='up' data-format='99' data-stop='" + sended_score + "'>" + sended_score + "</span>"
+     + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_count' data-direction='up' data-format='99' data-stop='" + clear_score + "'>" + clear_score + "</span>";
+     */counter();
     console.log("Printed Score = " + sended_score);
 }
 
@@ -229,6 +250,8 @@ function send_score(score, fail_body_point) { // 점수 받아옴
                     console.log("finish Exercise");
                     //location.href="jycom.asuscomm.com:5080/main/exercise_Result";
                     u.getUnity().SendMessage("CoordinateMapper", "LoadScene", "end");
+
+
                 }
                 else {
                     newVal = 0;
@@ -295,10 +318,12 @@ function init_score(score) {
 }
 
 function insert_set(set_num) {
-    document.getElementById('information_set').innerHTML =
-        "<span style='font-size:20px;'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
-        + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + clear_set + "'>" + clear_set + "</span>";
-    counter();
+    var set = (set_num*60)+clear_set;
+    information_set.setTime(set);
+    /*document.getElementById('information_set').innerHTML =
+     "<span style='font-size:20px;'> 세트수 </span><span class='counter counter-analog' id='set_num' data-direction='up' data-format='99' data-stop='" + set_num + "'>" + set_num + "</span>"
+     + '<span style="color: white;font-size: 20px;">&nbsp;/&nbsp;</span>' + "<span class='counter counter-analog' id='number_of_set' data-direction='up' data-format='99' data-stop='" + clear_set + "'>" + clear_set + "</span>";
+     */counter();
 }
 
 function move_Page(temp) {

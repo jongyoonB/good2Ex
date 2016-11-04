@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.11, for Linux (i686)
+-- MySQL dump 10.16  Distrib 10.1.13-MariaDB, for Win32 (AMD64)
 --
 -- Host: localhost    Database: exercise
 -- ------------------------------------------------------
--- Server version       5.7.11
+-- Server version	10.1.13-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,18 +18,17 @@
 --
 -- Table structure for table `battle_record`
 --
-use exercise;
+
 DROP TABLE IF EXISTS `battle_record`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `battle_record` (
-  `battle_record_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ÀÎµ¦½º',
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø ¹øÈ£',
-  `fuser_numb` int(11) NOT NULL COMMENT 'Ä£±¸ È¸¿ø ¹øÈ£',
-  `start_date` date NOT NULL COMMENT '½ÃÀÛ ³¯Â¥',
-  `end_date` date NOT NULL COMMENT 'Á¾·á ³¯Â¥',
-  `result` tinyint(4) NOT NULL COMMENT '°á°ú',
-
+  `battle_record_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ì¸ë±ìŠ¤',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì› ë²ˆí˜¸',
+  `fuser_numb` int(11) NOT NULL COMMENT 'ì¹œêµ¬ íšŒì› ë²ˆí˜¸',
+  `start_date` date NOT NULL COMMENT 'ì‹œì‘ ë‚ ì§œ',
+  `end_date` date NOT NULL COMMENT 'ì¢…ë£Œ ë‚ ì§œ',
+  `result` tinyint(4) NOT NULL COMMENT 'ê²°ê³¼',
   PRIMARY KEY (`battle_record_numb`,`user_numb`,`fuser_numb`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -52,11 +51,11 @@ DROP TABLE IF EXISTS `board`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `board` (
-  `article_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ÀÎµ¦½º',
+  `article_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ì¸ë±ìŠ¤',
   `user_numb` int(11) DEFAULT NULL,
-  `board_category` int(11) NOT NULL COMMENT 'Ä«Å×°í¸®',
-  `title` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '±Û Á¦¸ñ',
-  `content` mediumtext COLLATE utf8_unicode_ci NOT NULL COMMENT '±Û ³»¿ë',
+  `board_category` int(11) NOT NULL COMMENT 'ì¹´í…Œê³ ë¦¬',
+  `title` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ê¸€ ì œëª©',
+  `content` mediumtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'ê¸€ ë‚´ìš©',
   PRIMARY KEY (`article_numb`),
   KEY `user_numb` (`user_numb`),
   CONSTRAINT `board_ibfk_1` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -69,8 +68,7 @@ CREATE TABLE `board` (
 
 LOCK TABLES `board` WRITE;
 /*!40000 ALTER TABLE `board` DISABLE KEYS */;
-
-INSERT INTO `board` VALUES (17,1,1,'¤¾¤¾¤¾¤¾ ´ÙÀÌ¾îÆ® ¼º°ø!!!!',''),(18,2,2,'¾î±ú¸¦ Å°¿ì°í ½ÍÀºµ¥ ¾î¶² ¿îµ¿À» ÇØ¾ßÇÏ³ª¿ä?',''),(19,3,1,'´ıº§ ½Ã ÁÖÀÇ»çÇ×',''),(20,4,2,'¤Ğ¤Ğ¤Ğ µµ¿ÍÁÖ¼¼¿ä','');
+INSERT INTO `board` VALUES (17,1,1,'ã…ã…ã…ã… ë‹¤ì´ì–´íŠ¸ ì„±ê³µ!!!!',''),(18,2,2,'ì–´ê¹¨ë¥¼ í‚¤ìš°ê³  ì‹¶ì€ë° ì–´ë–¤ ìš´ë™ì„ í•´ì•¼í•˜ë‚˜ìš”?',''),(19,3,1,'ë¤ë²¨ ì‹œ ì£¼ì˜ì‚¬í•­',''),(20,4,2,'ã… ã… ã…  ë„ì™€ì£¼ì„¸ìš”','');
 /*!40000 ALTER TABLE `board` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,14 +80,13 @@ DROP TABLE IF EXISTS `challenge_complete_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `challenge_complete_list` (
-  `challenge_numb` int(11) NOT NULL COMMENT 'µµÀü °úÁ¦ ¹øÈ£',
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø ¹øÈ£',
-  `clear_date` date NOT NULL COMMENT '¿Ï·á ³¯Â¥',
+  `challenge_numb` int(11) NOT NULL COMMENT 'ë„ì „ ê³¼ì œ ë²ˆí˜¸',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì› ë²ˆí˜¸',
+  `clear_date` date NOT NULL COMMENT 'ì™„ë£Œ ë‚ ì§œ',
   PRIMARY KEY (`challenge_numb`,`user_numb`),
   KEY `user_numb` (`user_numb`),
   CONSTRAINT `challenge_complete_list_ibfk_1` FOREIGN KEY (`challenge_numb`) REFERENCES `challenge_list` (`challenge_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `challenge_complete_list_ibfk_2` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,9 +108,9 @@ DROP TABLE IF EXISTS `challenge_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `challenge_list` (
-  `challenge_numb` int(11) NOT NULL COMMENT 'µµÀü °úÁ¦ ¹øÈ£',
-  `challenge_title` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'µµÀü °úÁ¦ Á¦¸ñ',
-  `challenge_condition` mediumtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'µµÀü °úÁ¦ Á¶°Ç',
+  `challenge_numb` int(11) NOT NULL COMMENT 'ë„ì „ ê³¼ì œ ë²ˆí˜¸',
+  `challenge_title` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë„ì „ ê³¼ì œ ì œëª©',
+  `challenge_condition` mediumtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë„ì „ ê³¼ì œ ì¡°ê±´',
   PRIMARY KEY (`challenge_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -142,6 +139,7 @@ CREATE TABLE `check_point` (
   `position_check` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`check_point_index`),
   KEY `check_point___fk` (`exercise_numb`),
+  KEY `check_point_J___fk` (`exercise_numb`),
   CONSTRAINT `check_point___fk` FOREIGN KEY (`exercise_numb`) REFERENCES `exercise_info` (`exercise_numb`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -152,10 +150,36 @@ CREATE TABLE `check_point` (
 
 LOCK TABLES `check_point` WRITE;
 /*!40000 ALTER TABLE `check_point` DISABLE KEYS */;
-
-INSERT INTO `check_point` VALUES (1,0,2,'¿ŞÂÊ ÆÈ²ŞÄ¡°¡ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(2,1,2,'¿À¸¥ÂÊ ÆÈ²ŞÄ¡°¡ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(3,2,2,'¿ŞÂÊ ¼Õ¸ñÀÌ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(4,3,2,'¿À¸¥ÂÊ ¼Õ¸ñÀÌ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(5,0,3,'¿ŞÂÊ ÆÈ²ŞÄ¡°¡ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(6,1,3,'¿À¸¥ÂÊ ÆÈ²ŞÄ¡°¡ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(7,2,3,'¿ŞÂÊ ¼Õ¸ñÀÌ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(8,3,3,'¿À¸¥ÂÊ ¼Õ¸ñÀÌ ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(9,4,1,'¹«¸­ÀÌ ³Ê¹« ¾ÕÀ¸·Î ³ª¿Ô½À´Ï´Ù.'),(10,6,1,'´Ù¸®¸¦ ³Ê¹« ¹ú·È½À´Ï´Ù.'),(11,5,1,'»óÃ¼¸¦ ³Ê¹« ¼÷¿´½À´Ï´Ù.'),(12,0,2,'¿ŞÂÊ ÆÈÀ» ½Ç¼ö Çß½À´Ï´Ù.'),(13,1,2,'¿À¸¥ÂÊ ÆÈÀ» ½Ç¼ö Çß½À´Ï´Ù.'),(14,0,3,'¿ŞÂÊ ÆÈÀ» ½Ç¼ö Çß½À´Ï´Ù.'),(15,1,3,'¿À¸¥ÂÊ ÆÈÀ» ½Ç¼ö Çß½À´Ï´Ù.');
-
+INSERT INTO `check_point` VALUES (1,0,2,'ì™¼ìª½ íŒ”ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(2,1,2,'ì˜¤ë¥¸ìª½ íŒ”ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(3,2,4,'ì˜¤ë¥¸ìª½ ì†ëª©ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(4,3,4,'ì˜¤ë¥¸ìª½ ì†ëª©ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(5,0,3,'ì™¼ìª½ íŒ”ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(6,1,3,'ì˜¤ë¥¸ìª½ íŒ”ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(7,2,4,'ì™¼ìª½ ì†ëª©ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(8,3,4,'ì˜¤ë¥¸ìª½ ì†ëª©ì´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(9,4,1,'ë¬´ë¦ì´ ë„ˆë¬´ ì•ìœ¼ë¡œ ë‚˜ì™”ìŠµë‹ˆë‹¤.'),(10,6,1,'ë‹¤ë¦¬ë¥¼ ë„ˆë¬´ ë²Œë ¸ìŠµë‹ˆë‹¤.'),(11,5,1,'ìƒì²´ë¥¼ ë„ˆë¬´ ìˆ™ì˜€ìŠµë‹ˆë‹¤.'),(12,0,4,'ì™¼ìª½ íŒ”ì„ ì‹¤ìˆ˜ í–ˆìŠµë‹ˆë‹¤.'),(13,1,4,'ì˜¤ë¥¸ìª½ íŒ”ì„ ì‹¤ìˆ˜ í–ˆìŠµë‹ˆë‹¤.'),(14,0,4,'ì™¼ìª½ íŒ”ì„ ì‹¤ìˆ˜ í–ˆìŠµë‹ˆë‹¤.'),(15,1,4,'ì˜¤ë¥¸ìª½ íŒ”ì„ ì‹¤ìˆ˜ í–ˆìŠµë‹ˆë‹¤.');
 /*!40000 ALTER TABLE `check_point` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `check_point_j`
+--
+
+DROP TABLE IF EXISTS `check_point_j`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `check_point_j` (
+  `check_point_index` int(11) NOT NULL AUTO_INCREMENT,
+  `point_numb` int(11) DEFAULT NULL,
+  `exercise_numb` int(11) DEFAULT NULL,
+  `position_check` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`check_point_index`),
+  KEY `exercise_numb` (`exercise_numb`),
+  CONSTRAINT `check_point_j_ibfk_1` FOREIGN KEY (`exercise_numb`) REFERENCES `exercise_info` (`exercise_numb`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `check_point_j`
+--
+
+LOCK TABLES `check_point_j` WRITE;
+/*!40000 ALTER TABLE `check_point_j` DISABLE KEYS */;
+INSERT INTO `check_point_j` VALUES (1,0,2,'å·¦è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(2,1,2,'å³è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(3,2,4,'å³è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(4,3,4,'å³è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(5,0,3,'å·¦è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(6,1,3,'å³è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(7,2,4,'å·¦è…•ãŒå‰ã«å‡ºã¾ã—ãŸ'),(8,3,4,'å³è…•ãŒå‰ã«å‡ºã¾ã—ãŸ\n'),(9,4,1,NULL),(10,6,1,NULL),(11,5,1,NULL),(12,0,4,NULL),(13,1,4,NULL),(14,0,4,NULL),(15,1,4,NULL);
+/*!40000 ALTER TABLE `check_point_j` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -166,10 +190,10 @@ DROP TABLE IF EXISTS `exercise_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `exercise_info` (
-  `exercise_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT '¿îµ¿ ¹øÈ£',
-  `exercise_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '¿îµ¿ ÀÌ¸§',
+  `exercise_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ìš´ë™ ë²ˆí˜¸',
+  `exercise_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ìš´ë™ ì´ë¦„',
   `exercise_info` varchar(400) COLLATE utf8_unicode_ci NOT NULL,
-  `exercise_point_numb` int(11) NOT NULL COMMENT '¿îµ¿ ºÎÀ§ ¹øÈ£',
+  `exercise_point_numb` int(11) NOT NULL COMMENT 'ìš´ë™ ë¶€ìœ„ ë²ˆí˜¸',
   `kinematic_coefficient` float DEFAULT NULL,
   PRIMARY KEY (`exercise_numb`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -181,10 +205,35 @@ CREATE TABLE `exercise_info` (
 
 LOCK TABLES `exercise_info` WRITE;
 /*!40000 ALTER TABLE `exercise_info` DISABLE KEYS */;
-
-INSERT INTO `exercise_info` VALUES (1,'½ºÄõÆ®','½ºÄõÆ°´Â ÇÏÃ¼¿îµ¿ Áß¿¡¼­µµ °¡Àå ¿¡³ÊÁö¸¦ ¸¹ÀÌ ¼ÒºñÇÏ´Â ¿îµ¿ÀÌ¶ó Ã¼Áö¹æ °¨¼Ò¿¡µµ È¿°ú°¡ Å« ¿îµ¿ÀÔ´Ï´Ù.\r\nÀß ¹ß´ŞµÈ ´ëÅğºÎ ±ÙÀ°°ú µĞ±ÙÀº ¼ø°£ÀûÀÎ ¿îµ¿´É·ÂÀ» »Õ¾î³»´Â µ¥¿¡ ÇÙ½ÉÀû ¿ä¼Ò·Î ÀÛ¿ëÇÕ´Ï´Ù. \r\n½ºÄõÆ® ÈÆ·ÃÀ» ÅëÇØ ÇÏÃ¼ ±Ù·Â ¹ß´ŞÀº ¹°·ĞÀÌ°í, ´ëÅğ±ÙÀ°ÀÌ ¹ß´ŞÇÏ¸é¼­ ¿Õ¼ºÇÑ Å×½ºÅä½ºÅ×·Ğ ºĞºñ È¿°úµµ ¾òÀ» ¼ö ÀÖ½À´Ï´Ù.\r\nÇã¸®³ª ÄÚ¾î ±ÙÀ°Àº ¹°·Ğ ½Â¸ğ±Ù ¹ß´Ş¿¡µµ µµ¿òÀÌ µÇ¸ç ½ÉÁö¾î Èä°û¿¡µµ ÀÚ±Øµµ ÁÖ¹Ç·Î Àü½Å ¿îµ¿ÀÌ¶ó°í »ı°¢ÇÏ¼Åµµ ¹«¹æÇÕ´Ï´Ù.',2,1.84),(2,'´ıº§ ¼ñ´õ ÇÁ·¹½º','´ıº§ ¼ñ´õ ÇÁ·¹½º´Â ´ıº§·Î ½Ç½ÃÇÏ´Â ¿À¹öÇìµå ÇÁ·¹½º ¿îµ¿À¸·Î ¹Ùº§º¸´Ù ³ĞÀº °¡µ¿ ¹üÀ§°¡ Çü¼ºµÇ°í\r\nÁÖº¯ÀÇ ´Ù¾çÇÑ ±ÙÀ°µéÀÇ Á¶È­·Î¿î ÇùÀÀ ´É·Â°ú ±ÕÇü Á¶Àı ´É·ÂÀ» ¹ß´Ş½ÃÅ³ ¼ö ÀÖ´Â ¿îµ¿ ÀÔ´Ï´Ù.\r\n°¡µ¿ ¹üÀ§°¡ ³Ğ°í, ¿îµ¿ È¿°ú°¡ È®½ÇÇÑ ¸¸Å­ ÀÚ¼¼ÀÇ ¾ö°İÇÔÀÌ º¸´Ù Áß¿äÇØÁö°Ô µÇ¹Ç·Î ÀÚ¼¼°¡ ÈåÆ®·¯Áú Á¤µµ·Î ¹«°Å¿î Áß·®À» »ç¿ëÇÏÁö ¸»°í, ÀûÁ¤ Áß·®À» ÀÌ¿ëÇÏ¼Å¾ß ÇÕ´Ï´Ù.',1,2.1),(3,'»çÀÌµå ·¹ÅÍ·² ·¹ÀÌÁî','»çÀÌµå ·¹ÅÍ·² ·¹ÀÌÁî´Â »ï°¢±ÙÀÇ ¼±¸íµµ¸¦ ³ôÀÏ ¼ö ÀÖ´Â \r\n´Ü°üÀı ¿îµ¿ Áß Ãø¸é »ï°¢±ÙÀ» ¹ß´Ş½ÃÅ°±â À§ÇÑ ¿îµ¿ÀÔ´Ï´Ù.\r\nÇÁ·¹½º µ¿ÀÛ°ú ´Ş¸® ÀÚ±Ø½ÃÅ°´Â ±ÙÀ°ÀÇ ¹üÀ§¸¦ Á¦ÇÑÇÒ ¼ö ÀÖ°í, \r\n¸ñÇ¥ ºÎÀ§ ¼öÃà¿¡ ÁıÁßÇÒ ¼ö ÀÖ´Ù´Â ÀåÁ¡ÀÌ ÀÖ½À´Ï´Ù.\r\n³·Àº ÀúÇ×¿¡ ¹İÀÀÇÏ´Â ±Ù¼¶À¯µéÀ» ÀÚ±ØÇÏ±â À§ÇØ ÀúÁß·®, °í¹İº¹À¸·Î \r\n½Ç½ÃÇØÁÖ´Â°Ô ÁÁ½À´Ï´Ù.',1,2.2),(4,'·±Áö','·±Áö´Â ´ëµĞ±Ù Å³·¯¶ó°í ºÒ¸®´Â ¿îµ¿ÀÌ¸ç, °­·ÂÇÑ Èü Á¶ÀÎÆ®¸¦ ¸¸µå´Âµ¥ ÀÖ¾î À¯¿ëÇÕ´Ï´Ù.\r\n·±Áö´Â ´Ü¼øÈ÷ ±ÙÀ°À» ¹ß´Ş½ÃÅ°´Â È¿°ú »Ó¸¸ ¾Æ´Ï¶ó ´Ù¾çÇÑ ±ÙÀ°ÀÇ ÇùÀÀ ´É·Â, ±ÕÇü Á¶Àı ´É·Â,\r\n¿îµ¿½Å°æ°èÀÇ ¹ß´Ş¿¡µµ È¿°úÀüÀÎ ¿îµ¿ÀÔ´Ï´Ù. ±×¸®°í ·±Áö´Â ´Ù¸®ÀÇ ¸Å²ô·¯¿î ¸Ê½Ã¸¦ »ì¸±¼ö ÀÖ°í,\r\n¶óÀÎÀ» »ì¸± ¼ö ÀÖ°Ô ¸¸µé ¼ö ÀÖ´Â ¿îµ¿ ¹æ¹ıÀÔ´Ï´Ù.',2,1.83);
-
+INSERT INTO `exercise_info` VALUES (1,'ìŠ¤ì¿¼íŠ¸','ìŠ¤ì¿¼íŠ¸ëŠ” í•˜ì²´ìš´ë™ ì¤‘ì—ì„œë„ ê°€ì¥ ì—ë„ˆì§€ë¥¼ ë§ì´ ì†Œë¹„í•˜ëŠ” ìš´ë™ì´ë¼ ì²´ì§€ë°© ê°ì†Œì—ë„ íš¨ê³¼ê°€ í° ìš´ë™ì…ë‹ˆë‹¤.\nì˜ ë°œë‹¬ëœ ëŒ€í‡´ë¶€ ê·¼ìœ¡ê³¼ ë‘”ê·¼ì€ ìˆœê°„ì ì¸ ìš´ë™ëŠ¥ë ¥ì„ ë¿œì–´ë‚´ëŠ” ë°ì— í•µì‹¬ì  ìš”ì†Œë¡œ ì‘ìš©í•©ë‹ˆë‹¤. \nìŠ¤ì¿¼íŠ¸ í›ˆë ¨ì„ í†µí•´ í•˜ì²´ ê·¼ë ¥ ë°œë‹¬ì€ ë¬¼ë¡ ì´ê³ , ëŒ€í‡´ê·¼ìœ¡ì´ ë°œë‹¬í•˜ë©´ì„œ ì™•ì„±í•œ í…ŒìŠ¤í† ìŠ¤í…Œë¡  ë¶„ë¹„ íš¨ê³¼ë„ ì–»ì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.\ní—ˆë¦¬ë‚˜ ì½”ì–´ ê·¼ìœ¡ì€ ë¬¼ë¡  ìŠ¹ëª¨ê·¼ ë°œë‹¬ì—ë„ ë„ì›€ì´ ë˜ë©° ì‹¬ì§€ì–´ í‰ê³½ì—ë„ ìê·¹ë„ ì£¼ë¯€ë¡œ ì „ì‹  ìš´ë™ì´ë¼ê³  ìƒê°í•˜ì…”ë„ ë¬´ë°©í•©ë‹ˆë‹¤.',2,1.84),(2,'ë¤ë²¨ ìˆ„ë” í”„ë ˆìŠ¤','ë¤ë²¨ ìˆ„ë” í”„ë ˆìŠ¤ëŠ” ë¤ë²¨ë¡œ ì‹¤ì‹œí•˜ëŠ” ì˜¤ë²„í—¤ë“œ í”„ë ˆìŠ¤ ìš´ë™ìœ¼ë¡œ ë°”ë²¨ë³´ë‹¤ ë„“ì€ ê°€ë™ ë²”ìœ„ê°€ í˜•ì„±ë˜ê³ \nì£¼ë³€ì˜ ë‹¤ì–‘í•œ ê·¼ìœ¡ë“¤ì˜ ì¡°í™”ë¡œìš´ í˜‘ì‘ ëŠ¥ë ¥ê³¼ ê· í˜• ì¡°ì ˆ ëŠ¥ë ¥ì„ ë°œë‹¬ì‹œí‚¬ ìˆ˜ ìˆëŠ” ìš´ë™ ì…ë‹ˆë‹¤.\nê°€ë™ ë²”ìœ„ê°€ ë„“ê³ , ìš´ë™ íš¨ê³¼ê°€ í™•ì‹¤í•œ ë§Œí¼ ìì„¸ì˜ ì—„ê²©í•¨ì´ ë³´ë‹¤ ì¤‘ìš”í•´ì§€ê²Œ ë˜ë¯€ë¡œ ìì„¸ê°€ ííŠ¸ëŸ¬ì§ˆ ì •ë„ë¡œ ë¬´ê±°ìš´ ì¤‘ëŸ‰ì„ ì‚¬ìš©í•˜ì§€ ë§ê³ , ì ì • ì¤‘ëŸ‰ì„ ì´ìš©í•˜ì…”ì•¼ í•©ë‹ˆë‹¤.',1,2.1),(3,'ì‚¬ì´ë“œ ë ˆí„°ëŸ´ ë ˆì´ì¦ˆ','ì‚¬ì´ë“œ ë ˆí„°ëŸ´ ë ˆì´ì¦ˆëŠ” ì‚¼ê°ê·¼ì˜ ì„ ëª…ë„ë¥¼ ë†’ì¼ ìˆ˜ ìˆëŠ” \në‹¨ê´€ì ˆ ìš´ë™ ì¤‘ ì¸¡ë©´ ì‚¼ê°ê·¼ì„ ë°œë‹¬ì‹œí‚¤ê¸° ìœ„í•œ ìš´ë™ì…ë‹ˆë‹¤.\ní”„ë ˆìŠ¤ ë™ì‘ê³¼ ë‹¬ë¦¬ ìê·¹ì‹œí‚¤ëŠ” ê·¼ìœ¡ì˜ ë²”ìœ„ë¥¼ ì œí•œí•  ìˆ˜ ìˆê³ , \nëª©í‘œ ë¶€ìœ„ ìˆ˜ì¶•ì— ì§‘ì¤‘í•  ìˆ˜ ìˆë‹¤ëŠ” ì¥ì ì´ ìˆìŠµë‹ˆë‹¤.\në‚®ì€ ì €í•­ì— ë°˜ì‘í•˜ëŠ” ê·¼ì„¬ìœ ë“¤ì„ ìê·¹í•˜ê¸° ìœ„í•´ ì €ì¤‘ëŸ‰, ê³ ë°˜ë³µìœ¼ë¡œ \nì‹¤ì‹œí•´ì£¼ëŠ”ê²Œ ì¢‹ìŠµë‹ˆë‹¤.',1,2.2),(4,'ëŸ°ì§€','ëŸ°ì§€ëŠ” ëŒ€ë‘”ê·¼ í‚¬ëŸ¬ë¼ê³  ë¶ˆë¦¬ëŠ” ìš´ë™ì´ë©°, ê°•ë ¥í•œ í™ ì¡°ì¸íŠ¸ë¥¼ ë§Œë“œëŠ”ë° ìˆì–´ ìœ ìš©í•©ë‹ˆë‹¤.\nëŸ°ì§€ëŠ” ë‹¨ìˆœíˆ ê·¼ìœ¡ì„ ë°œë‹¬ì‹œí‚¤ëŠ” íš¨ê³¼ ë¿ë§Œ ì•„ë‹ˆë¼ ë‹¤ì–‘í•œ ê·¼ìœ¡ì˜ í˜‘ì‘ ëŠ¥ë ¥, ê· í˜• ì¡°ì ˆ ëŠ¥ë ¥,\nìš´ë™ì‹ ê²½ê³„ì˜ ë°œë‹¬ì—ë„ íš¨ê³¼ì „ì¸ ìš´ë™ì…ë‹ˆë‹¤. ê·¸ë¦¬ê³  ëŸ°ì§€ëŠ” ë‹¤ë¦¬ì˜ ë§¤ë„ëŸ¬ìš´ ë§µì‹œë¥¼ ì‚´ë¦´ìˆ˜ ìˆê³ ,\në¼ì¸ì„ ì‚´ë¦´ ìˆ˜ ìˆê²Œ ë§Œë“¤ ìˆ˜ ìˆëŠ” ìš´ë™ ë°©ë²•ì…ë‹ˆë‹¤.',2,1.83);
 /*!40000 ALTER TABLE `exercise_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `exercise_info_j`
+--
+
+DROP TABLE IF EXISTS `exercise_info_j`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exercise_info_j` (
+  `exercise_numb` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_name` varchar(45) NOT NULL,
+  `exercise_info` varchar(400) NOT NULL,
+  `exercise_point_numb` int(11) NOT NULL,
+  `kinematic_coefficient` double DEFAULT NULL,
+  PRIMARY KEY (`exercise_numb`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `exercise_info_j`
+--
+
+LOCK TABLES `exercise_info_j` WRITE;
+/*!40000 ALTER TABLE `exercise_info_j` DISABLE KEYS */;
+INSERT INTO `exercise_info_j` VALUES (1,'ã‚¹ã‚¯ãƒ¯ãƒƒãƒˆ','ã‚¹ã‚¯ãƒ¯ãƒƒãƒˆã¯ã€ä¸‹åŠèº«é‹å‹•ã®ä¸­ã§ã‚‚æœ€ã‚‚ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’å¤šãæ¶ˆè²»ã™ã‚‹ã®ã§ã€ä½“è„‚è‚ªæ¸›å°‘ã«ã‚‚åŠ¹æœãŒé«˜ã„ã§ã™ã€‚\nã‚ˆãç™ºé”ã—ãŸå¤ªã‚‚ã‚‚ã¨ãŠå°»ã®ç­‹è‚‰ã¯ã€ç¬é–“çš„ãªé‹å‹•èƒ½åŠ›ã‚’ç™ºæ®ã™ã‚‹ã®ã«æ ¸å¿ƒçš„ãªè¦ç´ ã¨ã—ã¦ä½œç”¨ã—ã¾ã™ã€‚ \nã‚¹ã‚¯ãƒ¯ãƒƒãƒˆè¨“ç·´ã‚’é€šã˜ã¦ä¸‹åŠèº«ã®ç­‹åŠ›ã®ç™ºé”ã¯ã‚‚ã¡ã‚ã‚“ã€å¤ªã‚‚ã‚‚ã®ç­‹è‚‰ãŒç™ºé”ã—ã€ ãƒ†ã‚¹ãƒˆã‚¹ãƒ†ãƒ­ãƒ³ã®æ—ºç››ãªåˆ†æ³ŒåŠ¹æœã‚‚å¾—ã‚‰ã‚Œã¾ã™ã€‚\nè…°ã‚„ã‚³ã‚¢ã®ç­‹è‚‰ã¯ã‚‚ã¡ã‚ã‚“ã€èƒŒä¸­ã®ç­‹è‚‰ã®ç™ºé”ã«ã‚‚å½¹ã«ãŸã¤ã—ã€èƒ¸éƒ­ã«ã‚‚åˆºæ¿€ã‚’ä¸ãˆã‚‹ã®ã§ã€å…¨èº«é‹å‹•ã ã¨æ€ã£ã¦ã‚‚ã„ã„ã§ã™ã€‚',2,1.84),(2,'ãƒ€ãƒ³ãƒ™ãƒ«ãƒ»ã‚·ãƒ§ãƒ«ãƒ€ãƒ¼ãƒ—ãƒ¬ã‚¹','ãƒ€ãƒ³ãƒ™ãƒ«ãƒ»ã‚·ãƒ§ãƒ«ãƒ€ãƒ¼ãƒ—ãƒ¬ã‚¹ã¯ãƒ€ãƒ³ãƒ™ãƒ«ã§è¡Œã†ã‚ªãƒ¼ãƒãƒ¼ãƒ˜ãƒƒãƒ‰ãƒ»ãƒ—ãƒ¬ã‚¹é‹å‹•ã§ã€ãƒãƒ¼ãƒ™ãƒ«ã‚ˆã‚Šå‹•ãã«åˆ¶é™ãŒãªã„ã®ã§é–¢ç¯€ãªã©ã®å¯å‹•ç¯„å›²ãŒåºƒããªã‚Šã€è‚©å›ã‚Šã®ç­‹è‚‰ã®é€£å‹•èƒ½åŠ›ã‚„ãƒãƒ©ãƒ³ã‚¹èª¿ç¯€èƒ½åŠ›ã‚’ç™ºé”ã•ã›ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚\nå¯å‹•ç¯„å›²ãŒåºƒãã€é‹å‹•åŠ¹æœãŒç¢ºå®Ÿãªã ã‘ã«ã€æ­£ã—ã„å§¿å‹¢ãŒã‚ˆã‚Šé‡è¦ã«ãªã‚‹ã®ã§ãã®ãŸã‚ã«ç„¡ç†ã«é‡ã„ã‚‚ã®ã‚’ä½¿ã‚ãšã€å§¿å‹¢ã«é©åˆ‡ãªé‡ã•ã®ã‚‚ã®ã‚’ãŠä½¿ã„ãã ã•ã„ã€‚',1,2.1),(3,'ã‚µã‚¤ãƒ‰ãƒ©ãƒ†ãƒ©ãƒ«ãƒ»ãƒ¬ã‚¤ã‚º','ã‚µã‚¤ãƒ‰ãƒ©ãƒ†ãƒ©ãƒ«ãƒ»ãƒ¬ã‚¤ã‚ºã¯ä¸‰è§’ç­‹ã®é®®æ˜åº¦ã‚’é«˜ã‚ã‚‹ã“ã¨ã®ã§ãã‚‹ \nçŸ­é–¢ç¯€é‹å‹•ã®ä¸­ã§ã€å´é¢ä¸‰è§’ç­‹ã‚’é›ãˆã‚‰ã‚Œã‚‹é‹å‹•ã§ã™ã€‚\nãƒ—ãƒ¬ã‚¹å‹•ä½œã¨ã¯é•ã£ã¦ã€åˆºæ¿€ã™ã‚‹ç­‹è‚‰ã®ç¯„å›²ã‚’åˆ¶é™ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã—ã€ã€ \nç›®æ¨™éƒ¨ä½ã®åç¸®ã«é›†ä¸­ã§ãã‚‹ã¨ã„ã†é•·æ‰€ãŒã‚ã‚Šã¾ã™ã€‚\nä½ã„æŠµæŠ—ã«åå¿œã™ã‚‹ç­‹ç¹Šç¶­ã‚’åˆºæ¿€ã™ã‚‹ãŸã‚ã«ã€ä½é‡é‡ã€é«˜åå¾©ã§ \nè¡Œã£ã¦ãã ã•ã„ã€‚',1,2.2),(4,'ãƒ©ãƒ³ã‚¸','ãƒ©ãƒ³ã‚¸ã¯å¤§è‡€æ ¹ãƒ»ã‚­ãƒ©ãƒ¼ã¨å‘¼ã°ã‚Œã‚‹é‹å‹•ã§ã‚ã‚Šã€å¼·åŠ›ãªãƒ’ãƒƒãƒ—ã‚¸ãƒ§ã‚¤ãƒ³ãƒˆã‚’ä½œã‚‹ä¸Šã§æœ‰ç”¨ã§ã™ã€‚\nãƒ©ãƒ³ã‚¸ã¯ã€å˜ã«ç­‹è‚‰ã‚’ç™ºé”ã•ã›ã‚‹åŠ¹æœã ã‘ã§ãªãã€æ§˜ã€…ãªç­‹è‚‰ã®èƒ½åŠ›ã€ãƒãƒ©ãƒ³ã‚¹èª¿æ•´èƒ½åŠ›ã€é‹å‹•ç¥çµŒç³»ã®ç™ºé”ã«ã‚‚åŠ¹æœçš„ãªé‹å‹•ã§ã™ã€‚ ãã—ã¦ãƒ©ãƒ³ã‚¸ã¯æ»‘ã‚‰ã‹ãªãƒ¬ãƒƒã‚°ãƒ©ã‚¤ãƒ³ã‚’ä½œã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚',2,1.83);
+/*!40000 ALTER TABLE `exercise_info_j` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -195,9 +244,9 @@ DROP TABLE IF EXISTS `exercise_movie_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `exercise_movie_info` (
-  `exercise_numb` int(11) NOT NULL COMMENT '¿îµ¿ ¹øÈ£',
-  `movie_order` int(11) NOT NULL COMMENT 'µ¿¿µ»ó ¼ø¼­',
-  `movie_path` mediumtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'µ¿¿µ»ó °æ·Î',
+  `exercise_numb` int(11) NOT NULL COMMENT 'ìš´ë™ ë²ˆí˜¸',
+  `movie_order` int(11) NOT NULL COMMENT 'ë™ì˜ìƒ ìˆœì„œ',
+  `movie_path` mediumtext COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë™ì˜ìƒ ê²½ë¡œ',
   PRIMARY KEY (`exercise_numb`,`movie_order`),
   CONSTRAINT `exercise_movie_info_ibfk_1` FOREIGN KEY (`exercise_numb`) REFERENCES `exercise_info` (`exercise_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -235,7 +284,7 @@ CREATE TABLE `exercise_order` (
 
 LOCK TABLES `exercise_order` WRITE;
 /*!40000 ALTER TABLE `exercise_order` DISABLE KEYS */;
-INSERT INTO `exercise_order` VALUES (1,2,2),(1,3,1),(2,1,2),(2,2,1),(2,3,3),(3,2,2),(3,4,1),(4,2,1),(4,3,2),(5,2,1),(5,3,2),(5,4,3),(6,1,1),(6,3,2),(6,5,3),(7,1,2),(7,5,1),(8,6,1),(8,7,2);
+INSERT INTO `exercise_order` VALUES (1,2,2),(1,3,1),(2,1,2),(2,2,1),(2,3,3),(3,2,2),(3,4,1),(4,2,1),(4,3,2),(5,2,1),(5,3,2),(5,4,3),(6,1,1),(6,3,2),(6,5,3),(7,1,2),(7,5,1),(8,6,1),(8,7,2),(9,8,1),(9,9,2),(10,10,1);
 /*!40000 ALTER TABLE `exercise_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,10 +296,10 @@ DROP TABLE IF EXISTS `exercise_point`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `exercise_point` (
-  `exercise_point_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT '¿îµ¿ ºÎÀ§ ¹øÈ£',
-  `exercise_point_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '¿îµ¿ ºÎÀ§ ÀÌ¸§',
+  `exercise_point_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ìš´ë™ ë¶€ìœ„ ë²ˆí˜¸',
+  `exercise_point_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ìš´ë™ ë¶€ìœ„ ì´ë¦„',
   PRIMARY KEY (`exercise_point_numb`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,8 +308,32 @@ CREATE TABLE `exercise_point` (
 
 LOCK TABLES `exercise_point` WRITE;
 /*!40000 ALTER TABLE `exercise_point` DISABLE KEYS */;
-INSERT INTO `exercise_point` VALUES (0,'Çã¹÷Áö'),(1,'¾î±ú');
+INSERT INTO `exercise_point` VALUES (0,'í—ˆë²…ì§€'),(1,'ì–´ê¹¨');
 /*!40000 ALTER TABLE `exercise_point` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `exercise_point_j`
+--
+
+DROP TABLE IF EXISTS `exercise_point_j`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exercise_point_j` (
+  `exercise_point_numb` int(11) NOT NULL AUTO_INCREMENT,
+  `exercise_point_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`exercise_point_numb`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `exercise_point_j`
+--
+
+LOCK TABLES `exercise_point_j` WRITE;
+/*!40000 ALTER TABLE `exercise_point_j` DISABLE KEYS */;
+INSERT INTO `exercise_point_j` VALUES (0,'å¤ªã‚‚ã‚‚'),(1,'è‚©');
+/*!40000 ALTER TABLE `exercise_point_j` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -272,18 +345,17 @@ DROP TABLE IF EXISTS `exercise_record`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `exercise_record` (
   `ex_record_numb` int(11) NOT NULL AUTO_INCREMENT,
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø¹øÈ£',
-  `exercise_numb` int(11) NOT NULL COMMENT '¿îµ¿¹øÈ£',
-  `target_count` int(11) NOT NULL COMMENT '¸ñÇ¥ ¿îµ¿ È½¼ö',
-  `clear_count` int(11) NOT NULL COMMENT '¼öÇà ¿îµ¿ È½¼ö',
-  `exercise_date` date NOT NULL COMMENT '¿îµ¿ ³¯Â¥',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì›ë²ˆí˜¸',
+  `exercise_numb` int(11) NOT NULL COMMENT 'ìš´ë™ë²ˆí˜¸',
+  `target_count` int(11) NOT NULL COMMENT 'ëª©í‘œ ìš´ë™ íšŸìˆ˜',
+  `clear_count` int(11) NOT NULL COMMENT 'ìˆ˜í–‰ ìš´ë™ íšŸìˆ˜',
+  `exercise_date` date NOT NULL COMMENT 'ìš´ë™ ë‚ ì§œ',
   PRIMARY KEY (`ex_record_numb`,`user_numb`,`exercise_numb`),
   KEY `exercise_numb` (`exercise_numb`),
   KEY `user_numb` (`user_numb`),
   CONSTRAINT `exercise_record_ibfk_1` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `exercise_record_ibfk_2` FOREIGN KEY (`exercise_numb`) REFERENCES `exercise_info` (`exercise_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION
-
-) ENGINE=InnoDB AUTO_INCREMENT=443 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=720 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,26 +364,7 @@ CREATE TABLE `exercise_record` (
 
 LOCK TABLES `exercise_record` WRITE;
 /*!40000 ALTER TABLE `exercise_record` DISABLE KEYS */;
-
-INSERT INTO `exercise_record` VALUES (48,2,3,30,5,'2016-05-29'),(49,2,2,30,5,'2016-05-29'),(50,2,2,30,5,'2016-05-31'),(51,2,3,30,5,'2016-05-31'),(58,2,2,30,5,'2016-05-30'),(59,2,1,20,5,'2016-05-30'),(60,2,3,30,5,'2016-05-30'),
-(223,2,2,10,0,'2016-06-24'),(224,2,3,6,0,'2016-06-24'),(251,2,2,30,30,'2016-06-15'),(254,2,3,30,30,'2016-06-15'),(298,2,2,30,0,'2016-07-20'),(299,2,2,30,0,'2016-07-22'),(300,2,2,30,0,'2016-07-18'),(301,2,3,30,0,'2016-07-20'),
-(302,2,3,30,0,'2016-07-22'),(303,2,3,30,0,'2016-07-18'),(304,2,2,30,0,'2016-07-26'),(305,2,2,30,0,'2016-07-28'),(306,2,3,30,0,'2016-07-26'),(307,2,3,30,0,'2016-07-28'),(308,2,2,30,0,'2016-07-11'),(309,2,2,30,0,'2016-07-13'),
-(310,2,3,30,0,'2016-07-11'),(311,2,3,30,0,'2016-07-13'),(312,2,2,30,0,'2016-07-06'),(313,2,2,30,0,'2016-07-08'),(314,2,3,30,0,'2016-07-06'),(315,2,3,30,0,'2016-07-08'),(316,2,4,40,0,'2016-07-06'),(317,2,4,40,0,'2016-07-08'),
-(318,2,2,30,0,'2016-07-29'),(319,2,2,30,0,'2016-07-27'),(320,2,3,30,0,'2016-07-29'),(321,2,3,30,0,'2016-07-27'),(322,2,2,30,0,'2016-07-01'),(323,2,2,30,0,'2016-07-07'),(324,2,3,30,0,'2016-07-01'),(325,2,3,30,0,'2016-07-07'),
-(326,2,2,30,0,'2016-07-04'),(327,2,2,30,0,'2016-07-14'),(328,2,2,30,0,'2016-07-19'),(329,2,3,30,0,'2016-07-04'),(330,2,3,30,0,'2016-07-14'),(331,2,3,30,0,'2016-07-19'),(332,2,4,40,0,'2016-07-04'),(333,2,4,40,0,'2016-07-14'),
-(334,2,4,40,0,'2016-07-19'),(335,2,2,30,0,'2016-08-11'),(336,2,2,30,0,'2016-08-10'),(337,2,2,30,0,'2016-08-12'),(338,2,3,30,0,'2016-08-11'),(339,2,3,30,0,'2016-08-10'),
-(340,2,3,30,0,'2016-08-12'),(341,2,2,30,0,'2016-07-21'),(342,2,2,30,0,'2016-07-15'),(343,2,3,30,0,'2016-07-21'),(344,2,3,30,0,'2016-07-15'),(345,2,3,30,0,'2016-08-15'),(346,3,2,30,1,'2016-08-17'),(347,3,3,30,0,'2016-08-19'),
-(348,2,2,30,0,'2016-08-15'),(349,3,2,30,0,'2016-08-17'),
-(350,3,2,30,0,'2016-08-19'),(351,3,2,30,0,'2016-08-22'),(352,3,2,30,0,'2016-08-24'),(353,3,2,30,20,'2016-05-26'),(354,3,3,30,0,'2016-08-22'),(355,3,3,30,0,'2016-08-24'),(356,3,3,30,20,'2016-05-26'),
-(362,2,2,10,10,'2016-06-05'),(364,2,3,6,6,'2016-06-05'),(372,2,2,30,30,'2016-06-08'),(373,2,2,30,30,'2016-06-10'),(375,2,3,30,25,'2016-06-08'),(376,2,3,30,31,'2016-06-10'),(378,2,4,40,33,'2016-06-08'),
-(379,2,4,40,38,'2016-06-10'),(396,3,2,30,10,'2016-06-12'),(397,3,3,30,10,'2016-06-12'),(398,2,2,10,10,'2016-06-12'),(399,2,3,6,6,'2016-06-12'),(410,2,2,10,0,'2016-06-18'),(411,2,3,6,0,'2016-06-18'),(412,2,3,30,0,'2016-06-19'),
-(413,2,2,30,0,'2016-06-19'),(414,2,4,45,0,'2016-06-20'),(415,2,1,20,0,'2016-06-20'),(416,2,2,30,0,'2016-06-21'),(417,2,3,30,0,'2016-06-21'),
-(418,2,2,30,20,'2016-06-07'),(419,2,2,30,5,'2016-06-09'),(420,2,2,30,30,'2016-06-11'),(421,2,3,30,30,'2016-06-07'),
-(422,2,3,30,10,'2016-06-09'),(423,2,3,30,30,'2016-06-11'),(424,2,2,10,2,'2016-06-14'),
-(425,2,2,10,5,'2016-06-16'),(426,2,2,10,0,'2016-06-18'),(427,2,3,6,3,'2016-06-14'),(428,2,3,6,6,'2016-06-16'),(429,2,3,6,0,'2016-06-18'),
-(430,2,3,30,0,'2016-06-20'),(431,2,2,30,0,'2016-06-20'),(432,2,3,6,6,'2016-06-17'),(433,2,2,10,10,'2016-06-17'),(434,2,1,20,0,'2016-06-19'),
-(435,2,3,30,0,'2016-06-19'),(436,2,4,45,0,'2016-06-19'),(437,2,2,30,0,'2016-06-30'),(438,2,1,20,0,'2016-06-30'),(439,2,3,30,0,'2016-06-30'),
-(440,2,1,20,0,'2016-06-21'),(441,2,3,30,0,'2016-06-21'),(442,2,4,45,0,'2016-06-21');
+INSERT INTO `exercise_record` VALUES (48,2,3,30,30,'2016-05-29'),(49,2,2,30,30,'2016-05-29'),(50,2,2,30,25,'2016-05-31'),(51,2,3,30,25,'2016-05-31'),(58,2,2,30,28,'2016-05-30'),(59,2,1,20,20,'2016-05-30'),(60,2,3,30,30,'2016-05-30'),(308,2,2,10,8,'2016-07-11'),(309,2,2,30,30,'2016-07-13'),(310,2,3,6,6,'2016-07-11'),(311,2,3,30,30,'2016-07-13'),(313,2,2,30,30,'2016-07-08'),(315,2,3,30,20,'2016-07-08'),(317,2,4,40,40,'2016-07-08'),(318,2,2,30,30,'2016-07-29'),(320,2,3,30,10,'2016-07-29'),(322,2,2,30,10,'2016-07-01'),(324,2,3,30,30,'2016-07-01'),(326,2,2,30,30,'2016-07-04'),(327,2,2,30,30,'2016-07-14'),(328,2,2,30,30,'0000-00-00'),(329,2,3,30,30,'2016-07-04'),(330,2,3,30,30,'2016-07-14'),(331,2,3,30,30,'0000-00-00'),(332,2,4,40,35,'2016-07-04'),(333,2,4,40,38,'2016-07-14'),(334,2,4,40,36,'0000-00-00'),(335,2,2,30,30,'2016-08-11'),(336,2,2,30,30,'2016-08-10'),(337,2,2,30,30,'2016-08-12'),(338,2,3,30,28,'0000-00-00'),(339,2,3,30,28,'2016-08-10'),(340,2,3,30,30,'2016-08-12'),(345,2,3,30,30,'2016-08-15'),(346,3,2,30,26,'2016-08-17'),(347,3,3,30,27,'2016-08-19'),(348,2,2,30,25,'2016-08-15'),(349,3,2,30,30,'2016-08-17'),(350,3,2,30,30,'2016-08-19'),(351,3,2,30,25,'2016-08-22'),(352,3,2,30,30,'2016-08-24'),(353,3,2,30,20,'2016-05-26'),(354,3,3,30,30,'2016-08-22'),(355,3,3,30,30,'2016-08-24'),(356,3,3,30,20,'2016-05-26'),(459,2,2,10,20,'2016-06-20'),(460,2,3,6,12,'2016-06-20'),(461,2,2,30,0,'2016-06-13'),(462,2,2,30,0,'2016-06-06'),(463,2,3,30,0,'2016-06-13'),(464,2,3,30,0,'2016-06-06'),(465,2,4,40,0,'2016-06-13'),(466,2,4,40,0,'2016-06-06'),(467,2,4,40,0,'2016-06-10'),(468,2,4,40,0,'2016-06-17'),(469,2,2,30,0,'2016-06-10'),(470,2,2,30,0,'2016-06-17'),(471,2,2,30,0,'2016-06-15'),(472,2,3,30,0,'2016-06-15'),(473,2,2,10,10,'2016-06-21'),(474,2,3,6,6,'2016-06-21'),(475,2,2,10,34,'2016-06-22'),(476,2,3,6,18,'2016-06-22'),(477,2,2,10,32,'2016-06-23'),(478,2,3,6,18,'2016-06-23'),(479,2,2,10,10,'2016-06-16'),(480,2,3,6,6,'2016-06-16'),(481,2,2,10,10,'2016-06-29'),(482,2,3,6,0,'2016-06-29'),(487,2,2,10,10,'2016-07-07'),(488,2,3,6,7,'2016-07-07'),(489,2,2,10,11,'2016-07-09'),(490,2,3,6,4,'2016-07-09'),(491,2,2,10,10,'2016-07-10'),(492,2,3,6,4,'2016-07-10'),(493,2,2,10,10,'2016-07-12'),(494,2,3,6,6,'2016-07-12'),(499,2,2,10,0,'2016-07-16'),(500,2,3,6,6,'2016-07-16'),(501,2,2,10,10,'2016-07-18'),(502,2,3,6,6,'2016-07-18'),(505,2,2,9,9,'2016-07-20'),(506,2,3,15,15,'2016-07-20'),(507,2,2,10,10,'2016-07-21'),(508,2,3,6,6,'2016-07-21'),(509,2,2,10,10,'2016-07-23'),(510,2,3,6,6,'2016-07-23'),(511,2,2,10,10,'2016-07-22'),(512,2,3,6,6,'2016-07-22'),(537,2,2,10,10,'2016-07-28'),(538,2,3,6,6,'2016-07-28'),(566,2,2,6,6,'2016-07-05'),(567,2,3,2,2,'2016-07-05'),(576,2,2,10,10,'2016-07-27'),(577,2,3,15,15,'2016-07-27'),(578,2,2,6,6,'2016-07-25'),(579,2,3,16,16,'2016-07-25'),(580,2,2,6,6,'2016-07-24'),(581,2,3,6,6,'2016-07-24'),(583,2,2,10,0,'2016-07-26'),(584,2,3,6,6,'2016-07-26'),(585,2,2,10,10,'2016-07-30'),(586,2,3,6,6,'2016-07-30'),(587,2,2,10,10,'2016-08-01'),(588,2,3,6,6,'2016-08-01'),(589,2,2,10,10,'2016-08-16'),(590,2,3,6,6,'2016-08-16'),(591,2,2,10,10,'2016-08-02'),(592,2,3,6,6,'2016-08-02'),(593,2,2,10,10,'2016-08-03'),(594,2,3,6,6,'2016-08-03'),(595,2,2,10,10,'2016-08-04'),(596,2,3,6,6,'2016-08-04'),(597,2,2,10,10,'2016-08-05'),(598,2,3,6,4,'2016-08-05'),(599,2,2,10,5,'2016-08-08'),(600,2,3,6,0,'2016-08-08'),(601,2,2,10,10,'2016-08-09'),(602,2,3,6,6,'2016-08-09'),(603,2,2,10,10,'2016-08-14'),(604,2,3,6,6,'2016-08-14'),(605,2,2,10,2,'2016-08-17'),(606,2,3,6,0,'2016-08-17'),(607,2,2,10,10,'2016-08-20'),(608,2,3,6,6,'2016-08-20'),(609,2,2,10,8,'2016-08-25'),(610,2,2,10,10,'2016-08-26'),(611,2,3,6,6,'2016-08-25'),(612,2,3,6,6,'2016-08-26'),(613,2,2,10,10,'2016-08-21'),(614,2,2,10,10,'2016-08-19'),(615,2,3,6,6,'2016-08-21'),(616,2,3,6,4,'2016-08-19'),(617,2,2,10,3,'2016-08-28'),(618,2,3,6,6,'2016-08-28'),(619,2,2,10,0,'2016-08-29'),(620,2,2,10,10,'2016-08-30'),(621,2,3,6,6,'2016-08-29'),(622,2,3,6,6,'2016-08-30'),(633,2,2,10,10,'2016-09-19'),(634,2,3,6,6,'2016-09-19'),(637,2,2,10,10,'2016-09-21'),(638,2,3,6,6,'2016-09-21'),(645,2,2,30,30,'2016-09-30'),(650,2,3,30,30,'2016-09-30'),(655,2,4,40,0,'2016-09-30'),(663,2,2,30,30,'2016-09-26'),(665,2,3,30,30,'2016-09-26'),(666,2,2,10,10,'2016-09-23'),(667,2,3,6,6,'2016-09-23'),(668,2,2,10,10,'2016-09-28'),(669,2,3,6,6,'2016-09-28'),(670,2,2,10,0,'2016-10-03'),(671,2,3,6,0,'2016-10-03'),(674,2,2,5,5,'2016-10-10'),(675,2,3,5,5,'2016-10-10'),(684,2,2,5,0,'2016-10-20'),(685,2,3,5,0,'2016-10-20'),(686,2,2,5,0,'2016-10-22'),(687,2,3,5,0,'2016-10-22'),(688,2,2,5,0,'2016-10-14'),(689,2,3,5,0,'2016-10-14'),(698,2,2,5,5,'2016-10-12'),(699,2,3,5,5,'2016-10-12'),(702,2,2,5,5,'2016-10-18'),(703,2,3,5,5,'2016-10-18'),(708,2,2,5,5,'2016-10-19'),(709,2,3,5,5,'2016-10-19'),(714,2,2,5,5,'2016-10-24'),(715,2,3,5,5,'2016-10-24'),(716,2,2,5,5,'2016-11-01'),(717,2,3,5,5,'2016-11-01'),(718,2,2,5,5,'2016-11-02'),(719,2,3,5,5,'2016-11-02');
 /*!40000 ALTER TABLE `exercise_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -323,14 +376,14 @@ DROP TABLE IF EXISTS `exercise_repeat_numb`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `exercise_repeat_numb` (
-  `numb_set_index` int(11) NOT NULL AUTO_INCREMENT COMMENT 'È½¼ö ¼³Á¤ ÀÎµ¦½º',
-  `exercise_numb` int(11) NOT NULL COMMENT '¿îµ¿ ¹øÈ£',
-  `number_of_set` int(11) NOT NULL COMMENT '¼¼Æ® ¼ö',
-  `number_of_count` int(11) NOT NULL COMMENT '1¼¼Æ® ´ç È½¼ö',
+  `numb_set_index` int(11) NOT NULL AUTO_INCREMENT COMMENT 'íšŸìˆ˜ ì„¤ì • ì¸ë±ìŠ¤',
+  `exercise_numb` int(11) NOT NULL COMMENT 'ìš´ë™ ë²ˆí˜¸',
+  `number_of_set` int(11) NOT NULL COMMENT 'ì„¸íŠ¸ ìˆ˜',
+  `number_of_count` int(11) NOT NULL COMMENT '1ì„¸íŠ¸ ë‹¹ íšŸìˆ˜',
   PRIMARY KEY (`numb_set_index`,`exercise_numb`),
   KEY `exercise_numb` (`exercise_numb`),
   CONSTRAINT `exercise_repeat_numb_ibfk_1` FOREIGN KEY (`exercise_numb`) REFERENCES `exercise_info` (`exercise_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,7 +392,7 @@ CREATE TABLE `exercise_repeat_numb` (
 
 LOCK TABLES `exercise_repeat_numb` WRITE;
 /*!40000 ALTER TABLE `exercise_repeat_numb` DISABLE KEYS */;
-INSERT INTO `exercise_repeat_numb` VALUES (1,1,2,10),(2,2,3,10),(3,3,3,10),(4,4,2,20),(5,4,3,15),(6,2,2,5),(7,3,2,3);
+INSERT INTO `exercise_repeat_numb` VALUES (1,1,2,10),(2,2,3,10),(3,3,3,10),(4,4,2,20),(5,4,3,15),(6,2,1,5),(7,3,1,5),(8,2,1,5),(9,3,1,5),(10,2,5,16),(11,3,0,0);
 /*!40000 ALTER TABLE `exercise_repeat_numb` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -351,9 +404,9 @@ DROP TABLE IF EXISTS `friends`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `friends` (
-  `f_index` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ÀÎµ¦½º',
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø ¹øÈ£',
-  `fuser_numb` int(11) NOT NULL COMMENT 'Ä£±¸ È¸¿ø ¹øÈ£',
+  `f_index` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ì¸ë±ìŠ¤',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì› ë²ˆí˜¸',
+  `fuser_numb` int(11) NOT NULL COMMENT 'ì¹œêµ¬ íšŒì› ë²ˆí˜¸',
   PRIMARY KEY (`f_index`,`user_numb`),
   KEY `user_numb` (`user_numb`),
   CONSTRAINT `friends_ibfk_1` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -371,6 +424,32 @@ INSERT INTO `friends` VALUES (13,1,2),(14,2,1),(15,3,4),(16,4,3);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `kcal`
+--
+
+DROP TABLE IF EXISTS `kcal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kcal` (
+  `user_numb` int(11) NOT NULL,
+  `kcal` int(11) NOT NULL,
+  `kcal_date` date NOT NULL,
+  PRIMARY KEY (`user_numb`,`kcal_date`),
+  CONSTRAINT `kcal_ibfk_1` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `kcal`
+--
+
+LOCK TABLES `kcal` WRITE;
+/*!40000 ALTER TABLE `kcal` DISABLE KEYS */;
+INSERT INTO `kcal` VALUES (2,200,'2016-07-11'),(2,100,'2016-07-13'),(2,6,'2016-07-20'),(2,13,'2016-07-21'),(2,9,'2016-07-22'),(2,5,'2016-07-24'),(2,16,'2016-08-17'),(2,17,'2016-08-20'),(2,30,'2016-09-07'),(2,16,'2016-09-11'),(2,29,'2016-09-18'),(2,15,'2016-09-19'),(2,15,'2016-09-20'),(2,14,'2016-09-21'),(2,22,'2016-09-22'),(2,15,'2016-09-23'),(2,5,'2016-09-28'),(2,40,'2016-09-30'),(2,14,'2016-10-10'),(2,13,'2016-10-11'),(2,14,'2016-10-12'),(2,10,'2016-10-18'),(2,13,'2016-10-19'),(2,13,'2016-10-24'),(2,10,'2016-11-01'),(2,13,'2016-11-02');
+/*!40000 ALTER TABLE `kcal` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pic`
 --
 
@@ -378,10 +457,10 @@ DROP TABLE IF EXISTS `pic`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pic` (
-  `pic_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ÀÎµ¦½º',
-  `user_numb` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'È¸¿ø ¹øÈ£',
-  `pic_path` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '»çÁø °æ·Î',
-  `shoot_date` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ÃÔ¿µ ³¯Â¥',
+  `pic_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ì¸ë±ìŠ¤',
+  `user_numb` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'íšŒì› ë²ˆí˜¸',
+  `pic_path` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ì‚¬ì§„ ê²½ë¡œ',
+  `shoot_date` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ì´¬ì˜ ë‚ ì§œ',
   PRIMARY KEY (`pic_numb`,`user_numb`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -404,9 +483,9 @@ DROP TABLE IF EXISTS `rank`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rank` (
-  `exercise_numb` int(11) NOT NULL COMMENT '¿îµ¿ ¹øÈ£',
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø¹øÈ£',
-  `rank` int(11) NOT NULL COMMENT '·©Å·',
+  `exercise_numb` int(11) NOT NULL COMMENT 'ìš´ë™ ë²ˆí˜¸',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì›ë²ˆí˜¸',
+  `rank` int(11) NOT NULL COMMENT 'ë­í‚¹',
   PRIMARY KEY (`exercise_numb`,`user_numb`),
   KEY `user_numb` (`user_numb`),
   CONSTRAINT `rank_ibfk_1` FOREIGN KEY (`exercise_numb`) REFERENCES `exercise_info` (`exercise_numb`),
@@ -432,9 +511,9 @@ DROP TABLE IF EXISTS `routine_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `routine_info` (
-  `routine_list_index` int(11) NOT NULL AUTO_INCREMENT COMMENT '·çÆ¾ ¸®½ºÆ® ÀÎµ¦½º',
-  `diffculty` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '³­ÀÌµµ',
-  `routine_category` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Ä«Å×°í¸®',
+  `routine_list_index` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ë£¨í‹´ ë¦¬ìŠ¤íŠ¸ ì¸ë±ìŠ¤',
+  `diffculty` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë‚œì´ë„',
+  `routine_category` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ì¹´í…Œê³ ë¦¬',
   PRIMARY KEY (`routine_list_index`),
   CONSTRAINT `routine_info_ibfk_1` FOREIGN KEY (`routine_list_index`) REFERENCES `routine_list` (`routine_list_index`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -446,9 +525,34 @@ CREATE TABLE `routine_info` (
 
 LOCK TABLES `routine_info` WRITE;
 /*!40000 ALTER TABLE `routine_info` DISABLE KEYS */;
-
-INSERT INTO `routine_info` VALUES (1,'»ó','¾î±ú'),(2,'ÇÏ','Çã¹÷Áö'),(3,'ÇÏ','¾î±ú'),(4,'Áß','¾î±ú'),(5,'Áß','Çã¹÷Áö'),(6,'»ó','Çã¹÷Áö'),(7,'»ó','¾î±ú'),(8,'ÇÏ','¾î±ú');
+INSERT INTO `routine_info` VALUES (1,'ìƒ','ì–´ê¹¨'),(2,'í•˜','í—ˆë²…ì§€'),(3,'í•˜','ì–´ê¹¨'),(4,'ì¤‘','ì–´ê¹¨'),(5,'ì¤‘','í—ˆë²…ì§€'),(6,'ìƒ','í—ˆë²…ì§€'),(7,'ìƒ','ì–´ê¹¨'),(8,'í•˜','ì–´ê¹¨');
 /*!40000 ALTER TABLE `routine_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `routine_info_j`
+--
+
+DROP TABLE IF EXISTS `routine_info_j`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `routine_info_j` (
+  `routine_list_index` int(11) NOT NULL AUTO_INCREMENT,
+  `diffculty` varchar(45) NOT NULL,
+  `routine_category` varchar(45) NOT NULL,
+  PRIMARY KEY (`routine_list_index`),
+  CONSTRAINT `routine_info_j_ibfk_1` FOREIGN KEY (`routine_list_index`) REFERENCES `routine_list_j` (`routine_list_index`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `routine_info_j`
+--
+
+LOCK TABLES `routine_info_j` WRITE;
+/*!40000 ALTER TABLE `routine_info_j` DISABLE KEYS */;
+INSERT INTO `routine_info_j` VALUES (1,'ä¸Š','è‚©'),(2,'ä¸‹','å¤ªã‚‚ã‚‚'),(3,'ä¸‹','è‚©'),(4,'ä¸­','è‚©'),(5,'ä¸­','å¤ªã‚‚ã‚‚'),(6,'ä¸Š','å¤ªã‚‚ã‚‚'),(7,'ä¸Š','ã‹ãŸ'),(8,'ä¸‹','è‚©');
+/*!40000 ALTER TABLE `routine_info_j` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -459,10 +563,10 @@ DROP TABLE IF EXISTS `routine_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `routine_list` (
-  `routine_list_index` int(11) NOT NULL AUTO_INCREMENT COMMENT '·çÆ¾ ¸®½ºÆ® ÀÎµ¦½º',
-  `routine_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '·çÆ¾ ÀÌ¸§',
+  `routine_list_index` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ë£¨í‹´ ë¦¬ìŠ¤íŠ¸ ì¸ë±ìŠ¤',
+  `routine_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë£¨í‹´ ì´ë¦„',
   PRIMARY KEY (`routine_list_index`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -471,13 +575,35 @@ CREATE TABLE `routine_list` (
 
 LOCK TABLES `routine_list` WRITE;
 /*!40000 ALTER TABLE `routine_list` DISABLE KEYS */;
-
-INSERT INTO `routine_list` VALUES (1,'¾î±ú(»ó±ŞÀÚ)'),(2,'Çã¹÷Áö(ÃÊ½ÉÀÚ)'),(3,'¾î±ú(ÃÊ½ÉÀÚ)'),(4,'¾î±ú(Áß±ŞÀÚ)'),(5,'Çã¹÷Áö(Áß±ŞÀÚ)'),(6,'Çã¹÷Áö(°í±ŞÀÚ)'),(7,'¾î±ú(»ó±ŞÀÚ2)'),(8,'¾î±ú(Å×½ºÆ®)');
+INSERT INTO `routine_list` VALUES (1,'ì–´ê¹¨(ìƒê¸‰ì)'),(2,'í—ˆë²…ì§€(ì´ˆì‹¬ì)'),(3,'ì–´ê¹¨(ì´ˆì‹¬ì)'),(4,'ì–´ê¹¨(ì¤‘ê¸‰ì)'),(5,'í—ˆë²…ì§€(ì¤‘ê¸‰ì)'),(6,'í—ˆë²…ì§€(ê³ ê¸‰ì)'),(7,'ì–´ê¹¨(ìƒê¸‰ì2)'),(8,'ì–´ê¹¨(í…ŒìŠ¤íŠ¸)'),(9,'í…ŒìŠ¤íŠ¸1'),(10,'í…ŒìŠ¤íŠ¸2'),(11,'í…ŒìŠ¤íŠ¸3');
 /*!40000 ALTER TABLE `routine_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `routine_list_j`
+--
 
+DROP TABLE IF EXISTS `routine_list_j`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `routine_list_j` (
+  `routine_list_index` int(11) NOT NULL AUTO_INCREMENT,
+  `routine_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`routine_list_index`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `routine_list_j`
+--
+
+LOCK TABLES `routine_list_j` WRITE;
+/*!40000 ALTER TABLE `routine_list_j` DISABLE KEYS */;
+INSERT INTO `routine_list_j` VALUES (1,'è‚©ï¼ˆä¸Šç´šè€…ï¼‰'),(2,'å¤ªã‚‚ã‚‚ï¼ˆä¸‹ç´šè€…ï¼‰'),(3,'è‚©ï¼ˆä¸‹ç´šè€…ï¼‰'),(4,'è‚©ï¼ˆä¸­ç´šè€…ï¼‰'),(5,'å¤ªã‚‚ã‚‚ï¼ˆä¸­ç´šè€…ï¼‰'),(6,'å¤ªã‚‚ã‚‚ï¼ˆä¸Šç´šè€…ï¼‰'),(7,'è‚©ï¼ˆä¸Šç´šè€…ï¼‰'),(8,'è‚©ï¼ˆåˆå¿ƒè€…ï¼‰'),(9,'ãƒ†ã‚¹ãƒˆ1'),(10,'ãƒ†ã‚¹ãƒˆ2'),(11,'ãƒ†ã‚¹ãƒˆ3');
+/*!40000 ALTER TABLE `routine_list_j` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -485,13 +611,13 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `user_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'È¸¿ø ¹øÈ£',
-  `id` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '¾ÆÀÌµğ',
-  `password` varchar(200) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ºñ¹Ğ¹øÈ£',
-  `mail` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ÀÌ¸ŞÀÏ',
-  `nick` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT '´Ğ³×ÀÓ',
-  `height` int(11) DEFAULT NULL COMMENT 'Å°',
-  `level` int(11) NOT NULL DEFAULT '1' COMMENT '·¹º§',
+  `user_numb` int(11) NOT NULL AUTO_INCREMENT COMMENT 'íšŒì› ë²ˆí˜¸',
+  `id` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ì•„ì´ë””',
+  `password` varchar(200) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë¹„ë°€ë²ˆí˜¸',
+  `mail` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ì´ë©”ì¼',
+  `nick` varchar(45) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ë‹‰ë„¤ì„',
+  `height` int(11) DEFAULT NULL COMMENT 'í‚¤',
+  `level` int(11) NOT NULL DEFAULT '1' COMMENT 'ë ˆë²¨',
   `pic` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_numb`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -503,10 +629,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-
-INSERT INTO `user` VALUES (1,'gustjd15','1234','gustjd15@naver.com','YGgood',180,99,NULL),(2,'kim','1234','kim11@gmail.com','HONGgyu',168,2,'2.jpg'),(3,'bae','1234','pae41@hanmail.com','PAEPAE',170,3,'3.jpg'),
-(4,'bak','1234','back23@naver.com','bakadayo',158,1,NULL),(5,'test','test','test@test.com','tester',180,2,NULL),(6,'kimtaeyoon','qmffn112','hongkyunkim@naver.com','±èÅÂÀ±Â¯¸ÚÁü',163,1,NULL),
-(7,'kingtaeyoon','qmffn112','hongkyunkim@naver.com','TaeYoonBaby',176,1,NULL);
+INSERT INTO `user` VALUES (1,'gustjd15','1234','gustjd15@naver.com','YGgood',180,99,NULL),(2,'kim','1234','kim11@gmail.com','HONGgyu',168,2,'2.jpg'),(3,'bae','1234','pae41@hanmail.com','PAEPAE',170,3,'3.jpg'),(4,'bak','1234','back23@naver.com','bakadayo',158,1,NULL),(5,'test','test','test@test.com','tester',180,2,NULL),(6,'kimtaeyoon','qmffn112','hongkyunkim@naver.com','ê¹€íƒœìœ¤ì§±ë©‹ì§',163,1,NULL),(7,'kingtaeyoon','qmffn112','hongkyunkim@naver.com','TaeYoonBaby',176,1,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -518,9 +641,9 @@ DROP TABLE IF EXISTS `user_position_record`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_position_record` (
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø ¹øÈ£',
-  `position_count` int(11) NOT NULL COMMENT 'Ä«¿îÆ®',
-  `position_check_date` date NOT NULL COMMENT '±â·Ï ³¯Â¥',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì› ë²ˆí˜¸',
+  `position_count` int(11) NOT NULL COMMENT 'ì¹´ìš´íŠ¸',
+  `position_check_date` date NOT NULL COMMENT 'ê¸°ë¡ ë‚ ì§œ',
   `check_point_index` int(11) DEFAULT NULL,
   `position_record_index` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`position_record_index`),
@@ -528,7 +651,7 @@ CREATE TABLE `user_position_record` (
   KEY `user_position_record___fk` (`check_point_index`),
   CONSTRAINT `user_position_record___fk` FOREIGN KEY (`check_point_index`) REFERENCES `check_point` (`check_point_index`),
   CONSTRAINT `user_position_record_ibfk_1` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`)
-) ENGINE=InnoDB AUTO_INCREMENT=489 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=862 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -537,50 +660,7 @@ CREATE TABLE `user_position_record` (
 
 LOCK TABLES `user_position_record` WRITE;
 /*!40000 ALTER TABLE `user_position_record` DISABLE KEYS */;
-
-INSERT INTO `user_position_record` VALUES (2,6,'2016-05-29',1,1),(2,6,'2016-05-29',2,2),(2,3,'2016-05-30',9,3),(2,3,'2016-05-30',11,4),(2,6,'2016-05-30',3,5),(2,6,'2016-05-31',3,6),
-(2,6,'2016-05-31',4,7),(2,3,'2016-05-29',5,8),(2,6,'2016-05-30',4,9),(3,1,'2016-05-26',1,168),(3,0,'2016-05-26',2,169),(3,1,'2016-05-26',3,170),
-(3,1,'2016-05-26',4,171),(3,1,'2016-05-26',5,172),(3,0,'2016-05-26',6,173),(3,0,'2016-05-26',7,174),(3,0,'2016-05-26',8,175),
-(2,1,'2016-06-15',1,176),(2,0,'2016-06-15',2,177),(2,0,'2016-06-15',3,178),(2,0,'2016-06-15',4,179),(2,1,'2016-06-15',5,180),
-(2,0,'2016-06-15',6,181),(2,0,'2016-06-15',7,182),(2,0,'2016-06-15',8,183),(2,1,'2016-06-16',1,184),(2,0,'2016-06-16',2,185),
-(2,1,'2016-06-16',3,186),(2,0,'2016-06-16',4,187),(2,1,'2016-06-16',5,188),(2,3,'2016-06-16',12,189),(2,2,'2016-06-16',13,190),
-(2,0,'0000-00-00',4,191),(2,1,'0000-00-00',1,204),(2,0,'0000-00-00',2,205),(2,0,'0000-00-00',3,206),(2,0,'0000-00-00',4,207),(2,1,'0000-00-00',1,208),
-(2,0,'0000-00-00',2,209),(2,1,'0000-00-00',3,210),(2,0,'0000-00-00',4,211),(2,1,'2016-06-14',1,212),(2,1,'2016-06-14',2,213),(2,0,'2016-06-14',3,214),
-(2,0,'2016-06-14',4,215),(2,0,'2016-06-14',5,216),(2,0,'2016-06-14',6,217),(2,0,'2016-06-14',7,218),(2,0,'2016-06-14',8,219),(2,0,'0000-00-00',5,220),(2,0,'2016-06-16',6,221),
-(2,0,'2016-06-16',7,222),(2,0,'2016-06-16',8,223),(2,0,'0000-00-00',5,224),(2,0,'0000-00-00',6,225),(2,0,'0000-00-00',7,226),(2,0,'0000-00-00',8,227),
-(2,0,'0000-00-00',5,228),(2,0,'0000-00-00',6,229),(2,0,'0000-00-00',7,230),(2,0,'0000-00-00',8,231),(2,0,'0000-00-00',5,232),(2,0,'0000-00-00',6,233),
-(2,0,'0000-00-00',7,234),(2,0,'0000-00-00',8,235),(2,0,'0000-00-00',1,236),(2,0,'0000-00-00',2,237),(2,0,'0000-00-00',3,238),
-(2,0,'0000-00-00',4,239),(2,0,'0000-00-00',1,240),(2,0,'0000-00-00',2,241),(2,0,'0000-00-00',3,242),(2,0,'0000-00-00',4,243),(2,0,'0000-00-00',1,244),
-(2,0,'0000-00-00',2,245),(2,0,'0000-00-00',3,246),(2,0,'0000-00-00',4,247),(2,0,'0000-00-00',1,248),(2,1,'0000-00-00',2,249),(2,0,'0000-00-00',3,250),
-(2,1,'0000-00-00',4,251),(2,0,'0000-00-00',1,252),(2,0,'0000-00-00',2,253),(2,0,'0000-00-00',3,254),(2,0,'0000-00-00',4,255),(2,0,'0000-00-00',1,256),
-(2,0,'0000-00-00',2,257),(2,0,'0000-00-00',3,258),(2,0,'0000-00-00',4,259),(2,0,'0000-00-00',1,260),(2,0,'0000-00-00',2,261),(2,0,'0000-00-00',3,262),
-(2,0,'0000-00-00',4,263),(2,0,'0000-00-00',1,264),(2,1,'0000-00-00',2,265),(2,0,'0000-00-00',3,266),(2,1,'0000-00-00',4,267),(2,1,'0000-00-00',1,268),
-(2,1,'0000-00-00',2,269),(2,1,'0000-00-00',3,270),(2,1,'0000-00-00',4,271),(2,0,'0000-00-00',1,272),(2,1,'0000-00-00',2,273),(2,0,'0000-00-00',3,274),
-(2,0,'0000-00-00',4,275),(2,0,'0000-00-00',1,276),(2,1,'0000-00-00',2,277),(2,0,'0000-00-00',3,278),(2,0,'0000-00-00',4,279),(2,0,'0000-00-00',1,280),
-(2,1,'0000-00-00',2,281),(2,0,'0000-00-00',3,282),(2,0,'0000-00-00',4,283),(2,0,'0000-00-00',1,284),(2,1,'0000-00-00',2,285),(2,0,'0000-00-00',3,286),
-(2,0,'0000-00-00',4,287),(2,0,'0000-00-00',5,288),(2,0,'0000-00-00',6,289),(2,0,'0000-00-00',7,290),(2,0,'0000-00-00',8,291),(2,0,'0000-00-00',5,292),
-(2,0,'0000-00-00',6,293),(2,0,'0000-00-00',7,294),(2,0,'0000-00-00',8,295),(2,0,'0000-00-00',5,296),(2,0,'0000-00-00',6,297),(2,0,'0000-00-00',7,298),
-(2,0,'0000-00-00',8,299),(2,0,'0000-00-00',5,300),(2,0,'0000-00-00',6,301),(2,0,'0000-00-00',7,302),(2,0,'0000-00-00',8,303),(2,0,'0000-00-00',5,304),
-(2,0,'0000-00-00',6,305),(2,0,'0000-00-00',7,306),(2,0,'0000-00-00',8,307),(2,1,'2016-06-02',1,308),(2,0,'2016-06-02',2,309),(2,0,'2016-06-02',3,310),
-(2,0,'2016-06-02',4,311),(3,1,'2016-06-12',1,312),(3,1,'2016-06-12',2,313),(3,2,'2016-06-12',3,314),(3,0,'2016-06-12',4,315),(3,2,'2016-06-12',5,316),
-(3,0,'2016-06-12',6,317),(3,1,'2016-06-12',7,318),(3,0,'2016-06-12',8,319),(3,1,'2016-06-13',1,320),(3,2,'2016-06-13',2,321),(3,3,'2016-06-13',3,322),
-(3,4,'2016-06-13',4,323),(3,5,'2016-06-13',5,324),(3,0,'2016-06-13',6,325),(3,2,'2016-06-13',7,326),(2,0,'0000-00-00',1,375),(2,0,'0000-00-00',2,376),
-(2,0,'0000-00-00',3,377),(2,0,'0000-00-00',4,378),(2,0,'0000-00-00',12,379),(2,0,'0000-00-00',13,380),(2,0,'0000-00-00',1,381),(2,0,'0000-00-00',2,382),
-(2,0,'0000-00-00',3,383),(2,0,'0000-00-00',4,384),(2,0,'0000-00-00',12,385),(2,0,'0000-00-00',13,386),(2,0,'0000-00-00',1,387),(2,0,'0000-00-00',2,388),
-(2,0,'0000-00-00',3,389),(2,0,'0000-00-00',4,390),(2,0,'0000-00-00',12,391),(2,0,'0000-00-00',13,392),(2,0,'0000-00-00',1,393),(2,0,'0000-00-00',2,394),(2,0,'0000-00-00',3,395),(2,0,'0000-00-00',4,396),
-(2,0,'0000-00-00',12,397),(2,0,'0000-00-00',13,398),(2,1,'0000-00-00',1,399),(2,0,'0000-00-00',2,400),(2,1,'0000-00-00',3,401),(2,0,'0000-00-00',4,402),(2,0,'0000-00-00',12,403),(2,0,'0000-00-00',13,404),
-(2,1,'0000-00-00',1,405),(2,0,'0000-00-00',2,406),(2,0,'0000-00-00',3,407),(2,0,'0000-00-00',4,408),(2,0,'0000-00-00',12,409),(2,0,'0000-00-00',13,410),(2,1,'0000-00-00',1,411),(2,0,'0000-00-00',2,412),
-(2,0,'0000-00-00',3,413),(2,0,'0000-00-00',4,414),(2,0,'0000-00-00',12,415),(2,0,'0000-00-00',13,416),(2,0,'0000-00-00',1,417),(2,0,'0000-00-00',2,418),(2,0,'0000-00-00',3,419),
-(2,1,'0000-00-00',4,420),(2,0,'0000-00-00',12,421),(2,0,'0000-00-00',13,422),(2,1,'0000-00-00',1,423),(2,0,'0000-00-00',2,424),(2,1,'0000-00-00',3,425),(2,0,'0000-00-00',4,426),
-(2,0,'0000-00-00',12,427),(2,0,'0000-00-00',13,428),(2,0,'0000-00-00',1,429),(2,0,'0000-00-00',2,430),(2,0,'0000-00-00',3,431),(2,0,'0000-00-00',4,432),(2,0,'0000-00-00',12,433),
-(2,0,'0000-00-00',13,434),(2,0,'0000-00-00',5,435),(2,0,'0000-00-00',6,436),(2,0,'0000-00-00',7,437),(2,0,'0000-00-00',8,438),(2,0,'0000-00-00',14,439),(2,0,'0000-00-00',15,440),
-(2,1,'0000-00-00',5,441),(2,1,'0000-00-00',6,442),(2,1,'0000-00-00',7,443),(2,1,'0000-00-00',8,444),(2,0,'0000-00-00',14,445),(2,0,'0000-00-00',15,446),(2,0,'0000-00-00',5,447),
-(2,0,'0000-00-00',6,448),(2,0,'0000-00-00',7,449),(2,1,'0000-00-00',8,450),(2,0,'0000-00-00',14,451),(2,0,'0000-00-00',15,452),(2,0,'0000-00-00',5,453),(2,1,'0000-00-00',6,454),
-(2,0,'0000-00-00',7,455),(2,1,'0000-00-00',8,456),(2,0,'0000-00-00',14,457),(2,0,'0000-00-00',15,458),(2,1,'0000-00-00',5,459),(2,1,'0000-00-00',6,460),(2,1,'0000-00-00',7,461),
-(2,1,'0000-00-00',8,462),(2,0,'0000-00-00',14,463),(2,0,'0000-00-00',15,464),(2,0,'0000-00-00',5,465),(2,0,'0000-00-00',6,466),(2,0,'0000-00-00',7,467),(2,0,'0000-00-00',8,468),
-(2,0,'0000-00-00',14,469),(2,0,'0000-00-00',15,470),(2,0,'0000-00-00',1,471),(2,0,'0000-00-00',2,472),(2,0,'0000-00-00',3,473),(2,0,'0000-00-00',4,474),(2,0,'0000-00-00',12,475),
-(2,0,'0000-00-00',13,476),(2,4,'2016-06-17',1,477),(2,8,'2016-06-17',2,478),(2,6,'2016-06-17',3,479),(2,5,'2016-06-17',4,480),(2,1,'2016-06-17',12,481),(2,1,'2016-06-17',13,482),
-(2,7,'2016-06-17',5,483),(2,8,'2016-06-17',6,484),(2,8,'2016-06-17',7,485),(2,8,'2016-06-17',8,486),(2,6,'2016-06-17',14,487),(2,4,'2016-06-17',15,488);
+INSERT INTO `user_position_record` VALUES (2,6,'2016-05-29',1,1),(2,6,'2016-05-29',2,2),(2,3,'2016-05-30',9,3),(2,3,'2016-05-30',11,4),(2,6,'2016-05-30',3,5),(2,6,'2016-05-31',3,6),(2,6,'2016-05-31',4,7),(2,3,'2016-05-29',5,8),(2,6,'2016-05-30',4,9),(3,1,'2016-05-26',1,168),(3,0,'2016-05-26',2,169),(3,1,'2016-05-26',3,170),(3,1,'2016-05-26',4,171),(3,1,'2016-05-26',5,172),(3,0,'2016-05-26',6,173),(3,0,'2016-05-26',7,174),(3,0,'2016-05-26',8,175),(2,1,'2016-06-15',1,176),(2,0,'2016-06-15',2,177),(2,0,'2016-06-15',3,178),(2,0,'2016-06-15',4,179),(2,1,'2016-06-15',5,180),(2,0,'2016-06-15',6,181),(2,0,'2016-06-15',7,182),(2,0,'2016-06-15',8,183),(2,1,'2016-06-16',1,184),(2,0,'2016-06-16',2,185),(2,1,'2016-06-16',3,186),(2,0,'2016-06-16',4,187),(2,1,'2016-06-16',5,188),(2,3,'2016-06-16',12,189),(2,2,'2016-06-16',13,190),(2,0,'0000-00-00',4,191),(2,1,'0000-00-00',1,204),(2,0,'0000-00-00',2,205),(2,0,'0000-00-00',3,206),(2,0,'0000-00-00',4,207),(2,1,'0000-00-00',1,208),(2,0,'0000-00-00',2,209),(2,1,'0000-00-00',3,210),(2,0,'0000-00-00',4,211),(2,1,'2016-06-14',1,212),(2,1,'2016-06-14',2,213),(2,0,'2016-06-14',3,214),(2,0,'2016-06-14',4,215),(2,0,'2016-06-14',5,216),(2,0,'2016-06-14',6,217),(2,0,'2016-06-14',7,218),(2,0,'2016-06-14',8,219),(2,0,'0000-00-00',5,220),(2,0,'2016-06-16',6,221),(2,0,'2016-06-16',7,222),(2,0,'2016-06-16',8,223),(2,0,'0000-00-00',5,224),(2,0,'0000-00-00',6,225),(2,0,'0000-00-00',7,226),(2,0,'0000-00-00',8,227),(2,0,'0000-00-00',5,228),(2,0,'0000-00-00',6,229),(2,0,'0000-00-00',7,230),(2,0,'0000-00-00',8,231),(2,0,'0000-00-00',5,232),(2,0,'0000-00-00',6,233),(2,0,'0000-00-00',7,234),(2,0,'0000-00-00',8,235),(2,0,'0000-00-00',1,236),(2,0,'0000-00-00',2,237),(2,0,'0000-00-00',3,238),(2,0,'0000-00-00',4,239),(2,0,'0000-00-00',1,240),(2,0,'0000-00-00',2,241),(2,0,'0000-00-00',3,242),(2,0,'0000-00-00',4,243),(2,0,'0000-00-00',1,244),(2,0,'0000-00-00',2,245),(2,0,'0000-00-00',3,246),(2,0,'0000-00-00',4,247),(2,0,'0000-00-00',1,248),(2,1,'0000-00-00',2,249),(2,0,'0000-00-00',3,250),(2,1,'0000-00-00',4,251),(2,0,'0000-00-00',1,252),(2,0,'0000-00-00',2,253),(2,0,'0000-00-00',3,254),(2,0,'0000-00-00',4,255),(2,0,'0000-00-00',1,256),(2,0,'0000-00-00',2,257),(2,0,'0000-00-00',3,258),(2,0,'0000-00-00',4,259),(2,0,'0000-00-00',1,260),(2,0,'0000-00-00',2,261),(2,0,'0000-00-00',3,262),(2,0,'0000-00-00',4,263),(2,0,'0000-00-00',1,264),(2,1,'0000-00-00',2,265),(2,0,'0000-00-00',3,266),(2,1,'0000-00-00',4,267),(2,1,'0000-00-00',1,268),(2,1,'0000-00-00',2,269),(2,1,'0000-00-00',3,270),(2,1,'0000-00-00',4,271),(2,0,'0000-00-00',1,272),(2,1,'0000-00-00',2,273),(2,0,'0000-00-00',3,274),(2,0,'0000-00-00',4,275),(2,0,'0000-00-00',1,276),(2,1,'0000-00-00',2,277),(2,0,'0000-00-00',3,278),(2,0,'0000-00-00',4,279),(2,0,'0000-00-00',1,280),(2,1,'0000-00-00',2,281),(2,0,'0000-00-00',3,282),(2,0,'0000-00-00',4,283),(2,0,'0000-00-00',1,284),(2,1,'0000-00-00',2,285),(2,0,'0000-00-00',3,286),(2,0,'0000-00-00',4,287),(2,0,'0000-00-00',5,288),(2,0,'0000-00-00',6,289),(2,0,'0000-00-00',7,290),(2,0,'0000-00-00',8,291),(2,0,'0000-00-00',5,292),(2,0,'0000-00-00',6,293),(2,0,'0000-00-00',7,294),(2,0,'0000-00-00',8,295),(2,0,'0000-00-00',5,296),(2,0,'0000-00-00',6,297),(2,0,'0000-00-00',7,298),(2,0,'0000-00-00',8,299),(2,0,'0000-00-00',5,300),(2,0,'0000-00-00',6,301),(2,0,'0000-00-00',7,302),(2,0,'0000-00-00',8,303),(2,0,'0000-00-00',5,304),(2,0,'0000-00-00',6,305),(2,0,'0000-00-00',7,306),(2,0,'0000-00-00',8,307),(2,1,'2016-06-02',1,308),(2,0,'2016-06-02',2,309),(2,0,'2016-06-02',3,310),(2,0,'2016-06-02',4,311),(3,1,'2016-06-12',1,312),(3,1,'2016-06-12',2,313),(3,2,'2016-06-12',3,314),(3,0,'2016-06-12',4,315),(3,2,'2016-06-12',5,316),(3,0,'2016-06-12',6,317),(3,1,'2016-06-12',7,318),(3,0,'2016-06-12',8,319),(3,1,'2016-06-13',1,320),(3,2,'2016-06-13',2,321),(3,3,'2016-06-13',3,322),(3,4,'2016-06-13',4,323),(3,5,'2016-06-13',5,324),(3,0,'2016-06-13',6,325),(3,2,'2016-06-13',7,326),(2,0,'0000-00-00',1,375),(2,0,'0000-00-00',2,376),(2,0,'0000-00-00',3,377),(2,0,'0000-00-00',4,378),(2,0,'0000-00-00',12,379),(2,0,'0000-00-00',13,380),(2,0,'0000-00-00',1,381),(2,0,'0000-00-00',2,382),(2,0,'0000-00-00',3,383),(2,0,'0000-00-00',4,384),(2,0,'0000-00-00',12,385),(2,0,'0000-00-00',13,386),(2,0,'0000-00-00',1,387),(2,0,'0000-00-00',2,388),(2,0,'0000-00-00',3,389),(2,0,'0000-00-00',4,390),(2,0,'0000-00-00',12,391),(2,0,'0000-00-00',13,392),(2,0,'0000-00-00',1,393),(2,0,'0000-00-00',2,394),(2,0,'0000-00-00',3,395),(2,0,'0000-00-00',4,396),(2,0,'0000-00-00',12,397),(2,0,'0000-00-00',13,398),(2,1,'0000-00-00',1,399),(2,0,'0000-00-00',2,400),(2,1,'0000-00-00',3,401),(2,0,'0000-00-00',4,402),(2,0,'0000-00-00',12,403),(2,0,'0000-00-00',13,404),(2,1,'0000-00-00',1,405),(2,0,'0000-00-00',2,406),(2,0,'0000-00-00',3,407),(2,0,'0000-00-00',4,408),(2,0,'0000-00-00',12,409),(2,0,'0000-00-00',13,410),(2,1,'0000-00-00',1,411),(2,0,'0000-00-00',2,412),(2,0,'0000-00-00',3,413),(2,0,'0000-00-00',4,414),(2,0,'0000-00-00',12,415),(2,0,'0000-00-00',13,416),(2,0,'0000-00-00',1,417),(2,0,'0000-00-00',2,418),(2,0,'0000-00-00',3,419),(2,1,'0000-00-00',4,420),(2,0,'0000-00-00',12,421),(2,0,'0000-00-00',13,422),(2,1,'0000-00-00',1,423),(2,0,'0000-00-00',2,424),(2,1,'0000-00-00',3,425),(2,0,'0000-00-00',4,426),(2,0,'0000-00-00',12,427),(2,0,'0000-00-00',13,428),(2,0,'0000-00-00',1,429),(2,0,'0000-00-00',2,430),(2,0,'0000-00-00',3,431),(2,0,'0000-00-00',4,432),(2,0,'0000-00-00',12,433),(2,0,'0000-00-00',13,434),(2,0,'0000-00-00',5,435),(2,0,'0000-00-00',6,436),(2,0,'0000-00-00',7,437),(2,0,'0000-00-00',8,438),(2,0,'0000-00-00',14,439),(2,0,'0000-00-00',15,440),(2,1,'0000-00-00',5,441),(2,1,'0000-00-00',6,442),(2,1,'0000-00-00',7,443),(2,1,'0000-00-00',8,444),(2,0,'0000-00-00',14,445),(2,0,'0000-00-00',15,446),(2,0,'0000-00-00',5,447),(2,0,'0000-00-00',6,448),(2,0,'0000-00-00',7,449),(2,1,'0000-00-00',8,450),(2,0,'0000-00-00',14,451),(2,0,'0000-00-00',15,452),(2,0,'0000-00-00',5,453),(2,1,'0000-00-00',6,454),(2,0,'0000-00-00',7,455),(2,1,'0000-00-00',8,456),(2,0,'0000-00-00',14,457),(2,0,'0000-00-00',15,458),(2,1,'0000-00-00',5,459),(2,1,'0000-00-00',6,460),(2,1,'0000-00-00',7,461),(2,1,'0000-00-00',8,462),(2,0,'0000-00-00',14,463),(2,0,'0000-00-00',15,464),(2,0,'0000-00-00',5,465),(2,0,'0000-00-00',6,466),(2,0,'0000-00-00',7,467),(2,0,'0000-00-00',8,468),(2,0,'0000-00-00',14,469),(2,0,'0000-00-00',15,470),(2,0,'0000-00-00',1,471),(2,0,'0000-00-00',2,472),(2,0,'0000-00-00',3,473),(2,0,'0000-00-00',4,474),(2,0,'0000-00-00',12,475),(2,0,'0000-00-00',13,476),(2,4,'2016-06-17',1,477),(2,8,'2016-06-17',2,478),(2,6,'2016-06-17',3,479),(2,5,'2016-06-17',4,480),(2,1,'2016-06-17',12,481),(2,1,'2016-06-17',13,482),(2,7,'2016-06-17',5,483),(2,8,'2016-06-17',6,484),(2,8,'2016-06-17',7,485),(2,8,'2016-06-17',8,486),(2,6,'2016-06-17',14,487),(2,4,'2016-06-17',15,488),(2,8,'2016-06-19',1,489),(2,6,'2016-06-19',2,490),(2,7,'2016-06-19',3,491),(2,5,'2016-06-19',4,492),(2,7,'2016-06-19',12,493),(2,7,'2016-06-19',13,494),(2,2,'2016-06-19',5,495),(2,2,'2016-06-19',6,496),(2,2,'2016-06-19',7,497),(2,2,'2016-06-19',8,498),(2,3,'2016-06-19',14,499),(2,4,'2016-06-19',15,500),(2,8,'2016-06-20',1,510),(2,10,'2016-06-20',2,511),(2,7,'2016-06-20',3,512),(2,7,'2016-06-20',4,513),(2,9,'2016-06-20',12,514),(2,8,'2016-06-20',13,515),(2,0,'2016-06-20',5,516),(2,0,'2016-06-20',6,517),(2,0,'2016-06-20',7,518),(2,0,'2016-06-20',8,519),(2,0,'2016-06-20',14,520),(2,0,'2016-06-20',15,521),(2,3,'2016-06-21',1,522),(2,3,'2016-06-21',2,523),(2,3,'2016-06-21',3,524),(2,3,'2016-06-21',4,525),(2,0,'2016-06-21',12,526),(2,0,'2016-06-21',13,527),(2,0,'2016-06-21',5,528),(2,0,'2016-06-21',6,529),(2,0,'2016-06-21',7,530),(2,0,'2016-06-21',8,531),(2,0,'2016-06-21',14,532),(2,0,'2016-06-21',15,533),(2,19,'2016-06-22',1,534),(2,11,'2016-06-22',2,535),(2,9,'2016-06-22',3,536),(2,9,'2016-06-22',4,537),(2,3,'2016-06-22',12,538),(2,1,'2016-06-22',13,539),(2,2,'2016-06-22',5,540),(2,2,'2016-06-22',6,541),(2,9,'2016-06-22',7,542),(2,2,'2016-06-22',8,543),(2,0,'2016-06-22',14,544),(2,0,'2016-06-22',15,545),(2,7,'2016-06-23',1,546),(2,7,'2016-06-23',2,547),(2,7,'2016-06-23',3,548),(2,7,'2016-06-23',4,549),(2,2,'2016-06-23',12,550),(2,0,'2016-06-23',13,551),(2,0,'2016-06-23',5,552),(2,0,'2016-06-23',6,553),(2,0,'2016-06-23',7,554),(2,0,'2016-06-23',8,555),(2,0,'2016-06-23',14,556),(2,0,'2016-06-23',15,557),(2,22,'2016-07-06',1,558),(2,10,'2016-07-06',2,559),(2,7,'2016-07-06',3,560),(2,5,'2016-07-06',4,561),(2,2,'2016-07-06',12,562),(2,23,'2016-07-06',13,563),(2,0,'2016-07-06',5,564),(2,0,'2016-07-06',6,565),(2,0,'2016-07-06',7,566),(2,0,'2016-07-06',8,567),(2,0,'2016-07-06',14,568),(2,0,'2016-07-06',15,569),(2,119,'2016-07-07',1,570),(2,14,'2016-07-07',2,571),(2,16,'2016-07-07',3,572),(2,7,'2016-07-07',4,573),(2,19,'2016-07-07',12,574),(2,36,'2016-07-07',13,575),(2,3,'2016-07-07',5,576),(2,3,'2016-07-07',6,577),(2,4,'2016-07-07',7,578),(2,4,'2016-07-07',8,579),(2,0,'2016-07-07',14,580),(2,0,'2016-07-07',15,581),(2,6,'2016-07-08',1,582),(2,0,'2016-07-08',2,583),(2,0,'2016-07-08',3,584),(2,0,'2016-07-08',4,585),(2,3,'2016-07-08',12,586),(2,13,'2016-07-08',13,587),(2,1,'2016-07-09',1,588),(2,1,'2016-07-09',2,589),(2,1,'2016-07-09',3,590),(2,1,'2016-07-09',4,591),(2,0,'2016-07-09',12,592),(2,0,'2016-07-09',13,593),(2,1,'2016-07-09',5,594),(2,1,'2016-07-09',6,595),(2,0,'2016-07-09',7,596),(2,0,'2016-07-09',8,597),(2,0,'2016-07-09',14,598),(2,0,'2016-07-09',15,599),(2,1,'2016-07-10',1,600),(2,0,'2016-07-10',2,601),(2,6,'2016-07-10',3,602),(2,1,'2016-07-10',4,603),(2,0,'2016-07-10',12,604),(2,0,'2016-07-10',13,605),(2,2,'2016-07-10',5,606),(2,2,'2016-07-10',6,607),(2,2,'2016-07-10',7,608),(2,1,'2016-07-10',8,609),(2,0,'2016-07-10',14,610),(2,0,'2016-07-10',15,611),(2,2,'2016-07-11',1,612),(2,0,'2016-07-11',2,613),(2,1,'2016-07-18',1,636),(2,1,'2016-07-18',2,637),(2,0,'2016-07-18',5,638),(2,1,'2016-07-18',6,639),(2,2,'2016-07-20',1,660),(2,2,'2016-07-20',2,661),(2,3,'2016-07-20',5,662),(2,7,'2016-07-20',6,663),(2,2,'2016-07-21',1,690),(2,1,'2016-07-21',2,691),(2,1,'2016-07-21',5,692),(2,1,'2016-07-21',6,693),(2,0,'2016-07-22',5,696),(2,1,'2016-07-22',6,697),(2,2,'2016-07-24',1,706),(2,0,'2016-07-24',2,707),(2,1,'2016-07-24',5,708),(2,4,'2016-07-24',6,709),(2,3,'2016-08-08',1,712),(2,0,'2016-08-08',2,713),(2,1,'2016-08-17',1,726),(2,0,'2016-08-17',2,727),(2,3,'2016-08-20',1,732),(2,3,'2016-08-20',2,733),(2,3,'2016-08-20',5,734),(2,2,'2016-08-20',6,735),(2,3,'2016-08-28',1,744),(2,3,'2016-08-28',2,745),(2,3,'2016-08-30',1,746),(2,3,'2016-08-30',2,747),(2,2,'2016-09-07',1,748),(2,3,'2016-09-07',2,749),(2,3,'2016-09-07',5,750),(2,3,'2016-09-07',6,751),(2,4,'2016-09-11',1,768),(2,3,'2016-09-11',2,769),(2,8,'2016-09-11',5,770),(2,8,'2016-09-11',6,771),(2,1,'2016-09-18',1,776),(2,0,'2016-09-18',2,777),(2,1,'2016-09-18',5,778),(2,0,'2016-09-18',6,779),(2,1,'2016-09-19',1,780),(2,2,'2016-09-19',2,781),(2,3,'2016-09-19',5,782),(2,3,'2016-09-19',6,783),(2,3,'2016-09-20',1,794),(2,2,'2016-09-20',2,795),(2,0,'2016-09-20',5,796),(2,1,'2016-09-20',6,797),(2,2,'2016-09-21',1,798),(2,2,'2016-09-21',2,799),(2,3,'2016-09-21',5,800),(2,5,'2016-09-21',6,801),(2,4,'2016-09-22',1,804),(2,4,'2016-09-22',2,805),(2,3,'2016-09-22',5,806),(2,3,'2016-09-22',6,807),(2,3,'2016-09-23',1,812),(2,2,'2016-09-23',2,813),(2,3,'2016-09-23',5,814),(2,3,'2016-09-23',6,815),(2,3,'2016-09-28',1,820),(2,4,'2016-09-28',2,821),(2,3,'2016-09-28',5,822),(2,3,'2016-09-28',6,823),(2,7,'2016-09-30',1,824),(2,4,'2016-09-30',2,825),(2,4,'2016-09-30',5,826),(2,1,'2016-09-30',6,827),(2,1,'2016-10-10',1,828),(2,2,'2016-10-10',2,829),(2,3,'2016-10-10',5,830),(2,3,'2016-10-10',6,831),(2,1,'2016-10-12',1,832),(2,2,'2016-10-12',2,833),(2,3,'2016-10-12',5,834),(2,3,'2016-10-12',6,835),(2,1,'2016-10-18',1,836),(2,2,'2016-10-18',2,837),(2,3,'2016-10-18',5,838),(2,3,'2016-10-18',6,839),(2,1,'2016-10-19',1,842),(2,2,'2016-10-19',2,843),(2,3,'2016-10-19',5,844),(2,3,'2016-10-19',6,845),(2,1,'2016-10-24',1,850),(2,2,'2016-10-24',2,851),(2,3,'2016-10-24',5,852),(2,3,'2016-10-24',6,853),(2,2,'2016-11-01',1,854),(2,2,'2016-11-01',2,855),(2,4,'2016-11-01',5,856),(2,4,'2016-11-01',6,857),(2,3,'2016-11-02',1,858),(2,2,'2016-11-02',2,859),(2,3,'2016-11-02',5,860),(2,3,'2016-11-02',6,861);
 /*!40000 ALTER TABLE `user_position_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -599,7 +679,7 @@ CREATE TABLE `user_routine_info` (
   PRIMARY KEY (`routine_list_numb`),
   KEY `user_routine_info___fk` (`user_numb`),
   CONSTRAINT `user_routine_info___fk` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`)
-) ENGINE=InnoDB AUTO_INCREMENT=184 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=277 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -608,15 +688,7 @@ CREATE TABLE `user_routine_info` (
 
 LOCK TABLES `user_routine_info` WRITE;
 /*!40000 ALTER TABLE `user_routine_info` DISABLE KEYS */;
-
-INSERT INTO `user_routine_info` VALUES (1,2,1,'2016-05-29'),(2,2,2,'2016-05-30'),(66,2,4,'2016-05-31'),(83,2,8,'2016-06-24'),(92,2,4,'2016-06-15'),(111,2,4,'2016-07-20'),(112,2,4,'2016-07-22'),(113,2,4,'2016-07-18'),
-(114,2,4,'2016-07-26'),(115,2,4,'2016-07-28'),(116,2,4,'2016-07-11'),(117,2,4,'2016-07-13'),(118,2,5,'2016-07-06'),(119,2,5,'2016-07-08'),(120,2,4,'2016-07-29'),(121,2,4,'2016-07-27'),
-(122,2,4,'2016-07-01'),(123,2,4,'2016-07-07'),(128,2,5,'2016-07-04'),(129,2,5,'2016-07-14'),(130,2,5,'2016-07-19'),(131,2,4,'2016-08-11'),(132,2,4,'2016-08-10'),(133,2,4,'2016-08-12'),(134,2,4,'2016-07-21'),
-(135,2,4,'2016-07-15'),(136,2,1,'2016-08-15'),(137,3,1,'2016-08-17'),(138,3,1,'2016-08-19'),(139,3,4,'2016-08-22'),(140,3,4,'2016-08-24'),(141,3,4,'2016-05-26'),(145,2,8,'2016-06-05'),(150,3,5,'2016-06-06'),
-(151,3,5,'2016-06-08'),(152,3,5,'2016-06-10'),(159,3,4,'2016-06-15'),(160,3,4,'2016-06-17'),(161,3,4,'2016-06-12'),(165,2,8,'2016-06-12'),(167,3,6,'2016-06-16'),(169,3,8,'2016-06-18'),(170,3,1,'2016-06-19'),
-(171,3,7,'2016-06-20'),(172,3,4,'2016-06-21'),(173,2,4,'2016-06-07'),(174,2,4,'2016-06-09'),(175,2,4,'2016-06-11'),(176,2,8,'2016-06-14'),(177,2,8,'2016-06-16'),(178,2,8,'2016-06-18'),(179,2,1,'2016-06-20'),
-(180,2,8,'2016-06-17'),(181,2,6,'2016-06-19'),(182,2,2,'2016-06-30'),(183,2,6,'2016-06-21');
-
+INSERT INTO `user_routine_info` VALUES (1,2,1,'2016-05-29'),(2,2,2,'2016-05-30'),(66,2,4,'2016-05-31'),(111,2,9,'2016-07-20'),(115,2,9,'2016-07-28'),(116,2,8,'2016-07-11'),(117,2,4,'2016-07-13'),(119,2,5,'2016-07-08'),(120,2,4,'2016-07-29'),(121,2,9,'2016-07-27'),(122,2,4,'2016-07-01'),(128,2,5,'2016-07-04'),(129,2,5,'2016-07-14'),(130,2,5,'0000-00-00'),(131,2,8,'2016-08-11'),(132,2,4,'2016-08-10'),(133,2,4,'2016-08-12'),(134,2,9,'2016-07-21'),(136,2,1,'2016-08-15'),(137,3,1,'2016-08-17'),(138,3,1,'2016-08-19'),(139,3,4,'2016-08-22'),(140,3,4,'2016-08-24'),(141,3,4,'2016-05-26'),(192,2,8,'2016-06-20'),(193,2,5,'2016-06-13'),(194,2,5,'2016-06-06'),(195,2,3,'2016-06-10'),(196,2,3,'2016-06-17'),(197,2,4,'2016-06-15'),(198,2,8,'2016-06-21'),(199,2,8,'2016-06-22'),(200,2,8,'2016-06-23'),(201,2,8,'2016-06-16'),(202,2,8,'2016-06-29'),(204,2,9,'2016-07-05'),(205,2,8,'2016-07-07'),(206,2,8,'2016-07-09'),(207,2,8,'2016-07-10'),(208,2,8,'2016-07-12'),(209,2,8,'2016-07-16'),(210,2,8,'2016-07-18'),(211,2,8,'2016-07-23'),(212,2,8,'2016-07-22'),(213,2,9,'2016-07-24'),(214,2,9,'2016-07-25'),(215,2,8,'2016-07-26'),(216,2,8,'2016-07-30'),(217,2,8,'2016-08-01'),(218,2,8,'2016-08-16'),(219,2,8,'2016-08-02'),(220,2,8,'2016-08-03'),(221,2,8,'2016-08-04'),(222,2,8,'2016-08-05'),(223,2,8,'2016-08-08'),(224,2,8,'2016-08-09'),(225,2,8,'2016-08-14'),(226,2,8,'2016-08-17'),(227,2,8,'2016-08-20'),(228,2,8,'2016-08-25'),(229,2,8,'2016-08-26'),(230,2,8,'2016-08-21'),(231,2,8,'2016-08-19'),(232,2,8,'2016-08-28'),(233,2,8,'2016-08-29'),(234,2,8,'2016-08-30'),(238,2,8,'2016-09-19'),(240,2,8,'2016-09-21'),(246,2,5,'2016-09-30'),(251,2,4,'2016-09-26'),(252,2,8,'2016-09-23'),(253,2,8,'2016-09-28'),(254,2,8,'2016-10-03'),(255,2,9,'2016-10-10'),(259,2,8,'2016-10-20'),(260,2,8,'2016-10-22'),(261,2,8,'2016-10-14'),(266,2,8,'2016-10-12'),(268,2,8,'2016-10-18'),(271,2,8,'2016-10-19'),(274,2,8,'2016-10-24'),(275,2,8,'2016-11-01'),(276,2,8,'2016-11-02');
 /*!40000 ALTER TABLE `user_routine_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -628,9 +700,9 @@ DROP TABLE IF EXISTS `weight`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `weight` (
-  `user_numb` int(11) NOT NULL COMMENT 'È¸¿ø¹øÈ£',
-  `date` date NOT NULL COMMENT '±â·Ï ³¯Â¥',
-  `weight` int(11) NOT NULL COMMENT '¸ö¹«°Ô',
+  `user_numb` int(11) NOT NULL COMMENT 'íšŒì›ë²ˆí˜¸',
+  `date` date NOT NULL COMMENT 'ê¸°ë¡ ë‚ ì§œ',
+  `weight` int(11) NOT NULL COMMENT 'ëª¸ë¬´ê²Œ',
   PRIMARY KEY (`user_numb`,`date`),
   CONSTRAINT `weight_ibfk_1` FOREIGN KEY (`user_numb`) REFERENCES `user` (`user_numb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -640,10 +712,9 @@ CREATE TABLE `weight` (
 -- Dumping data for table `weight`
 --
 
-
 LOCK TABLES `weight` WRITE;
 /*!40000 ALTER TABLE `weight` DISABLE KEYS */;
-INSERT INTO `weight` VALUES (2,'2016-04-19',67),(2,'2016-05-20',60),(2,'2016-05-26',58),(2,'2016-05-27',56),(2,'2016-05-30',57),(2,'2016-05-31',55),(2,'2016-06-06',60),(3,'2016-04-04',66),(3,'2016-04-15',65),(3,'2016-04-23',48);
+INSERT INTO `weight` VALUES (2,'2016-04-19',68),(2,'2016-05-20',70),(2,'2016-05-26',69),(2,'2016-05-27',69),(2,'2016-05-30',68),(2,'2016-05-31',68),(2,'2016-06-06',68),(2,'2016-07-11',69),(2,'2016-07-21',67),(2,'2016-07-23',66),(2,'2016-07-25',65),(3,'2016-04-04',60),(3,'2016-04-15',63),(3,'2016-04-23',62);
 /*!40000 ALTER TABLE `weight` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -656,4 +727,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-19 13:47:15
+-- Dump completed on 2016-11-04 16:38:28
