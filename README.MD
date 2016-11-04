@@ -1,4 +1,4 @@
-#*ウンドウビヨリ*
+#*ウンドウビヨリ(Team Project)*
 
 Kinectを利用し既存のパーソナルトレーナの長所に加えて家で、時間を気にせず、筋肉量と正しい姿勢を確認しながら運動できる機能を提供するウェブ基盤のサービス	
 
@@ -19,7 +19,9 @@ Kinectを利用し既存のパーソナルトレーナの長所に加えて家�
  * Unity 5.3.4f1
  * KinemotoSDK
 
-
+#Charge Of Part  
+ * Arduino  
+ * Unity  
 ![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e1.png)  
 
 ![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e2.png)  
