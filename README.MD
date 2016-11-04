@@ -22,6 +22,7 @@ Kinectを利用し既存のパーソナルトレーナの長所に加えて家�
 #Charge Of Part  
  * Arduino  
  * Unity  
+ * Socket Communication  
 ![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e1.png)  
 
 ![](http://portfolio.jongyoonb.space/jp/wp-content/uploads/sites/2/2016/09/e2.png)  
