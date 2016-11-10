@@ -79,6 +79,7 @@ public class DumbelCoordinator : MonoBehaviour
     public GameObject panel;
     public GameObject SetGoal;
     public GameObject ScoreGoal;
+    private GameObject howtostart;
 
     //GameObject for Status
     //public static GameObject Status_panel;
@@ -132,8 +133,8 @@ public class DumbelCoordinator : MonoBehaviour
     //helper
     public static GameObject helper;
     public changeAnimation changeAnimation;
-    private GameObject balloon;
-    private static GameObject balloon_text;
+    private static GameObject balloon;
+    public static GameObject balloon_text;
 
     //stop_watch(timer)
     public static Stopwatch set_timer = new Stopwatch();
@@ -149,8 +150,19 @@ public class DumbelCoordinator : MonoBehaviour
     //practice_mod
     public static bool practice_On;
 
+    //set Language & font
+    public static string lang;
+    public static Font bokutachi;
+
     void Start()
     {
+
+        //get jap font
+        bokutachi = Resources.Load("Fonts/bokutachi", typeof(Font)) as Font;
+
+        //setLang("jp");
+        //setGetDumbel(2);
+        //scoreGetDumbel(5);
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
         KinemotoSDK.EngagementHandler.HandRaiseCounter.Clear();
@@ -158,6 +170,7 @@ public class DumbelCoordinator : MonoBehaviour
         //call javascript function
         Application.ExternalCall("orderPlus", "ok");
         Application.ExternalCall("UnityReady", "ok");
+
         if (!GameObject.Find("BGM"))
         {
             BGM = new GameObject("BGM");
@@ -173,8 +186,6 @@ public class DumbelCoordinator : MonoBehaviour
         MessageController.AddComponent<AudioSource>();
         MessageController.AddComponent<MessageController>();
         msgController = gameObject.GetComponent("ScriptName") as MessageController;
-
-       
 
         //helper
         helper = GameObject.Find("helper");
@@ -256,19 +267,28 @@ public class DumbelCoordinator : MonoBehaviour
         //practice mod
         Mark1_1 = GameObject.Find("Mark1_1");
         Mark1_2 = GameObject.Find("Mark1_2");
-        Mark1_3 = GameObject.Find("Mark1_3");
+        //Mark1_3 = GameObject.Find("Mark1_3");
         Mark2_1 = GameObject.Find("Mark2_1");
         Mark2_2 = GameObject.Find("Mark2_2");
-        Mark2_3 = GameObject.Find("Mark2_3");
+        //Mark2_3 = GameObject.Find("Mark2_3");
 
         Mark1_1.SetActive(false);
         Mark1_2.SetActive(false);
-        Mark1_3.SetActive(false);
+        //Mark1_3.SetActive(false);
         Mark2_1.SetActive(false);
         Mark2_2.SetActive(false);
-        Mark2_3.SetActive(false);
-
-        checkPoint1.GetComponentInChildren<Text>().text = "팔을 올릴 때";
+        //Mark2_3.SetActive(false);
+        lang = "jp";
+        if (lang == "kr")
+        {
+            checkPoint1.GetComponentInChildren<Text>().text = "팔을 올릴 때";
+        }
+        else if(lang == "jp")
+        {
+            setFont(checkPoint1, bokutachi);
+            checkPoint1.GetComponentInChildren<Text>().text = "腕を上がるとき";
+        }
+        
         checkPoint1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
         checkPoint1_1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
         checkPoint1_2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
@@ -277,7 +297,16 @@ public class DumbelCoordinator : MonoBehaviour
         checkPoint1_1.GetComponentInChildren<Text>().color = Color.black;
         checkPoint1_2.GetComponentInChildren<Text>().color = Color.black;
 
-        checkPoint2.GetComponentInChildren<Text>().text = "팔을 내릴 때";
+        if (lang == "kr")
+        {
+            checkPoint2.GetComponentInChildren<Text>().text = "팔을 내릴 때";
+        }
+        else if (lang == "jp")
+        {
+            setFont(checkPoint2, bokutachi);
+            checkPoint2.GetComponentInChildren<Text>().text = "腕を下げるとき";
+        }
+        
         checkPoint2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
         checkPoint2_1.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
         checkPoint2_2.GetComponentInChildren<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
@@ -360,21 +389,24 @@ public class DumbelCoordinator : MonoBehaviour
             //Resize Unity Player Size & stop movie & hide startinfo & show status panel
             if (!screenSet)
             {
+                if (lang == "jp")
+                {
+                    setFont(balloon_text, bokutachi);
+                }
+
                 //Message.SetActive(true);
                 //Time.captureFramerate = 60;
                 PlayMovieTexture.StopAllMovies();
                 GameMask.SetActive(false);
                 //Status.SetActive(true);
                 //Status_panel.GetComponent<RawImage>().CrossFadeAlpha(1000, 2.0f, false);
-                Application.ExternalCall("screenSize", "ok");
+                //Application.ExternalCall("screenSize", "ok");
                 screenSet = true;
                 //MessageController.GetComponent<MessageController>().playClip(1);
                 //balloon.GetComponent<RectTransform>().localPosition = new Vector3(88.5f, balloon.GetComponent<RectTransform>().localPosition.y, balloon.GetComponent<RectTransform>().localPosition.z);
                 //balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(89.7f, balloon_text.GetComponent<RectTransform>().localPosition.y, balloon_text.GetComponent<RectTransform>().localPosition.z);
                 //helper.GetComponent<Transform>().localPosition = new Vector3(215f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
                 helper.SetActive(true);
-                balloon.SetActive(true);
-                balloon_text.SetActive(true);
                 changeAni("pose_00");
                 set_timer.Start();
             }
@@ -581,7 +613,15 @@ public class DumbelCoordinator : MonoBehaviour
 
         if (current_phase == 1)
         {
-            Message.GetComponent<RawImage>().texture = Resources.Load("IMG/raiseArm") as Texture;
+            if(lang == "kr")
+            {
+                Message.GetComponent<RawImage>().texture = Resources.Load("IMG/raiseArm") as Texture;
+            }
+            else
+            {
+                Message.GetComponent<RawImage>().texture = Resources.Load("IMG/raiseArm-J") as Texture;
+            }
+            
             elbowLeftDegree.GetComponent<Text>().text = ((int)dumbel.elbow_Right_Angle).ToString();
             elbowLeftDegree.transform.position = new Vector3((Joints["ElbowLeft"].transform.position.x + 1.5f), (Joints["ElbowLeft"].transform.position.y + 0.35f), 10);
             elbowLeftDegree.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -601,7 +641,15 @@ public class DumbelCoordinator : MonoBehaviour
          
             if (current_phase == 4)
             {
-                Message.GetComponent<RawImage>().texture = Resources.Load("IMG/downArm") as Texture;
+                if (lang == "kr")
+                {
+                    Message.GetComponent<RawImage>().texture = Resources.Load("IMG/downArm") as Texture;
+                }
+                else
+                {
+                    Message.GetComponent<RawImage>().texture = Resources.Load("IMG/downArm-J") as Texture;
+                }
+                
             }
         }
 
@@ -621,22 +669,51 @@ public class DumbelCoordinator : MonoBehaviour
     }
     public void setGetDumbel(int set)
     {
-        SetGoal.GetComponent<Text>().text = set.ToString() + "세트";
-        Application.ExternalCall("cut_View", set, set);
+        if (lang == "kr")
+        {
+            SetGoal.GetComponent<Text>().text = set.ToString() + "세트";
+        }
+        else
+        {
+            setFont(SetGoal, bokutachi);
+            SetGoal.GetComponent<Text>().text = set.ToString() + "セット";
+            //SetGoal.GetComponent<RectTransform>().localPosition = new Vector3(505f, 16f, 0f);
+            SetGoal.GetComponent<RectTransform>().localPosition = new Vector3(372f, -23f, 0f);
+            //GameObject.Find("exercise_title").GetComponent<RectTransform>().localPosition = new Vector3(347f, 179f, 0f);
+        }
         DumbelCheck.clear_Set = (short)set;
     }
 
     public void scoreGetDumbel(int score)
     {
-        ScoreGoal.GetComponent<Text>().text = score.ToString() + "회";
-        Application.ExternalCall("cut_view", score, score);
+        if (lang == "kr")
+        {
+            ScoreGoal.GetComponent<Text>().text = score.ToString() + "회";
+        }
+        else
+        {
+            setFont(ScoreGoal, bokutachi);
+            ScoreGoal.GetComponent<Text>().text = score.ToString() + "回";
+            //ScoreGoal.GetComponent<RectTransform>().localPosition = new Vector3(571f, -152f, 0f);
+            ScoreGoal.GetComponent<RectTransform>().localPosition = new Vector3(372f, -131f, 0f);
+        }
         DumbelCheck.clear_Score = (short)score;
     }
     public void LoadScene(string scene)
     {
         Application.ExternalCall("screenResize", "ok");
         Application.ExternalCall("sendTest", "LoadScene");
-        playMSGClip(1);
+
+        //play sound otukaresama
+        if (lang == "kr")
+        {
+            playMSGClip(1);
+        }
+        else if(lang == "jp")
+        {
+            playMSGClip(9);
+        }
+        
         msg2Web(scene);
         KinemotoSDK.EngagementHandler.EngagedPlayers.Clear();
         KinemotoSDK.EngagementHandler.EngagedUsers.Clear();
@@ -676,18 +753,42 @@ public class DumbelCoordinator : MonoBehaviour
                 //change breaktime string next ex / end ex
                 if (scene != "end")
                 {
-                    BreakTime = 10f;
-                    GameObject.Find("Finish").GetComponent<Text>().text = "목표 횟수 완료";
-                    GameObject.Find("TakeArest").GetComponent<Text>().text = "휴식 시간 입니다";
+                    BreakTime = 5f;
+                    if(lang == "kr")
+                    {
+                        GameObject.Find("Finish").GetComponent<Text>().text = "목표 횟수 완료";
+                        GameObject.Find("TakeArest").GetComponent<Text>().text = "휴식 시간 입니다";
+                    }
+                    else
+                    {
+                        setFont(GameObject.Find("Finish"), bokutachi);
+                        setFont(GameObject.Find("TakeArest"), bokutachi);
+                        GameObject.Find("Finish").GetComponent<Text>().text = "目標回数完了";
+                        GameObject.Find("TakeArest").GetComponent<Text>().text = "休み時間です";
+                        GameObject.Find("TakeArest").GetComponent<RectTransform>().localPosition = new Vector3(741f, -200f, 0);
+                    }
+
                     msg2Web("Change Scene : " + scene);
                 }
                 else
                 {
                     firework.SetActive(true);
-                    BreakTime = 10f;
-                    GameObject.Find("Finish").GetComponent<Text>().text = "목표 운동 완료";
-                    GameObject.Find("TakeArest").GetComponent<RectTransform>().localPosition = new Vector3(507f, -200f);
-                    GameObject.Find("TakeArest").GetComponent<Text>().text = "곧 결과 페이지로 이동합니다";
+                    BreakTime = 6f;
+                    if (lang == "kr")
+                    {
+                        GameObject.Find("Finish").GetComponent<Text>().text = "목표 운동 완료";
+                        GameObject.Find("TakeArest").GetComponent<Text>().text = "곧 결과 페이지로 이동합니다";
+                        GameObject.Find("TakeArest").GetComponent<RectTransform>().localPosition = new Vector3(507f, -200f);
+                    }
+                    else
+                    {
+                        setFont(GameObject.Find("Finish"), bokutachi);
+                        setFont(GameObject.Find("TakeArest"), bokutachi);
+                        GameObject.Find("Finish").GetComponent<Text>().text = "目標運動完了";
+                        GameObject.Find("TakeArest").GetComponent<Text>().text = "結果ページへ移動します";
+                        GameObject.Find("Finish").GetComponent<RectTransform>().localPosition = new Vector3(165f, 122f, 0);
+                        GameObject.Find("TakeArest").GetComponent<RectTransform>().localPosition = new Vector3(544f, -200f);
+                    }
                     msg2Web("Change Scene : " + scene);
                 }
                 StartCoroutine(LoadNewScene(scene, BreakTime));
@@ -715,7 +816,7 @@ public class DumbelCoordinator : MonoBehaviour
         }
         else
         {
-            Application.ExternalCall("move_Page",  "true");
+            Application.ExternalCall("move_Page",  lang);
         }
 
         // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
@@ -737,7 +838,17 @@ public class DumbelCoordinator : MonoBehaviour
 
     public static void setBallonText(string text)
     {
+        if (!balloon_text.activeInHierarchy && text.Length != 0)
+        {
+            balloon.SetActive(true);
+            balloon_text.SetActive(true);
+        }
+
         balloon_text.GetComponent<Text>().text = text;
+        if(text.Length <= 10)
+        {
+            balloon_text.GetComponentInChildren<Text>().resizeTextMaxSize = 40;
+        }
         //balloon_text.GetComponent<Text>().CrossFadeAlpha(0, 0, false);
         //balloon_text.GetComponent<Text>().CrossFadeAlpha(1, 1.5f, false);
         //balloon_text.GetComponent<Text>().CrossFadeColor(Color.black, 1f, false, false);
@@ -786,6 +897,8 @@ public class DumbelCoordinator : MonoBehaviour
         }
         balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(2f, 271f, balloon_text.GetComponent<RectTransform>().localPosition.z);
         helper.GetComponent<Transform>().localPosition = new Vector3(-352f, helper.GetComponent<Transform>().localPosition.y, helper.GetComponent<Transform>().localPosition.z);
+        practice_mod(true);
+
     }
     public void ResumeScreen()
     {
@@ -797,10 +910,10 @@ public class DumbelCoordinator : MonoBehaviour
         Status.SetActive(true);
         Mark1_1.SetActive(false);
         Mark1_2.SetActive(false);
-        Mark1_3.SetActive(false);
+        //Mark1_3.SetActive(false);
         Mark2_1.SetActive(false);
         Mark2_2.SetActive(false);
-        Mark2_3.SetActive(false);
+        //Mark2_3.SetActive(false);
         //title.GetComponent<RectTransform>().localPosition = new Vector3(3124f, 413f, title.GetComponent<RectTransform>().localPosition.z);
         balloon_text.GetComponent<RectTransform>().localPosition = new Vector3(-192f, 248f, balloon_text.GetComponent<RectTransform>().localPosition.z);
         try
@@ -841,5 +954,64 @@ public class DumbelCoordinator : MonoBehaviour
         firewall_obj.SetActive(false);
         firewall_obj.transform.parent = GameObject.Find("Canvas").transform;
         firewall_position = new Vector3(0, 0);
+    }
+
+    public void setLang(string language)
+    {
+        lang = language;
+        Application.ExternalCall("sendTest", language);
+        if (lang == "jp")
+        {
+            GameObject.Find("PT_CheckPoint1").GetComponentInChildren<Text>().font = bokutachi;
+            GameObject.Find("PT_CheckPoint1_1").GetComponentInChildren<Text>().font = bokutachi;
+            GameObject.Find("PT_CheckPoint1_2").GetComponentInChildren<Text>().font = bokutachi;
+
+            GameObject.Find("PT_CheckPoint2").GetComponentInChildren<Text>().font = bokutachi;
+            GameObject.Find("PT_CheckPoint2_1").GetComponentInChildren<Text>().font = bokutachi;
+            GameObject.Find("PT_CheckPoint2_2").GetComponentInChildren<Text>().font = bokutachi;
+
+            GameObject.Find("PT_CheckPoint1").GetComponentInChildren<Text>().text = "腕を上げるとき";
+            GameObject.Find("PT_CheckPoint1_1").GetComponentInChildren<Text>().text = "左腕を肩と平行に";
+            GameObject.Find("PT_CheckPoint1_2").GetComponentInChildren<Text>().text = "右腕を肩と平行に";
+
+            GameObject.Find("PT_CheckPoint2").GetComponentInChildren<Text>().text = "腕を下げるとき";
+            GameObject.Find("PT_CheckPoint2_1").GetComponentInChildren<Text>().text = "左腕を肩と平行に";
+            GameObject.Find("PT_CheckPoint2_2").GetComponentInChildren<Text>().text = "右腕を肩と平行に";
+
+            GameObject.Find("PT_CheckPoint1_2").GetComponentInChildren<Text>().resizeTextForBestFit = false;
+            GameObject.Find("PT_CheckPoint2_2").GetComponentInChildren<Text>().resizeTextForBestFit = false;
+        }
+        //howtostart
+        howtostart = GameObject.Find("How To Start");
+
+        if (lang == "kr")
+        {
+            howtostart.GetComponent<Text>().text = "시작하시려면 팔을 들어 주세요";
+        }
+        else
+        {
+            setFont(howtostart, bokutachi);
+            howtostart.GetComponent<Text>().text = "始めるためには手を上げてください";
+            //howtostart.GetComponent<RectTransform>().localPosition = new Vector3(286f, -299f, 0f);
+            howtostart.GetComponent<RectTransform>().localPosition = new Vector3(245f, 183f, 0f);
+            howtostart.GetComponent<RectTransform>().localScale = new Vector3(0.73246f, 0.73251f, 1f);
+        }
+    }
+
+    public static void setFont(GameObject obj, Font font)
+    {
+        //try
+        {
+            //UnityEngine.Debug.Log(obj.name);
+            //UnityEngine.Debug.Log(font.name);
+            //UnityEngine.Debug.Log(obj.GetComponentInChildren<Text>().font);
+            obj.GetComponentInChildren<Text>().font = font;
+            obj.GetComponentInChildren<Text>().lineSpacing = 1f;
+        }
+        //catch
+        {
+
+        }
+        
     }
 }

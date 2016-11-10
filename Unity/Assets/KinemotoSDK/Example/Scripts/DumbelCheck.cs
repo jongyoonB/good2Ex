@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class DumbelCheck
 {
@@ -285,7 +286,14 @@ public class DumbelCheck
             ready_Flag = true;
             if (score_Count == 0 && set_Count == 0)
             {
-                MSGorder = 16;
+                if (DumbelCoordinator.lang == "kr")
+                {
+                    MSGorder = 7;
+                }
+                else if (DumbelCoordinator.lang == "jp")
+                {
+                    MSGorder = 15;
+                }
             }
         }
     }
@@ -466,7 +474,7 @@ public class DumbelCheck
             if (DumbelCoordinator.practice_On)
             {
                 //Debug.Log(practice_count);
-                if (practice_count > 2)
+                if (practice_count > 1)
                 {
                     practice_count = 0;
                     bad_count = 0;
@@ -537,7 +545,6 @@ public class DumbelCheck
             //PointsText.transform.position = new Vector3(DumbelCoordinator.JointInfo["SpineShoulder"].X, DumbelCoordinator.JointInfo["SpineShoulder"].Y);
             if (!DumbelCoordinator.practice_On && bad_count > 2)
             {
-                dumbelCoordi.practice_mod(true);
                 dumbelCoordi.SplitScreen();
             }
 
@@ -568,19 +575,43 @@ public class DumbelCheck
             //depth
             if (!LeftArmDepth[i] && !RightArmDepth[i])
             {
-                checkPoint[i , ct] = "양팔이 어깨와 평행하지 않음";
+                if (DumbelCoordinator.lang == "kr")
+                {
+                    checkPoint[i, ct] = "양팔이 어깨와 평행하지 않음";
+                }
+                else
+                {
+                    checkPoint[i, ct] = "両腕が肩と平行しないです";
+                }
+                
                 ct++;
             }
             else
             {
                 if (!LeftArmDepth[i] && RightArmDepth[i])
                 {
-                    checkPoint[i , ct] = "왼팔과 어깨가 평행하지 않음";
+                    if (DumbelCoordinator.lang == "kr")
+                    {
+                        checkPoint[i, ct] = "왼팔과 어깨가 평행하지 않음";
+                    }
+                    else
+                    {
+                        checkPoint[i, ct] = "左腕が肩と平行しないです";
+                    }
+                    
                     ct++;
                 }
                 else if (LeftArmDepth[i] && !RightArmDepth[i])
                 {
-                    checkPoint[i , ct] = "오른팔과 어깨가 평행하지 않음";
+                    if (DumbelCoordinator.lang == "kr")
+                    {
+                        checkPoint[i, ct] = "오른팔과 어깨가 평행하지 않음";
+                    }
+                    else
+                    {
+                        checkPoint[i, ct] = "右腕が肩と平行しないです";
+                    }
+                    
                     ct++;
                 }
             }
@@ -588,20 +619,20 @@ public class DumbelCheck
             //muscle
             if (!LeftArmMuscle[i] && !RightArmMuscle[i])
             {
-                checkPoint[i , ct] = "양쪽 승모근에 힘이 들어감";
-                ct++;
+                //checkPoint[i , ct] = "양쪽 승모근에 힘이 들어감";
+                //ct++;
             }
             else
             {
                 if (!LeftArmMuscle[i] && RightArmMuscle[i])
                 {
-                    checkPoint[i , ct] = "왼쪽 승모근에 힘이 들어감";
-                    ct++;
+                    //checkPoint[i , ct] = "왼쪽 승모근에 힘이 들어감";
+                    //ct++;
                 }
                 else if (LeftArmMuscle[i] && !RightArmMuscle[i])
                 {
-                    checkPoint[i , ct] = "오른쪽 승모근에 힘이 들어감";
-                    ct++;
+                    //checkPoint[i , ct] = "오른쪽 승모근에 힘이 들어감";
+                    //ct++;
                 }
             }
             ct = 0;
@@ -812,6 +843,7 @@ public class DumbelCheck
 
     void set_text(string listName, string context)
     {
+
         if(context.Length == 0 || context == null)
         {
             context = "";
@@ -819,6 +851,10 @@ public class DumbelCheck
         Debug.Log("set " + listName + " : " + context);
         try
         {
+            if(DumbelCoordinator.lang == "jp")
+            {
+                DumbelCoordinator.setFont(GameObject.Find(listName), DumbelCoordinator.bokutachi);
+            }
             GameObject.Find(listName).GetComponentInChildren<Text>().text = context;
         }
         catch
@@ -882,15 +918,37 @@ public class DumbelCheck
 
         if (!ElbowLeftDepthCheck && !ElbowRightDepthCheck)
         {
-            failed_message = "양팔이 너무 앞으로 나왔어요";
+            if (DumbelCoordinator.lang == "kr")
+            {
+                failed_message = "양팔이 너무 앞으로 나왔어요";
+            }
+            else
+            {
+                failed_message = "両腕が前に出ました";
+            }
         }
         else if (!ElbowLeftDepthCheck && ElbowRightDepthCheck)
         {
-            failed_message = "왼팔이 너무 앞으로 나왔어요";
+            if (DumbelCoordinator.lang == "kr")
+            {
+                failed_message = "왼팔이 너무 앞으로 나왔어요";
+            }
+            else
+            {
+                failed_message = "左腕が前に出ました";
+            }
+            
         }
         else if (ElbowLeftDepthCheck && !ElbowRightDepthCheck)
         {
-            failed_message = "오른팔이 너무 앞으로 나왔어요";
+            if (DumbelCoordinator.lang == "kr")
+            {
+                failed_message = "오른팔이 너무 앞으로 나왔어요";
+            }
+            else
+            {
+                failed_message = "右腕が前に出ました";
+            }
         }
         else
         {
@@ -901,7 +959,15 @@ public class DumbelCheck
 
                 if (start_Flag && !top_Flag && (armpit_Left_Angle <= 110 || armpit_Right_Angle <= 110))
                 {
-                    failed_message = "잠깐!!! 팔을 더 올리셔야죠!!";
+                    if (DumbelCoordinator.lang == "kr")
+                    {
+                        failed_message = "잠깐!!! 팔을 더 올리셔야죠!!";
+                    }
+                    else
+                    {
+                        failed_message = "腕をもっと上げてください";
+                        DumbelCoordinator.balloon_text.GetComponentInChildren<Text>().resizeTextMaxSize = 33;
+                    }
                 }
             }
         }
@@ -966,21 +1032,49 @@ public class DumbelCheck
 
         if (judgment[0] + judgment[1] == 2)
         {
-            MSGorder = 7;
+            if (DumbelCoordinator.lang == "kr")
+            {
+                MSGorder = 3;
+            }
+            else if (DumbelCoordinator.lang == "jp")
+            {
+                MSGorder = 11;
+            }
         }
         
         else if (judgment[0] == 1)
         {
-            MSGorder = 10;
+            if (DumbelCoordinator.lang == "kr")
+            {
+                MSGorder = 5;
+            }
+            else if (DumbelCoordinator.lang == "jp")
+            {
+                MSGorder = 13;
+            }
         }
         else if (judgment[1] == 1)
         {
-            MSGorder = 13;
+            if (DumbelCoordinator.lang == "kr")
+            {
+                MSGorder = 6;
+            }
+            else if (DumbelCoordinator.lang == "jp")
+            {
+                MSGorder = 14;
+            }
         }
 
         else if(judgment[0] + judgment[1] + judgment[2] + judgment[3] + judgment[4] + judgment[5] == 0)
         {
-            MSGorder = 6;
+            if (DumbelCoordinator.lang == "kr")
+            {
+                MSGorder = 2;
+            }
+            else if (DumbelCoordinator.lang == "jp")
+            {
+                MSGorder = 10;
+            }
         }
 
 
@@ -997,12 +1091,26 @@ public class DumbelCheck
                     DumbelCoordinator.firewall_position = new Vector3(((DumbelCoordinator.JointInfo["FootLeft"].X + DumbelCoordinator.JointInfo["FootRight"].X) / 2), ((DumbelCoordinator.JointInfo["FootLeft"].Y) * 6));
                     DumbelCoordinator.firewall_obj.transform.position = DumbelCoordinator.firewall_position;
                     DumbelCoordinator.firewall_obj.SetActive(true);
-                    MSGorder = 9;
+                    if (DumbelCoordinator.lang == "kr")
+                    {
+                        MSGorder = 4;
+                    }
+                    else if (DumbelCoordinator.lang == "jp")
+                    {
+                        MSGorder = 12;
+                    }
 
                 }
                 else if ((clear_Score - 2) == score_Count)
                 {
-                    MSGorder = 0;
+                    if (DumbelCoordinator.lang == "kr")
+                    {
+                        MSGorder = 0;
+                    }
+                    else if (DumbelCoordinator.lang == "jp")
+                    {
+                        MSGorder = 8;
+                    }
                 }
                 else if ((clear_Score - 3) == score_Count)
                 {
